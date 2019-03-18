@@ -81,6 +81,7 @@ class HomeView extends BaseComponent {
           <div className="content responsive-grid">
 
             {
+              //从 rcdb.models 中取出来的数据，展示首页的几张图
               this.state.models.map((model, idx) => {
 
                 const thumbnailUrl =

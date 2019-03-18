@@ -1,0 +1,11 @@
+models.js 
+（src\server\api\endpoints\models.js）
+包含 deleteModel、cleanModels等，疑似 EventEmitter 的接收总站
+
+Viewer.Configurator.js
+(Viewer.Configurator\Viewer.Configurator.js)
+拓展生命周期函数
+
+HomeView.js
+（src\client\routes\Home\components\HomeView.js）
+首页几张图的展示的 HTML ， 同级的 HomeContaines 文件用于 将 HomeView 组建和 store 联系起来
