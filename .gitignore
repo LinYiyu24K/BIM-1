@@ -5,14 +5,14 @@ dist
 coverage
 .idea
 .vscode
-resources/img/optimized
-resources/libs/lmv
-resources/models/dev
-resources/db/prod
-resources/db/dev
-bin/static
-push-to-prod.sh
-config/development.config.js
-nginx
-TMP
+# resources/img/optimized
+# resources/libs/lmv
+# resources/models/dev
+# resources/db/prod
+# resources/db/dev
+# bin/static
+# push-to-prod.sh
+# config/development.config.js
+# nginx
+# TMP
 
