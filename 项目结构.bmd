@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<document type="BLUMIND" editor_version="3.2.902.24361" document_version="3.0.0.0">
+  <!--Create by Blumind, you can download it free from http://www.blumind.org-->
+  <information>
+    <author>joe</author>
+    <company>
+    </company>
+    <version>3.0</version>
+    <description>
+    </description>
+  </information>
+  <attributes>
+    <item name="editor_show_sidebar">True</item>
+  </attributes>
+  <charts active_chart="0">
+    <chart name="新页面 1" type="MindMap">
+      <remark>
+      </remark>
+      <layout>TREE_RIGHT</layout>
+      <style>
+        <back_color>White</back_color>
+        <fore_color>Black</fore_color>
+        <line_color>LightSlateGray</line_color>
+        <border_color>SlateGray</border_color>
+        <node_back_color>LightGray</node_back_color>
+        <node_fore_color>Black</node_fore_color>
+        <select_color>RoyalBlue</select_color>
+        <hover_color>MediumSlateBlue</hover_color>
+        <link_line_color>Green</link_line_color>
+        <widget_margin>1</widget_margin>
+        <picture_thumb_size>100, 100</picture_thumb_size>
+      </style>
+      <nodes>
+        <node id="1" text="forge-rcdb.nodejs-master" x="395" y="201" width="181" height="41" text_b="12, 12, 157, 17">
+          <style>
+            <back_color>Silver</back_color>
+            <fore_color>Black</fore_color>
+            <border_color>Black</border_color>
+            <padding>12</padding>
+          </style>
+          <nodes>
+            <node id="2" text="bin" x="565" y="252" width="45" height="22" text_b="2, 2, 23, 18">
+              <widgets>
+                <widget type="NOTES" x="26" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                  <text>&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;bin&lt;/SPAN&gt;&lt;/P&gt;
+&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;&lt;SPAN style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;里面的&lt;SPAN lang=EN-US&gt;app.js&lt;/SPAN&gt;是整个项目的入口&lt;SPAN lang=EN-US&gt;(&lt;/SPAN&gt;为了在&lt;SPAN lang=EN-US&gt;webstorm&lt;/SPAN&gt;里面运行正常，我把它放在外面了&lt;SPAN lang=EN-US&gt;)&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/SPAN&gt;&lt;/P&gt;</text>
+                </widget>
+              </widgets>
+            </node>
+            <node id="3" text="config" x="565" y="284" width="64" height="22" text_b="2, 2, 42, 18">
+              <widgets>
+                <widget type="NOTES" x="45" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                  <text>&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;config&lt;/SPAN&gt;&lt;/P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;
+&lt;P class=MsoNormal style="MARGIN: 0cm 0cm 0pt"&gt;是一些配置，包括数据库的登陆配置。它的内容在&lt;SPAN lang=EN-US&gt;src/server/index.js&lt;/SPAN&gt;中会使用到&lt;SPAN lang=EN-US&gt;(&lt;/SPAN&gt;通过一个叫&lt;SPAN lang=EN-US&gt;c0nfig&lt;/SPAN&gt;的&lt;SPAN lang=EN-US&gt;node&lt;/SPAN&gt;模块&lt;SPAN lang=EN-US&gt;)&lt;?xml:namespace prefix = "o" ns = "urn:schemas-microsoft-com:office:office" /&gt;&lt;o:p&gt;&lt;/o:p&gt;&lt;/SPAN&gt;&lt;/P&gt;&lt;/SPAN&gt;</text>
+                </widget>
+              </widgets>
+            </node>
+            <node id="4" text="dist" x="565" y="316" width="48" height="22" text_b="2, 2, 26, 18">
+              <widgets>
+                <widget type="NOTES" x="29" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                  <text>&lt;P class=MsoNormal&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;dist &lt;/SPAN&gt;&lt;SPAN style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;是 &lt;SPAN lang=EN-US&gt;production&lt;/SPAN&gt;模式下的&lt;SPAN lang=EN-US&gt;output&lt;/SPAN&gt;，它是在&lt;SPAN lang=EN-US&gt;/webpack/production.webpack.config.js&lt;/SPAN&gt;中设置的&lt;/SPAN&gt;&lt;/P&gt;</text>
+                </widget>
+              </widgets>
+            </node>
+            <node id="5" text="resources" x="565" y="348" width="83" height="22" text_b="2, 2, 61, 18" fold_btn_b="552, 353, 13, 13">
+              <widgets>
+                <widget type="NOTES" x="64" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                  <text>&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;resources &lt;/SPAN&gt;&lt;SPAN style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;存放 模型文件和 别的资源文件&lt;/SPAN&gt;</text>
+                </widget>
+              </widgets>
+              <nodes>
+                <node id="13" text="db" x="686" y="380" width="42" height="22" text_b="2, 2, 20, 18">
+                  <widgets>
+                    <widget type="NOTES" x="23" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                      <text>&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;db &lt;/SPAN&gt;&lt;SPAN style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;里面的&lt;SPAN lang=EN-US&gt;json&lt;/SPAN&gt;文件 手动导入到&lt;SPAN lang=EN-US&gt;mongodb&lt;/SPAN&gt;&lt;/SPAN&gt;</text>
+                    </widget>
+                  </widgets>
+                </node>
+              </nodes>
+              <lines>
+                <line target="13" begin_side="Bottom" end_side="Left" begin_rect="565, 348, 83, 22" end_rect="686, 380, 42, 22" />
+              </lines>
+            </node>
+            <node id="14" text="src" x="565" y="412" width="43" height="22" text_b="2, 2, 21, 18" fold_btn_b="552, 417, 13, 13">
+              <widgets>
+                <widget type="NOTES" x="24" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                  <text>&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;存放源代码&lt;/SPAN&gt;&lt;/P&gt;</text>
+                </widget>
+              </widgets>
+              <nodes>
+                <node id="15" text="client" x="666" y="444" width="59" height="22" text_b="2, 2, 37, 18">
+                  <style>
+                    <back_color>Pink</back_color>
+                  </style>
+                  <widgets>
+                    <widget type="NOTES" x="40" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                      <text>&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;&lt;STRONG&gt;&lt;FONT style="BACKGROUND-COLOR: #ffffff" color=#ff8080&gt;client 的内容比较重要&lt;/FONT&gt;&lt;/STRONG&gt;：&lt;/SPAN&gt;&lt;/P&gt;
+&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;1. 设置了路由/routes&lt;/SPAN&gt;&lt;/P&gt;
+&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;2. 设置了用户看到的布局 /viewer.components&lt;/SPAN&gt;&lt;/P&gt;
+&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;/viewer.components/Viewer.Configurator(我看的那部分是configurator的内容)&lt;/SPAN&gt;&lt;/P&gt;
+&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;3. 调用了用户要用到的extension的功能：&lt;/SPAN&gt;&lt;/P&gt;
+&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;\client\viewer.components\Viewer.Extensions.Dynamic&lt;/SPAN&gt;&lt;/P&gt;</text>
+                    </widget>
+                  </widgets>
+                </node>
+                <node id="16" text="server" x="666" y="476" width="62" height="22" text_b="2, 2, 40, 18">
+                  <widgets>
+                    <widget type="NOTES" x="43" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                      <text>&lt;P&gt;启动app：&lt;/P&gt;
+&lt;P&gt;1. 编译compile里面的内容，关键部分是 client里面的内容。&lt;/P&gt;
+&lt;P&gt;2. 设置一些需要用到的service(这个我没有仔细看)&lt;/P&gt;
+&lt;P&gt;3. 连接数据库&lt;/P&gt;
+&lt;P&gt;&amp;nbsp;&lt;/P&gt;
+&lt;P&gt;&amp;nbsp;&lt;/P&gt;</text>
+                    </widget>
+                  </widgets>
+                </node>
+              </nodes>
+              <lines>
+                <line target="15" begin_side="Bottom" end_side="Left" begin_rect="565, 412, 43, 22" end_rect="666, 444, 59, 22" />
+                <line target="16" begin_side="Bottom" end_side="Left" begin_rect="565, 412, 43, 22" end_rect="666, 476, 62, 22" />
+              </lines>
+            </node>
+            <node id="6" text="webpack" x="565" y="508" width="79" height="22" text_b="2, 2, 57, 18">
+              <widgets>
+                <widget type="NOTES" x="60" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                  <text>&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;webpack &lt;/SPAN&gt;&lt;SPAN style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;设置入口为 &lt;SPAN lang=EN-US&gt;src/client/index.js&lt;/SPAN&gt;&lt;/SPAN&gt;</text>
+                </widget>
+              </widgets>
+            </node>
+            <node id="7" text="package.json" x="565" y="540" width="103" height="22" text_b="2, 2, 81, 18">
+              <widgets>
+                <widget type="NOTES" x="84" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                  <text>&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;package.json &lt;/SPAN&gt;&lt;SPAN style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;整个项目的一些依赖以及 &lt;SPAN lang=EN-US&gt;script&lt;/SPAN&gt;的操作。&lt;/SPAN&gt;</text>
+                </widget>
+              </widgets>
+            </node>
+            <node id="17" text="app.js" x="565" y="572" width="61" height="22" text_b="2, 2, 39, 18">
+              <widgets>
+                <widget type="NOTES" x="42" y="3" width="16" height="16" align="Right" hyperlink="" display_index="0" padding="0">
+                  <text>&lt;P&gt;&lt;SPAN lang=EN-US style='FONT-SIZE: 10.5pt; FONT-FAMILY: 等线; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: "Times New Roman"; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: ZH-CN; mso-bidi-language: AR-SA'&gt;项目入口&lt;/SPAN&gt;&lt;/P&gt;</text>
+                </widget>
+              </widgets>
+            </node>
+          </nodes>
+          <lines>
+            <line target="2" begin_side="Bottom" end_side="Left" begin_rect="395, 201, 181, 41" end_rect="565, 252, 45, 22" />
+            <line target="3" begin_side="Bottom" end_side="Left" begin_rect="395, 201, 181, 41" end_rect="565, 284, 64, 22" />
+            <line target="4" begin_side="Bottom" end_side="Left" begin_rect="395, 201, 181, 41" end_rect="565, 316, 48, 22" />
+            <line target="5" begin_side="Bottom" end_side="Left" begin_rect="395, 201, 181, 41" end_rect="552, 348, 96, 22" />
+            <line target="14" begin_side="Bottom" end_side="Left" begin_rect="395, 201, 181, 41" end_rect="552, 412, 56, 22" />
+            <line target="6" begin_side="Bottom" end_side="Left" begin_rect="395, 201, 181, 41" end_rect="565, 508, 79, 22" />
+            <line target="7" begin_side="Bottom" end_side="Left" begin_rect="395, 201, 181, 41" end_rect="565, 540, 103, 22" />
+            <line target="17" begin_side="Bottom" end_side="Left" begin_rect="395, 201, 181, 41" end_rect="565, 572, 61, 22" />
+          </lines>
+        </node>
+      </nodes>
+    </chart>
+  </charts>
+</document>

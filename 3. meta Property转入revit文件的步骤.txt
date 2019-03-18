@@ -1,0 +1,3 @@
+1. VS中运行 E:\forgeProjects\rvtmetaprop-master\rvtmetaprop.sln
+2. Meta Properties选项中，打开要输入的 json文件（注意！ json文件中，要手动输入 "categoryId":"PG_GENERAL",）
+

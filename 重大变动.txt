@@ -1,0 +1,21 @@
+
+http://localhost:3000/configurator?id=123456789012345678901234
+显示的缩减的extensionManager内容，并且添加了按钮，按钮功能仅仅是变动视图。(要在mongodb数据库中的这个对象中的extension里面增加 toolbarExtension)
+
+
+http://localhost:3000/configurator?id=234567890123456789012345
+的模型是通过点击左边的按钮，然后再在右边的extensionManager里面显示相应的功能。(这个时候，我还没改view.configurator.js里面的内容)
+
+
+http://localhost:3000/configurator?id=345678901234567890123456
+重要变动！！！！
+
+现在开始改动view.configurator.js，若要恢复前面2个的内容，把备份的view.configurator.js的内容恢复即可。
+现在要
+1. 按钮按下的同时，渲染指定的extension，再按一次的时候就隐藏。
+2. 按 下 另一个extension的时候，上一个extension要隐藏起来。
+
+
+
+
+2018 6 18 meta property里面的删除所有property的功能 被我关了，因为显示不好看

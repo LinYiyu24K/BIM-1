@@ -1,0 +1,25 @@
+
+
+添加 下面的按钮：
+参考 官方文档。
+
+我已在extensionManagerToolbar里面添加好。
+
+
+
+
+添加关闭按钮，我是通过传递参数的方法，把onclick函数传递出去的，在extensionXXX.js里面添加：
+
+在renderTitle()里面添加：
+
+<button onClick={() => this.closeExt()}
+                title="关闭控件" className="closeExtensionButton">
+        </button>
+
+
+在render(opts)里面添加：
+
+this.closeExt = opts.closeExt
+
+
+

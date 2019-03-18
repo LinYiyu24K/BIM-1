@@ -1,0 +1,122 @@
+3.4去掉登录等按钮
+F:\webproject\forge-rcdb.nodejs\src\client\store\app.js
+line219  
+        gallery: true,
+        login: true,
+        demos: true,
+        about: true,
+**********************************
+网上地址改为本地
+F:\webproject\forge-rcdb.nodejs\config\development.config.js
+
+line79viewer3D: 'https://developer.api.autodesk.com/derivativeservice/v2/viewers/viewer3D.js?v=5.0',
+      style:    'https://developer.api.autodesk.com/derivativeservice/v2/viewers/style.css?v=5.0'
+改为
+viewer3D: '../resources/files/viewers3D.js',
+style:    '../resources/files/viewersStyle.css'
+
+**************************************
+    var viewer = this.viewer;
+ // Button 1
+    var button1 = new Autodesk.Viewing.UI.Button('my-view-front-button');
+    button1.onClick = function(e) {
+        viewer.setViewCube('front');
+    };
+    button1.addClass('my-view-front-button');
+    button1.setToolTip('View front');
+
+    // Button 2
+    var button2 = new Autodesk.Viewing.UI.Button('my-view-back-button');
+    button2.onClick = function(e) {
+        viewer.setViewCube('back');
+    };
+    button2.addClass('my-view-back-button');
+    button2.setToolTip('View Back');
+
+    //showcase
+
+    var showcaseButton = new Autodesk.Viewing.UI.Button('showcaseButton');
+    showcaseButton.onClick = function(e) {
+      let _this = this;
+      viewer.loadDynamicExtension ('Viewing.Extension.Showcase').then(function () {
+        // let extension = _this.getExtensionbyId('Viewing.Extension.Showcase');
+        // let curExtension = _this.getCurrentOpenExtension();
+
+        // if(curExtension){//存在已经打开的extension，把它关掉
+        //   _this.onExtensionItemClicked(curExtension);
+        // }
+
+        // if(extension){
+        //   _this.onExtensionItemClicked(extension);
+        // };
+      });
+    }.bind(this);
+    showcaseButton.addClass('showcaseButton');
+    showcaseButton.setToolTip('showcase');
+
+    // screenshotButton 截图
+    var screenshotButton = new Autodesk.Viewing.UI.Button('screenshotButton');
+    let screen = false;
+    screenshotButton.onClick = function(e) {
+      //viewer.setViewCube('front');//设为后面的视图
+        viewer.loadDynamicExtension ('Viewing.Extension.ScreenShotManager').then(function () {
+        // let extension = _this.getExtensionbyId('Viewing.Extension.ScreenShotManager');
+        // let curExtension = _this.getCurrentOpenExtension();
+
+        // if(curExtension){//存在已经打开的extension，把它关掉
+        //   _this.onExtensionItemClicked(curExtension);
+        // }
+
+        // if(extension){
+        //   _this.onExtensionItemClicked(extension);
+        // };
+      });
+    }.bind(this);
+    screenshotButton.addClass('screenshotButton');
+    screenshotButton.setToolTip('截图');
+
+    //ShareModel
+    var ShareModelButton = new Autodesk.Viewing.UI.Button('ShareModelButton');
+    ShareModelButton.onClick = function(e) {
+      Autodesk.Viewing.theExtensionManager.registerExternalExtension(
+        'shareModel',
+        'http://localhost:3000/resources/extensions/share.js');
+      viewer.loadExtension('shareModel').then(
+        function(externalExtension) {
+          externalExtension.share();
+        })
+
+    }.bind(this);
+    ShareModelButton.addClass('ShareModelButton');
+    ShareModelButton.setToolTip('ShareModel');
+
+    //Share
+    var ShareButton = new Autodesk.Viewing.UI.Button('ShareButton');
+    ShareButton.onClick = function(e) {
+      // viewer.loadExtension('external', null );
+      // // viewer.loadDynamicExtension ('external').then(function () {
+
+      // // });
+      viewer.loadExtension('Autodesk.Viewing.Collaboration');
+    }.bind(this);
+    ShareButton.addClass('ShareButton');
+    ShareButton.setToolTip('Share');
+
+    // SubToolbar
+    this.subToolbar = new Autodesk.Viewing.UI.ControlGroup('my-custom-view-toolbar');
+    this.subToolbar.addControl(button1);
+    this.subToolbar.addControl(button2);
+    this.subToolbar.addControl(showcaseButton);
+    this.subToolbar.addControl(screenshotButton);
+    this.subToolbar.addControl(ShareModelButton);
+    this.subToolbar.addControl(ShareButton);
+
+    viewer.toolbar.addControl(this.subToolbar);
+*****************************************************
+去掉链接
+F:\webproject\forge-rcdb.nodejs\src\client\components\Navbar\AppNavbar.js
+line139
+href="https://forge.autodesk.com"
+              target="_blank"
+改为
+href=""
