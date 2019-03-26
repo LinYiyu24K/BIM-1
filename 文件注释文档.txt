@@ -1,3 +1,13 @@
+development.index.ejs
+（src\client\layouts\development.index.ejs）
+这个是 index.html，使用 webpack的    new HtmlWebpackPlugin 插件进行编译集成js和css文件
+
+app.js
+（src\client\store\app.js）
+这个是 redux 的各个 reducer ，就是各个注入store的 reducer，各种全局的数据状态在这里设置
+其他 store 文件夹的逻辑注释详见 myForge
+重点 ： createInitialState 是 store 的初始 state
+
 models.js 
 （src\server\api\endpoints\models.js）
 包含 deleteModel、cleanModels等，疑似 EventEmitter 的接收总站
@@ -8,4 +18,23 @@ Viewer.Configurator.js
 
 HomeView.js
 （src\client\routes\Home\components\HomeView.js）
-首页几张图的展示的 HTML ， 同级的 HomeContaines 文件用于 将 HomeView 组建和 store 联系起来
+首页几张图的展示的 HTML ， 从 rcdb.models 数据库中取出
+同级的 HomeContaines 文件用于 将 HomeView 组建和 store 联系起来
+
+CoreLayout.js
+src\client\layouts\CoreLayout\CoreLayout.js
+最外层的路由页面
+定义了很多事件接收器，on('model.added',...) 等模型、svf上传以及用户登陆的 getUser方法执行
+
+Header.js
+（D:\work\EBIM\myForge\src\client\components\Header\Header.js）
+导航栏部分！！！！
+其中的AOONavbar 是导航栏组件
+
+Viewer.Configurator.js
+（D:\work\EBIM\myForge\src\client\viewer.components\Viewer.Configurator\Viewer.Configurator.js）
+首页点击一个模型之后进去的主要操作页面
+
+StorageSvc.js
+D:\work\EBIM\myForge\src\client\services\StorageSvc.js
+这是一个前端缓存，类似于 localStorage，存储在 Locker

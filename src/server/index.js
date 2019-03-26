@@ -22,6 +22,7 @@ import MaterialAPI from './api/endpoints/materials'
 import ExtractAPI from './api/endpoints/extract'
 import SocketAPI from './api/endpoints/socket'
 import ConfigAPI from './api/endpoints/config'
+import NewDMAPI from './api/endpoints/newdm'
 import ModelAPI from './api/endpoints/models'
 import ForgeAPI from './api/endpoints/forge'
 import HooksAPI from './api/endpoints/hooks'
@@ -171,6 +172,7 @@ app.use('/api/materials', MaterialAPI())
 app.use('/api/extract',   ExtractAPI())
 app.use('/api/socket',    SocketAPI())
 app.use('/api/config',    ConfigAPI())
+app.use('/api/newdm',     NewDMAPI())
 app.use('/api/models',    ModelAPI())
 app.use('/api/forge',     ForgeAPI())
 app.use('/api/hooks',     HooksAPI())
