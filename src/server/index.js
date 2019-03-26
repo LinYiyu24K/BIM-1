@@ -206,7 +206,11 @@ app.use(require('connect-history-api-fallback')())
 // Static routes
 //
 /////////////////////////////////////////////////////////////////////
+
+console.log("process.env.HOT_RELOADING>>>>>>>>>>>>: ",process.env.HOT_RELOADING)
+
 if (process.env.HOT_RELOADING) {
+
 
   // dynamically require webpack dependencies
   // to keep them in devDependencies (package.json)
