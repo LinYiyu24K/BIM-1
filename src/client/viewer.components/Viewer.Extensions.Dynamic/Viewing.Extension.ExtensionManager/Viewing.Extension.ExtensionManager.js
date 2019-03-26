@@ -212,7 +212,88 @@ class ExtensionManager extends MultiModelExtensionBase {
   }
 
   createUI() {
+     var viewer = this.viewer;
 
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    // DataManagement 资料管理
+    var dataManagement = new Autodesk.Viewing.UI.Button('dataManagement');
+    dataManagement.onClick = function(e) {
+      //viewer.setViewCube('front');//设为后面的视图
+
+      //添加了这个loadDE函数，然后把原有的代码（下边注释的）放入函数体内
+      // let extension = this.getExtensionbyId("Viewing.Extension.DataManagement");
+      // let curExtension = this.getCurrentOpenExtension();
+
+      // if(curExtension){//存在已经打开的extension，把它关掉
+      //   this.onExtensionItemClicked(curExtension);
+      // }
+
+      // if(extension){
+      //   this.onExtensionItemClicked(extension);
+      // }
+      viewer.loadDynamicExtension('Viewing.Extension.NewDataManagement').then(function(){
+        let extension = this.getExtensionbyId("Viewing.Extension.NewDataManagement");
+        let curExtension = this.getCurrentOpenExtension();
+
+        if(curExtension){//存在已经打开的extension，把它关掉
+          this.onExtensionItemClicked(curExtension);
+        }
+
+        if(extension){
+          this.onExtensionItemClicked(extension);
+        }
+      });
+
+    }.bind(this);
+    dataManagement.addClass('dataManagement');
+    // dataManagement.addClass('adsk-icon-fullscreen');
+    dataManagement.setToolTip('资料管理');
+
+    
+    // saveViewButton 视点保存
+    var saveViewButton = new Autodesk.Viewing.UI.Button('saveViewButton');
+    saveViewButton.onClick = function(e) {
+      //viewer.setViewCube('front');//设为后面的视图
+      
+      var myThis = this;
+      viewer.loadDynamicExtension('Viewing.Extension.ConfigManager').then(function(){
+
+        console.log(myThis);
+        console.log('!!!!!!!!!!!!!!!!!!!!')
+        let extension = myThis.getExtensionbyId("Viewing.Extension.ConfigManager");
+        let curExtension = myThis.getCurrentOpenExtension();
+  
+        if(curExtension){//存在已经打开的extension，把它关掉
+          myThis.onExtensionItemClicked(curExtension);
+        }
+  
+        if(extension){
+          myThis.onExtensionItemClicked(extension);
+        }
+
+      });
+
+
+    }.bind(this);
+    saveViewButton.addClass('saveViewButton');
+    saveViewButton.setToolTip('视点保存');
+
+
+
+
+
+
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // SubToolbar
+    this.subToolbar = new Autodesk.Viewing.UI.ControlGroup('my-custom-view-toolbar');
+
+    this.subToolbar.addControl(dataManagement);
+    this.subToolbar.addControl(saveViewButton);
+
+    viewer.toolbar.addControl(this.subToolbar);
   }
   /////////////////////////////////////////////////////////
   // Unload callback
