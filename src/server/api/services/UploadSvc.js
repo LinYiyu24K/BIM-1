@@ -30,6 +30,28 @@ export default class UploadSvc extends BaseSvc {
 
     this.multer = multer({storage: storage})
 
+
+    //////////////////////////////////////
+    //修改：增加资料管理的dataMulter
+    // const uploadSvc = new UploadSvc({
+    //   tempStorage: path.join(__dirname, '/../../TMP')
+    // })
+    // 将资料图片存储在 forge/resources/img/newDM 下，避免定时清除
+    /////////////////////////////////////////
+    const dataStorage = multer.diskStorage({
+
+      destination: path.join(__dirname, '/../../../../resources/img/newDM'),
+      filename: (req, file, cb) => {
+        crypto.pseudoRandomBytes(16, (err, raw) => {
+          if (err) return cb(err)
+          cb(null, raw.toString('hex') + path.extname(
+            file.originalname))
+        })
+      }
+    })
+
+    this.dataMulter = multer({storage: dataStorage})
+
     // start cleanup task to remove uploaded temp files
     setInterval(() => {
       this.clean(config.tempStorage, 60 * 60)
@@ -56,6 +78,16 @@ export default class UploadSvc extends BaseSvc {
   get uploader () {
 
     return this.multer
+  }
+
+
+  /////////////////////////////////////////////////////////
+  //
+  //修改：新增资料管理的multer
+  /////////////////////////////////////////////////////////
+  get dataUploader () {
+
+    return this.dataMulter
   }
 
   /////////////////////////////////////////////////////////
