@@ -205,6 +205,7 @@ export default class ModelSvc extends BaseSvc {
           }
         }
 
+
         const model = await dbSvc.findOne(
           this._config.collection,
           query)
@@ -243,6 +244,11 @@ export default class ModelSvc extends BaseSvc {
             sequences: 1
           }
         }
+
+
+        console.log(`this._config是：${JSON.stringify(this._config)}`)
+
+        console.log(`获得视点组数据库获取的collection是：${this._config.collection}`)
 
         const model = await dbSvc.findOne(
           this._config.collection,
@@ -475,7 +481,7 @@ export default class ModelSvc extends BaseSvc {
         const collection = await dbSvc.getCollection(
           this._config.collection)
 
-
+        console.log(`getConfigSequenceStates接收到的 modelId,sequenceId分别是${modelId},${sequenceId}`)
         /////////////////////////////////////////////////////////////////
         // aggregate方法：类似于SQL的count方法
         // $match：用于过滤数据，只输出符合条件的文档。$match使用MongoDB的标准查询操作。
@@ -508,6 +514,8 @@ export default class ModelSvc extends BaseSvc {
 
           if (err) {
 
+            console.log(`getConfigSequenceStates发成了错误：\n${err}`)
+
             return reject(err)
           }
 
@@ -517,6 +525,10 @@ export default class ModelSvc extends BaseSvc {
           }
 
           const sequence = result[0].sequences
+
+          console.log(`getConfigSequenceStates得到 result 的sequences：\n${sequence}`)
+
+          console.log(`getConfigSequenceStates得到 result 的sequences 的statesId是：\n${JSON.stringify(sequence.stateIds)}`)
 
           const stateMap = {};
 

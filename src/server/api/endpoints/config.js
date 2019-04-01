@@ -39,6 +39,8 @@ module.exports = function() {
 
       res.json(response)
 
+      console.log(`getSequences的返回值: ${response}`)
+
     } catch (error) {
 
       res.status(error.statusCode || 500)
