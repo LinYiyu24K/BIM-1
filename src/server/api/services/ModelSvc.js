@@ -228,6 +228,10 @@ export default class ModelSvc extends BaseSvc {
 
       try {
 
+      console.log("数据库操作：sequences接口的 this._config 值为: "+JSON.stringify(this._config))
+      console.log("数据库操作：sequences接口的 this._config.dbName 值为: "+this._config.dbName)        
+
+
         const dbSvc = ServiceManager.getService(
           this._config.dbName)
           //////////////////////////////////////////

@@ -30,6 +30,9 @@ module.exports = function() {
 
       const db = req.params.db
 
+      console.log(">>>>>>>>sequences借口的 db 值为: "+db)
+      console.log(">>>>>>>>sequences借口的 modelId 值为: "+modelId)
+
       const modelSvc = ServiceManager.getService(
         db + '-ModelSvc')
 

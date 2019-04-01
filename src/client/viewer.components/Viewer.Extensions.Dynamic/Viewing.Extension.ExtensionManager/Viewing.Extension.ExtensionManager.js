@@ -196,6 +196,7 @@ class ExtensionManager extends MultiModelExtensionBase {
       }
     }
     console.log("Cannot find this Extension: "+id);
+    console.log("state中的extensions: ",JSON.stringify(extensions));
     return false;
   };
 
