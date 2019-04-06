@@ -60,6 +60,47 @@ module.exports = function() {
     res.json(`${authURL}&response_type=code&state=${csrf}`)
   })
 
+    // 注释：myLogin接口，用于替代/login
+    router.post('/myLogin', async(req,res) => {
+      try{
+        const user = req.body;
+  
+        let response = {};
+        const modelSvc = ServiceManager.getService('users-ModelSvc')
+  
+        const password =
+          await modelSvc.postMyLogin(user.username)
+        console.log(`??????????从数据库中成功取回密码： ${JSON.stringify(password)}`)
+        console.log(`??????????前端输入的密码是： ${JSON.stringify(user.password)}`)
+        if(user.password == password.password){
+          response.success = true;
+          req.session.forge = user.username || {};
+        }else{
+          response.success = false;
+        }
+        console.log(`????????返回前端的内容为： ${JSON.stringify(response)}`)      
+        res.json(response)
+  
+        // if (!user) {
+        //   res.status(404)
+        //   //如果不是用户，显示对应的错误信息
+        //   return res.json('用户密码错误')
+        // }
+        // res.json(user)
+  
+      }catch (error) {
+
+        console.log(`/myLogin接口错误：>>>>>>>>>>>${error}`)
+  
+        res.status(error.statusCode || 500)
+        res.json(error)
+      }
+  
+  
+    })
+
+
+
   /////////////////////////////////////////////////////////
   // logout endpoint
   //

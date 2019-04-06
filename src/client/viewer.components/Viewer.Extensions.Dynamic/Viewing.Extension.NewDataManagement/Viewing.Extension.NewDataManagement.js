@@ -31,7 +31,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
   constructor (viewer, options) {
 
     super (viewer, options)
-    //修改：增加this.state
+    //增加this.state
     this.state = {
       show:false
     }
@@ -67,20 +67,22 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     if (this.options.apiUrl) {
 
       const modelId = this.options.dbModel._id
-    //修改：将config改为newdm
+    // this.api 是 ConfigAPI的实例，所有 ajax 请求的集合
       this.api = new ConfigAPI(
         options.apiUrl +
         `/newdm/${options.database}/${modelId}`)
     }
   }
 
-  //修改：新增弹窗控制事件
+  //弹窗控制事件
   handleClose() {
+
     console.log(`这里执行了handleClose`)
     this.react.setState({ show: false });
   }
 
   handleShow() {
+
     console.log(`这里执行了handleShow`)
     this.react.setState({ show: true });
   }
@@ -991,7 +993,9 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     }
   }
 
-  //
+  //TODO：这个是切换窗口模式的函数，可以用来研究样式
+  //      popRenderExtension 在 Viewing.Extension.ExtensionManagerToolbar\Viewing.Extension.ExtensionManagerToolbar.js
+  //      pushViewerPanel 疑似在 src\client\viewer.components\Viewer.Configurator\Viewer.Configurator.js
   async setDocking (docked) {
 
     const id = NewDataManagementExtension.ExtensionId
@@ -1027,12 +1031,14 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     }
   }
 
-  //注释：拓展的头部header 包括了一个切换模式
+  // 拓展的头部header 包括了一个切换模式
   renderTitle (docked) {
 
     const spanClass = docked
       ? 'fa fa-chain-broken'
       : 'fa fa-chain'
+
+    // TODO: onClick={() => this.closeExt() closeExt 不是一个函数？无法关闭拓展
 
     return (
       <div className="title">
@@ -1432,6 +1438,9 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
   render (opts) {
 
     const state = this.react.getState()
+
+    console.log("数据管理拓展 render ，此时的 state 为>>>>>>>>>>>>>>")
+    console.log(state)
 
     this.closeExt = opts.closeExt
 

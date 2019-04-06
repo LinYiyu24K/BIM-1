@@ -31,7 +31,7 @@ module.exports = function() {
       const db = req.params.db
 
       console.log(">>>>>>>>sequences借口的 db 值为: "+db)
-      console.log(">>>>>>>>sequences借口的 modelId 值为: "+modelId)
+      console.log(">>>>>>>>sequences借口的 modelId 值为: "+req.params.modelId)
 
       const modelSvc = ServiceManager.getService(
         db + '-ModelSvc')
@@ -45,6 +45,8 @@ module.exports = function() {
       console.log(`getSequences的返回值: ${response}`)
 
     } catch (error) {
+
+      console.log("发生了错误： "+error)
 
       res.status(error.statusCode || 500)
       res.json(error)

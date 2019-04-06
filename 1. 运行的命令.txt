@@ -18,3 +18,5 @@ mongoimport --db forge-rcdb --collection configurator.models --file D:\work\EBIM
 mongoimport --db forge-rcdb --collection gallery.models --file D:\work\EBIM\BIM\resources\db\dev\gallery.models.json
 
 mongoimport --db forge-rcdb --collection rcdb.materials --file D:\work\EBIM\BIM\resources\db\dev\rcdb.materials.json
+
+mongoimport --db forge-rcdb --collection users --file D:\work\EBIM\BIM\resources\db\dev\users.json

@@ -1,0 +1,15 @@
+
+
+修改日志：
+
+
+
+2、登录逻辑
+APPNavbar.js 中登录
+1）在 client\forgesvc 中的 login 的 catch （58行）中进行登录操作，账号密码已写死
+2）在forge.js 中增加 /myLogin 接口，对 user.json 进行操作验证
+3）增加 user 集合，并在 E:\work\BIM\config\development.config.js 105行增加
+users:{
+        collection:'users'
+      }
+增加 users-modelsvc 的服务
