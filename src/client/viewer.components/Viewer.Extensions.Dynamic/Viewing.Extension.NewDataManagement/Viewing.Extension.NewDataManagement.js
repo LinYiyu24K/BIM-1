@@ -36,6 +36,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       show:false
     }
 
+    console.log(`NewDataManagement 的 options:>>>>>\n${JSON.stringify(options)}`)
+
     this.renderTitle = this.renderTitle.bind(this)
     this.toggleItem = this.toggleItem.bind(this)
     this.addItem = this.addItem.bind(this)
@@ -209,7 +211,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           name:'进度'
         }
       ],    //资料类型选择
-      uploadDataTypes:[   //搜索用的视点类型
+      uploadDataTypes:[   //上传用的视点类型
         {
           id:0,
           name:'请选择'
@@ -239,6 +241,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
             this.loadSequences()  //175行
           }
       })
+    }).catch((error)=>{
+      console.log('NewDataManagement 加载出现了错误',error)
     })
 
     console.log('Viewing.Extension.NewDataManagement loaded')
