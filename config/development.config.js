@@ -101,6 +101,9 @@ const config = {
       },
       rcdb:{
         collection:'rcdb.models'
+      },
+      users:{
+        collection:'users'
       }
     },
     materials: {

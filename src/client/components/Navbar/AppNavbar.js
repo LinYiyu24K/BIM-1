@@ -97,9 +97,11 @@ export default class AppNavbar extends React.Component {
   //
   //
   /////////////////////////////////////////////////////////
-  login () {
+  async login () {
 
     const { appState } = this.props
+
+    console.log(`appState是值：${appState}>>>>>>`)
 
     if (appState.user) {
 
@@ -112,7 +114,9 @@ export default class AppNavbar extends React.Component {
 
     } else {
 
-      this.forgeSvc.login()
+      const user = await this.forgeSvc.login()
+
+      this.props.setUser(user)
     }
   }
 
@@ -127,7 +131,7 @@ export default class AppNavbar extends React.Component {
     const {user} = appState
 
     const username = user
-      ? `${user.firstName} ${user.lastName}`
+      ? `${user}`
       : ''
 
     return appState.navbar.visible && (
@@ -200,7 +204,8 @@ export default class AppNavbar extends React.Component {
                   }
                   {
                     appState.user &&
-                    <img className="avatar" src={appState.user.profileImages.sizeX80}/>
+                    <span className="a360-logo"/>
+                    // <img className="avatar" src={appState.user.profileImages.sizeX80}/>
                   }
                 <label className="nav-label">
                   &nbsp; { appState.user ? username : this.formatMessage(messages.login)}

@@ -217,7 +217,8 @@ const createInitialState = () => {
       visible: true,
       links:{
         settings: true,
-        home: true
+        home: true,
+        login: true
       }
     },
     viewerEnv: null,

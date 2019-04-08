@@ -49,16 +49,55 @@ export default class ForgeSvc extends BaseSvc {
 
       const user = await this.getUser()
 
+      console.log('loging.....>>>>>>>>>>>')
+
       return user
 
     } catch (ex) {
 
-      const url = await this.getLoginURL()
+      console.log('longin,/user接口错误>>>>>>>>>>>>')
 
-      window.location.assign(url)
+      ////////////////////////////////////////////////////////////////
+      //const url = await this.getLoginURL()
+      //
+      //window.location.assign(url)
+      //return null
+      /////////////////////////////////////////////////////////////////
 
-      return null
+      // 注释：新增登录逻辑
+      const url = window.location.href;
+      
+      const myUser ={
+        username:'cangshu',
+        password:'123'
+      }
+      const isSuccessLogin = await this.myLogin(myUser);
+
+      console.log(`>>>>>>>>>>>>>>>>>>>>>isSuccessLogin: ${JSON.stringify(isSuccessLogin)}`)
+
+      if(isSuccessLogin.success == true){
+        alert("cangshu已登录")
+        // window.location.href = url;
+        return myUser.username;
+      }else{
+        alert('账号密码错误！')
+        return null
+      }
     }
+  }
+
+  //注释：新增登录验证逻辑
+  myLogin(myUser){
+
+    const url = "/myLogin"
+
+    return this.api.ajax({
+      contentType: 'application/json',
+      data: JSON.stringify(myUser),
+      dataType: 'json',
+      type: 'POST',
+      url
+    })
   }
 
   /////////////////////////////////////////////////////////

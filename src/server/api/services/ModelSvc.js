@@ -314,6 +314,9 @@ export default class ModelSvc extends BaseSvc {
 
         const dbSvc = ServiceManager.getService(
           this._config.dbName)
+
+          console.log(`postMyLogin操作的dbName是：${this._config.dbName}>>>>>>>>>>>`)
+
           //////////////////////////////////////////
           //注释：fieldQuery是查询字段，符合条件的文档将会被返回
           //pageQuery用于限制返回的文档字段，有时我们不需要返回命中的文档的所有字段
@@ -332,9 +335,14 @@ export default class ModelSvc extends BaseSvc {
           this._config.collection,
           query)
 
+        console.log(`postMyLogin成功`)
+
+
         return resolve (model || {})
 
       } catch (ex) {
+
+        console.log(`postMyLogin发生错误： ${ex}`)
 
         return reject(ex)
       }

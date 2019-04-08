@@ -46,6 +46,8 @@ module.exports = function() {
 
     } catch (error) {
 
+      console.log("发生了错误： "+error)
+
       res.status(error.statusCode || 500)
       res.json(error)
     }

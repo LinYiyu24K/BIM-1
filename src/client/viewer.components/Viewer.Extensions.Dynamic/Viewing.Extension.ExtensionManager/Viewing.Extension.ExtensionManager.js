@@ -233,16 +233,17 @@ class ExtensionManager extends MultiModelExtensionBase {
       // if(extension){
       //   this.onExtensionItemClicked(extension);
       // }
+      var myThis = this
       viewer.loadDynamicExtension('Viewing.Extension.NewDataManagement').then(function(){
-        let extension = this.getExtensionbyId("Viewing.Extension.NewDataManagement");
-        let curExtension = this.getCurrentOpenExtension();
+        let extension = myThis.getExtensionbyId("Viewing.Extension.NewDataManagement");
+        let curExtension = myThis.getCurrentOpenExtension();
 
         if(curExtension){//存在已经打开的extension，把它关掉
-          this.onExtensionItemClicked(curExtension);
+          myThis.onExtensionItemClicked(curExtension);
         }
 
         if(extension){
-          this.onExtensionItemClicked(extension);
+          myThis.onExtensionItemClicked(extension);
         }
       });
 
