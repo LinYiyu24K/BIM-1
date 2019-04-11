@@ -62,21 +62,21 @@ module.exports = function() {
   // add sequence
   //
   /////////////////////////////////////////////////////////
-  router.post('/:db/:modelId/sequences',
+  router.post('/:db/:modelId/userdata',
     async(req, res) => {
 
     try {
 
       const db = req.params.db
 
-      const sequence = req.body.sequence
+      const user = req.body.user
       const modelSvc = ServiceManager.getService(
         db + '-ModelSvc')
 
       const response =
-        await modelSvc.addConfigSequence (
+        await modelSvc.addUserData (
           req.params.modelId,
-          sequence)
+          user)
 
       res.json(response)
 

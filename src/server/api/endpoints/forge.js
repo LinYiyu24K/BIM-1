@@ -90,7 +90,7 @@ module.exports = function() {
   
       }catch (error) {
 
-        console.log(`/myLogin接口错误：>>>>>>>>>>>${error}`)
+        console.log(`/myLogin接口错误：>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>${JSON.stringify(error)}`)
   
         res.status(error.statusCode || 500)
         res.json(error)

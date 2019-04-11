@@ -336,13 +336,12 @@ export default class ModelSvc extends BaseSvc {
           query)
 
         console.log(`postMyLogin成功`)
-
-
+        
         return resolve (model || {})
 
       } catch (ex) {
 
-        console.log(`postMyLogin发生错误： ${ex}`)
+        console.log(`postMyLogin发生错误：>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ${JSON.stringify(ex)}`)
 
         return reject(ex)
       }
@@ -372,6 +371,45 @@ export default class ModelSvc extends BaseSvc {
           {
             $push: {
               'sequences': sequence
+            }
+          },
+          (err) => {
+
+            return err
+              ? reject(err)
+              : resolve (sequence)
+          })
+
+      } catch (ex) {
+
+        return reject(ex)
+      }
+    })
+  }
+
+  /////////////////////////////////////////////////////////
+  // 注释：新增，添加 users , 相当于 sequences
+  //
+  /////////////////////////////////////////////////////////
+  addUserData (modelId, user) {
+
+    return new Promise(async(resolve, reject) => {
+
+      try {
+
+        const dbSvc = ServiceManager.getService(
+          this._config.dbName)
+
+        const collection = await dbSvc.getCollection(
+          this._config.collection)
+
+        collection.update(
+          {
+            '_id': new mongo.ObjectID(modelId)
+          },
+          {
+            $push: {
+              'users': user
             }
           },
           (err) => {

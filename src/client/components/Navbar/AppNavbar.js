@@ -17,6 +17,7 @@ import Navbar from 'react-bootstrap/lib/Navbar'
 import Button from 'react-bootstrap/lib/Button'
 import Modal from 'react-bootstrap/lib/Modal'
 import Nav from 'react-bootstrap/lib/Nav'
+import ContentEditable from 'react-contenteditable'
 
 import { intlShape } from 'react-intl'
 import messages from 'translations/messages'
@@ -46,8 +47,20 @@ export default class AppNavbar extends React.Component {
     this.forgeSvc = ServiceManager.getService(
       'ForgeSvc')
 
+    //注释：新增引入 storagesvc 用于存储用户登录,用于 this.login
+    this.storageSvc = ServiceManager.getService(
+      'StorageSvc')
+
+    //注释：新增引入 dialogSvc 用于弹窗用户登录,用于 this.myLogin  
+    this.dialogSvc =
+      ServiceManager.getService(
+        'DialogSvc') 
+
     this.formatMessage = this.context.intl.formatMessage
+
+
   }
+
 
   /////////////////////////////////////////////////////////
   //
@@ -101,23 +114,158 @@ export default class AppNavbar extends React.Component {
 
     const { appState } = this.props
 
-    console.log(`appState是值：${appState}>>>>>>`)
+    console.log(`appState是值：>>>>>>>>>>>>>>${appState}`)
 
-    if (appState.user) {
+    const user = appState.user
+
+    const sessionStorageUser = window.sessionStorage.getItem('user')
+
+    console.log(`sessionStorageUser 的值:>>>>>>>>>${sessionStorageUser}`)
+
+    const username = user
+      ? `${user}`
+      : sessionStorageUser ?`${sessionStorageUser}`:``
+
+    console.log(`login 中最终的`)
+
+    if (username) {
 
       this.props.setUser(null)
 
       this.forgeSvc.logout().then(() => {
+
+        if(window.sessionStorage){
+
+          window.sessionStorage.setItem('user','')
+        }else{
+          
+          this.storageSvc.save('user',null)
+        }
+        
+        console.log("退出登录之后的 stotageSvc 中的 user 的值:>>>>>>>>")
+        console.log(this.storageSvc.load('user'))
+        console.log("退出登录之后的 sessionStorage 中的 user 的值:>>>>>>>>")
+        console.log(sessionStorage.getItem('user'))
 
         window.location.reload()
       })
 
     } else {
 
-      const user = await this.forgeSvc.login()
+      await this.myLogin()
 
-      this.props.setUser(user)
     }
+  }
+
+    //13 enter=回车键
+    onKeyDown (e) {
+
+      if (e.keyCode === 13) {
+  
+        e.stopPropagation()
+        e.preventDefault()
+      }
+    }
+  
+    //
+    onInputChanged (e, key) {
+  
+      const state = this.state
+  
+      state[key] = e.target.value
+  
+      this.setState(state)
+    }
+
+  myLogin () {
+
+    this.setState({
+      loginUsername: '',
+      loginPassword:''
+    })
+
+    const onClose = async(result) => {
+
+      console.log(this.state.loginUsername,">>>>>>>>this.state.loginUsername")
+
+      const state = this.state;
+
+      const myUser = {
+        username: state.loginUsername,
+        password: state.loginPassword
+      }
+
+      if (result === 'OK') {
+
+        const isSuccessLogin = await this.forgeSvc.myLoginAPI(myUser);
+
+        console.log(`>>>>>>>>>>>>>>>>>>>>>isSuccessLogin: ${JSON.stringify(isSuccessLogin)}`)
+
+        const user = myUser.username;
+
+        if(isSuccessLogin.success == true){
+          console.log("cangshu已登录")
+          // window.location.href = url;
+          // return myUser.username;
+          
+          console.log(`登录的用户名是:>>>>>>>>>>>>>>${user}`)
+
+          this.props.setUser(user)
+
+          if(window.sessionStorage){
+
+            window.sessionStorage.setItem('user',user)
+          }else{
+            
+            this.storageSvc.save('user',user)
+          }
+
+          console.log(`此时 sessionStorage 中的 user 值是:>>>>>>>>>>>>>>>>>${window.sessionStorage.getItem('user')}`)
+
+        }else{
+
+          alert('账号密码错误！')
+
+          this.props.setUser(null)
+
+          if(window.sessionStorage){
+
+            window.sessionStorage.setItem('user','')
+          }else{
+            
+            this.storageSvc.save('user',null)
+          }
+
+          console.log(`此时 sessionStorage 中的 user 值是:>>>>>>>>>>>>>>>>>${window.sessionStorage.getItem('user')}`)
+
+        }
+      }
+
+      this.dialogSvc.off('dialog.close', onClose)
+    }
+
+    this.dialogSvc.on('dialog.close', onClose)
+
+    this.dialogSvc.setState({
+      className: 'config-manager-dlg',
+      title: 'Login ...',
+      content:
+        <div>
+          <ContentEditable
+            onChange={(e) => this.onInputChanged(e, 'loginUsername')}
+            onKeyDown={(e) => this.onKeyDown(e)}
+            data-placeholder="User name ..."
+            className="sequence-name-input"
+            html={''}/>
+            <ContentEditable
+            onChange={(e) => this.onInputChanged(e, 'loginPassword')}
+            onKeyDown={(e) => this.onKeyDown(e)}
+            data-placeholder="Password ..."
+            className="sequence-name-input"
+            html={''}/>
+        </div>,
+      open: true
+    })
   }
 
   /////////////////////////////////////////////////////////
@@ -130,9 +278,16 @@ export default class AppNavbar extends React.Component {
 
     const {user} = appState
 
+    const sessionStorageUser = window.sessionStorage.getItem('user')
+
     const username = user
       ? `${user}`
-      : ''
+      : sessionStorageUser ?`${sessionStorageUser}`:``
+
+      console.log(`此时 appNavbar render中 appState 的 user 值是:>>>>>>>>>>>>>>>>>${user}`)
+      console.log(`此时 appNavbar render中 sessionStorage 的 user 值是:>>>>>>>>>>>>>>>>>${sessionStorageUser}`)
+      console.log(`此时 appNavbar render中 sessionStorage 的 user 类型是:>>>>>>>>>>>>>>>>>${sessionStorageUser}`)
+      console.log(`此时 appNavbar render中 最终填充的 的 username 值是:>>>>>>>>>>>>>>>>>${username}`)
 
     return appState.navbar.visible && (
 
@@ -208,7 +363,7 @@ export default class AppNavbar extends React.Component {
                     // <img className="avatar" src={appState.user.profileImages.sizeX80}/>
                   }
                 <label className="nav-label">
-                  &nbsp; { appState.user ? username : this.formatMessage(messages.login)}
+                  &nbsp; { appState.user ? username : sessionStorageUser ?sessionStorageUser:this.formatMessage(messages.login)}
                 </label>
               </NavItem>
             }

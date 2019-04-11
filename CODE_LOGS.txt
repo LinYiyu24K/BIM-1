@@ -2,14 +2,18 @@
 
 修改日志：
 
+疑问:为什么 AppNavbar 中登录弹窗中输入一个字符就 render 一次
 
-
-2、登录逻辑
+1、登录逻辑
 APPNavbar.js 中登录
-1）在 client\forgesvc 中的 login 的 catch （58行）中进行登录操作，账号密码已写死
-2）在forge.js 中增加 /myLogin 接口，对 user.json 进行操作验证
-3）增加 user 集合，并在 E:\work\BIM\config\development.config.js 105行增加
+1）
+  在 src\client\components\Navbar\AppNavbar.js 中的增加 myLogin 方法，让用户进行弹窗登录操作，默认账号密码为 cangshu 123 （暂未实现注册功能）
+  同时更改 AppNavbar 的 render 函数 28 和 336 行，判断 sessionStorage 以判断登录态，自动登录
+2）在 client/ForgeSvc.js 中增加 myLoginAPI ajax请求方法体
+3）在forge.js 中增加 /myLogin 接口，在 user.json 集合进行操作验证 ， 并且登录成功后前端分别在 sessionStorage 和 storageSvc 中 save ‘user’ 键用于存储登录态
+4）增加 user 集合，并在 E:\work\BIM\config\development.config.js 105行增加
 users:{
         collection:'users'
       }
 增加 users-modelsvc 的服务
+

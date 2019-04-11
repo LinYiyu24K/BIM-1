@@ -44,13 +44,13 @@ export default class ConfigAPI extends ClientAPI {
   // 注释：这个功能应该需要改动，addSequence类似增加用户
   //
   /////////////////////////////////////////////////////////
-  addSequence (sequence) {
+  addSequence (user) {
 
     const payload = {
-      sequence
+      user
     }
 
-    const url = '/sequences'
+    const url = '/userdata'
 
     return this.ajax({
       url: url,

@@ -1,6 +1,4 @@
 /////////////////////////////////////////////////////////
-// Viewing.Extension.StateManager.React
-// by Philippe Leefsma, March 2017
 //
 /////////////////////////////////////////////////////////
 import MultiModelExtensionBase from 'Viewer.MultiModelExtensionBase'
@@ -24,6 +22,10 @@ import {
   DropdownButton,
   MenuItem
 } from 'react-bootstrap'
+
+import {
+  setUser
+  } from '../../../store/app'
 
 class NewDataManagementExtension extends MultiModelExtensionBase {
 
@@ -51,12 +53,15 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       ServiceManager.getService(
         'DialogSvc')
 
+    this.storageSvc = ServiceManager.getService(
+      'StorageSvc')    
+
     this.restoreFilter = options.restoreFilter || null
 
     this.playPeriod = this.options.playPeriod || 1800
 
     this.dialogSvc =
-      ServiceManager.getService('DialogSvc')
+      ServiceManager.getService('DialogSvc') 
 
     this.itemsClass = this.guid()
 
@@ -191,7 +196,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       loop: true,   //循环播放
       items: [],    //一个视点序列里的所有视点
 
-      user: null, // 当前用户，同 sequence
+      // user: username, // 当前用户，同 sequence
       uploadDataType:{id:0,name:'请选择'},//用户上传时候的视点类型
       selectedDataType:{id:0,name:'请选择'},//用户查询选中的视点类型
       dataName:'',//用户查询输入的字符串
@@ -247,6 +252,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       console.log('NewDataManagement 加载出现了错误',error)
     })
 
+    console.log(this.react.getState())
+
     console.log('Viewing.Extension.NewDataManagement loaded')
 
     return true
@@ -278,17 +285,66 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
   
   async loadSequences () {
 
+    let hasUserLogin = ''
+
+    if(window.sessionStorage){
+
+      hasUserLogin = window.sessionStorage.getItem('user');
+    }else{
+
+      let usernameArr = Object.values(this.storageSvc.load('user'));
+      usernameArr.pop();
+      hasUserLogin = usernameArr.join()
+    }
+
+    
+    console.log(`存储 storageSvc 的 hasUserLogin 的值是 :>>>>>>>>> ${hasUserLogin}`)
+
+    if(hasUserLogin.length === 0){
+      
+      alert('请登录！')
+      
+      return 
+    }
+
     //注释：this.api 就是 Viewing.Extension.Config.API.js导出的实例
     //      这里返回的 sequences 是一个只有一个用户的数组，["cangshu"]
-    const sequences =
+    let sequences =
       await this.api.getSequences({
         sortByName: true
       })
     //TODO:这里应该返回一个用户的sequence
     //修改：将const sequences = sequences.length 修改为 const user = sequences.length
-    const user = sequences.length ?
+    let user = sequences.length ?
       sequences[0] : null
+    
+    if(!user){
 
+      const username = usernameArr.join('');
+
+      console.log(`存储 storageSvc 的 username 的值是 :>>>>>>>>> ${username}`)
+
+      const loginUser = {
+        id: this.guid(),
+        stateIds: [],
+        user:username
+      }
+
+      if(this.api){
+
+        await this.api.addSequence(loginUser)
+
+        sequences =
+        await this.api.getSequences({
+          sortByName: true
+        })
+
+        user = sequences.length ?
+          sequences[0] : null
+      }
+
+    }
+      
     //修改：将 this.react.setState({ 修改为  this.react.setState({
     //       sequences                                            user
     //     })                                   })
@@ -303,6 +359,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       this.setActiveSequence (user)
     }, 2000)
   }
+
 
   //
   onModelActivated (event) {
@@ -637,12 +694,12 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         //所以在将视点信息存在data中的 states 中，并且转为字符串
         if(file != null ){
           this.api.addStateFile(
-            state.sequence.id,
+            state.user.id,
             file,
             {"data":{"state":JSON.stringify(viewerState)}})
         }else{
           this.api.addState(
-            state.sequence.id,
+            state.user.id,
             viewerState
           )
         }
