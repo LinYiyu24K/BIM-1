@@ -520,7 +520,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     })
   }
 
-  //
+  //注释：根据dom 节点获得 states 的 id 数组
   getStateIds () {
 
     const domItems = document.getElementsByClassName(
