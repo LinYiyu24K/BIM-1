@@ -19,6 +19,8 @@ export default class ForgeSvc extends BaseSvc {
 
         this._clientId = res.clientId
       })
+
+
   }
 
   /////////////////////////////////////////////////////////
@@ -64,14 +66,14 @@ export default class ForgeSvc extends BaseSvc {
       //return null
       /////////////////////////////////////////////////////////////////
 
-      // 注释：新增登录逻辑
-      const url = window.location.href;
+      // 注释：登录逻辑
+      // const url = window.location.href;
       
       const myUser ={
         username:'cangshu',
         password:'123'
       }
-      const isSuccessLogin = await this.myLogin(myUser);
+      const isSuccessLogin = await this.myLoginAPI(myUser);
 
       console.log(`>>>>>>>>>>>>>>>>>>>>>isSuccessLogin: ${JSON.stringify(isSuccessLogin)}`)
 
@@ -86,8 +88,10 @@ export default class ForgeSvc extends BaseSvc {
     }
   }
 
+  
+
   //注释：新增登录验证逻辑
-  myLogin(myUser){
+  myLoginAPI(myUser){
 
     const url = "/myLogin"
 

@@ -48,6 +48,20 @@
   overflow: hidden;
 }
 
+.sequence-name-input {
+  border: 1px solid #aeaeae;
+  width: calc(100% - 236px);
+  padding: 3px 0 0 10px;
+  margin-bottom:10px;
+  font-weight: normal;
+  white-space: nowrap;
+  border-radius: 4px;
+  text-align: left;
+  overflow: hidden;
+  height: 26px;
+  width: 100%;
+}
+
 .navbar .dropdown.open{
   overflow: visible;
 }
