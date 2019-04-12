@@ -100,6 +100,7 @@ module.exports = {
       $: 'jquery'
     }),
 
+    //html模板插件
     new HtmlWebpackPlugin({
 
       viewer3D: config.forge.viewer.viewer3D,

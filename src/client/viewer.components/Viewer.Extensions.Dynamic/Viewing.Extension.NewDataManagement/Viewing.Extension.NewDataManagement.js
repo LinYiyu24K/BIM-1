@@ -38,7 +38,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       show:false
     }
 
-    console.log(`NewDataManagement 的 options:>>>>>\n${JSON.stringify(options)}`)
+    // console.log(`NewDataManagement 的 options:>>>>>\n${JSON.stringify(options)}`)
 
     this.renderTitle = this.renderTitle.bind(this)
     this.toggleItem = this.toggleItem.bind(this)
@@ -320,7 +320,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     
     if(!user){
 
-      const username = usernameArr.join('');
+      const username = hasUserLogin;
 
       console.log(`存储 storageSvc 的 username 的值是 :>>>>>>>>> ${username}`)
 
