@@ -2,7 +2,9 @@
 
 修改日志：
 
-疑问:为什么 AppNavbar 中登录弹窗中输入一个字符就 render 一次
+疑问:
+为什么 AppNavbar 中登录弹窗中输入一个字符就 render 一次
+src\client\viewer.components\Viewer.Configurator\Viewer.Configurator.js 中的 loadDynamicExtension 方法不起效果！！！
 
 1、登录逻辑
 APPNavbar.js 中登录

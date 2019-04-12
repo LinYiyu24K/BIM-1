@@ -38,8 +38,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       show:false
     }
 
-    console.log(`NewDataManagement 的 options:>>>>>\n${JSON.stringify(options)}`)
-
     this.renderTitle = this.renderTitle.bind(this)
     this.toggleItem = this.toggleItem.bind(this)
     this.addItem = this.addItem.bind(this)
@@ -94,11 +92,44 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     this.react.setState({ show: true });
   }
 
-/////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+  //
+  //用户进入资料管理拓展，未登陆，则弹窗提示
+  /////////////////////////////////////////////////////////
+  showMissUserDlg () {
+
+    const onClose = (result) => {
+
+      this.dialogSvc.off('dialog.close', onClose)
+
+      if (result === 'OK') {
+
+        return
+      }
+
+    }
+
+    this.dialogSvc.on('dialog.close', onClose)
+
+    this.dialogSvc.setState({
+      onRequestClose: () => {},
+      className: 'login-dlg',
+      title: '请登录',
+      content:
+        <div>
+          数据管理与单独用户绑定，请先行登录...
+        </div>,
+      open: true
+      // TODO:将open设为true
+      // open: false
+    })
+  }
+
+  /////////////////////////////////////////////////////////
   //
   //修改：上传资料时候用户没有在模型中选中焦点
   /////////////////////////////////////////////////////////
-  showMissPoint () {
+  showMissPointDlg () {
 
     const onClose = (result) => {
 
@@ -131,7 +162,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
   //
   //修改：上传资料时候用户没有选择资料类型
   /////////////////////////////////////////////////////////
-  showMissDataType () {
+  showMissDataTypeDlg () {
 
     const onClose = (result) => {
 
@@ -168,7 +199,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
   // Extension Id
   static get ExtensionId() {
-    return 'Viewing.Extension.NewDataManagement'
+    return 'Viewing.Extension.NewDataManagementExtension'
   }
 
   // Load callback
@@ -249,12 +280,12 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           }
       })
     }).catch((error)=>{
-      console.log('NewDataManagement 加载出现了错误',error)
+      console.log('NewDataManagementExtension 加载出现了错误',error)
     })
 
     console.log(this.react.getState())
 
-    console.log('Viewing.Extension.NewDataManagement loaded')
+    console.log('Viewing.Extension.NewDataManagementExtension loaded')
 
     return true
   }
@@ -264,7 +295,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     this.react.popViewerPanel(this)
 
-    console.log('Viewing.Extension.NewDataManagement unloaded')
+    console.log('Viewing.Extension.NewDataManagementExtension unloaded')
 
     return true
   }
@@ -289,8 +320,12 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     if(window.sessionStorage){
 
+      console.log(`hasUserLogin 使用了 sessionStorage>>>>>>>>>>>>>>>>>>>>>`)
+
       hasUserLogin = window.sessionStorage.getItem('user');
     }else{
+
+      console.log(`hasUserLogin 使用了 storageSvc>>>>>>>>>>>>>>>>>>>>>`)
 
       let usernameArr = Object.values(this.storageSvc.load('user'));
       usernameArr.pop();
@@ -298,11 +333,11 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     }
 
     
-    console.log(`存储 storageSvc 的 hasUserLogin 的值是 :>>>>>>>>> ${hasUserLogin}`)
+    console.log(` hasUserLogin 的值是 :>>>>>>>>> ${hasUserLogin}`)
 
-    if(hasUserLogin.length === 0){
+    if(hasUserLogin == null || hasUserLogin.length === 0){
       
-      alert('请登录！')
+      this.showMissUserDlg()
       
       return 
     }
@@ -320,7 +355,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     
     if(!user){
 
-      const username = usernameArr.join('');
+      const username = hasUserLogin;
 
       console.log(`存储 storageSvc 的 username 的值是 :>>>>>>>>> ${username}`)
 
@@ -639,7 +674,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     //注释：viewer.getState()得到一个视点的所有的信息，根据viewer判断当前视点位置？？？？？？？/
     //      dataType 是用户上传视点的类型
-    const viewerState = Object.assign({},
+    let viewerState = Object.assign({},
       this.viewer.getState(), {
         id: this.guid(),
         name,
@@ -648,12 +683,12 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     
     //更改：新增。判断用户是否选择焦点，如果没有选择，则弹窗提示
     if(viewerState.objectSet[0].id.length === 0){
-      this.showMissPoint()
+      this.showMissPointDlg()
       return
     }
     //更改：新增。判断用户是否选择资料类型，如果没有选择，则弹窗提示
     if(viewerState.dataType.id == 0){
-      this.showMissDataType()
+      this.showMissDataTypeDlg()
       return
     }
 
@@ -693,10 +728,15 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         //这个请求会调用 upLoadSvc 的upload方法，解析data字段，
         //所以在将视点信息存在data中的 states 中，并且转为字符串
         if(file != null ){
-          this.api.addStateFile(
+          const newState =  await this.api.addStateFile(
             state.user.id,
             file,
             {"data":{"state":JSON.stringify(viewerState)}})
+
+            viewerState = newState.body
+
+            console.log(`新增加的 file 数据视点的所有信息:>>>>>>>>>>>>>>>>>>`)
+            console.log(newState)
         }else{
           this.api.addState(
             state.user.id,
@@ -1406,12 +1446,16 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
               className={className}
               key={item.id}
               onClick={async() => {
+
+                console.log(`数据视点 item : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>`)
+                console.log(item)
+                console.log(`<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
                 if(state.stateSelection) {
                   if (this.itemToggling) {
-                    console.log(`>>>>>>>>这里执行了this.toggleItem(item)`)
+                    console.log(`>>>>>>>>这里执行了this.toggleItem(item)>>>>>>>>>>>`)
                     this.toggleItem(item)
                   } else {
-                    console.log(`>>>>>>>>?>>>>>这里执行了his.onRestoreState (item)`)
+                    console.log(`>>>>>>>>?>>>>>这里执行了this.onRestoreState (item)>>>>>>>>>>>>>>`)
                     this.onRestoreState (item)
 
                     //注释：获取所点击视点的资料图片
@@ -1486,7 +1530,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           <img
             id='itemImg'
             style={{"width":"200px","height":"200px","backgroundColor":"red","overflow":"hidden"}} 
-            src="http:localhost:3000/resources/img/newDM/3.png" 
+            src="http:localhost:3000/resources/img/newDM/60cf0f5bd0e56d818079e73af9395f77.png" 
             alt="图片"/>
         </div>
       </div>

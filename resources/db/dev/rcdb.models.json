@@ -29,6 +29,18 @@
                 "parentControl" : "modelTools",
                 "extensions" : [
                     {
+                        "id" : "Viewing.Extension.NewDataManagementExtension",
+                        "enabled" : true,
+                        "options" : {
+                            "displayIndex" : NumberInt(0),
+                            "flex" : 0.6
+                        }
+                    },
+                    {
+                        "id" : "Viewing.Extension.ConfigManager",
+                        "enabled" : true
+                    },
+                    {
                         "id" : "Viewing.Extension.Database.Table",
                         "enabled" : true,
                         "options" : {

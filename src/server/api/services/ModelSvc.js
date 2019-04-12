@@ -763,11 +763,16 @@ export default class ModelSvc extends BaseSvc {
 
         const collection = await dbSvc.getCollection(
           this._config.collection)
-          console.log(`》》》》》》》执行到了！！上传文件!!!的数据库`)
-        console.log(`>>>>>>>数据库这里states的值是： ${JSON.stringify(states)}`)
+
+        console.log(`》》》》》》》执行到了！！上传文件!!!的数据库`)
+
         const statesArray = Array.isArray(states)
           ? states : [states]
 
+        console.log(`>>>>>>>数据库这里statesArr的值是>>>>>>>>>>>>>>： `)
+        console.log(statesArray)
+        console.log(`>>>>>>>statesArray是个数组吗？>>>>>>>>>>>>>>： `)
+        
         const stateIds = statesArray.map((item) => {
           return item.id
         })

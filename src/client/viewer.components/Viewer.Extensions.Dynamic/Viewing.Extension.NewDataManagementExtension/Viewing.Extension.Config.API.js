@@ -205,6 +205,7 @@ export default class ConfigAPI extends ClientAPI {
     }, opts)
 
     return super.upload (url, file, options)
+
   }
 
 
