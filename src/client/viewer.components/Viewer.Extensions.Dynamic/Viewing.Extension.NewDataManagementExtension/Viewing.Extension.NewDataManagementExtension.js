@@ -1421,7 +1421,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     })
   }
 
-  //注释：资料视点在这里渲染
+  //注释：资料视点组在这里渲染
   renderItems () {
 
     const state = this.react.getState()
@@ -1544,8 +1544,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     const state = this.react.getState()
 
-    console.log("数据管理拓展 render ，此时的 state 为>>>>>>>>>>>>>>")
-    console.log(state)
+    // console.log("数据管理拓展 render ，此时的 state 为>>>>>>>>>>>>>>")
+    // console.log(state)
 
     this.closeExt = opts.closeExt
 

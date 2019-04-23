@@ -220,6 +220,8 @@ export default class AppNavbar extends React.Component {
             this.storageSvc.save('user',user)
           }
 
+          window.location.reload()
+
           console.log(`此时 sessionStorage 中的 user 值是:>>>>>>>>>>>>>>>>>${window.sessionStorage.getItem('user')}`)
 
         }else{

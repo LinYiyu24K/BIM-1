@@ -44,5 +44,9 @@ Viewing.Extension.ExtensionManagerToolbar.js
 集成了 extension 的一些公共管理函数
 
 ClientAPI.js
-E:\work\BIM\src\client\components\ClientAPI\ClientAPI.js
+(E:\work\BIM\src\client\components\ClientAPI\ClientAPI.js)
 封装了一些请求函数，比如 this.ajax、 this.fetch 等函数
+
+WidgetContainer.js
+(E:\work\BIM\src\client\components\WidgetContainer\WidgetContainer.js)
+一个组件，extension 的最外层框架，包括 title 和主体的 children
