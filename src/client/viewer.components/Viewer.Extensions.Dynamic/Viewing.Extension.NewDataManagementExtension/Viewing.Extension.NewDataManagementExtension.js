@@ -212,12 +212,14 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         }
       })
 
+    //作用未知，在 renderItem 方法中用这个变量进行if判断，true 时 item 的 onClick 事件会触发 toggleItem 方法
+    //然而一直执行 onRestoreState ，可见 this.option.itemToggling 为 flase
     this.itemToggling = this.options.itemToggling
 
     this.react.setState({
       emptyStateNameCaption:'新资料的名称 ...',
       disabled: this.options.disabled,
-      stateSelection: true,
+      stateSelection: true,//作用未知，在 renderItem 方法中用这个变量进行if判断，true 时 item 的 onClick 事件才会触发
       stateCreation: true,
       newSequenceName: '',
       newStateName: '',
@@ -271,6 +273,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     }).then (() => {
 
+      const that = this
+
       this.react.pushRenderExtension(this).then(
         async() => {
 
@@ -278,8 +282,33 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
             this.loadSequences()  //175行
           }
+
+          //在 layout 下创建资料的容器
+          const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0],
+                oldContainer = layout.lastChild,
+                myDataContainer = document.createElement('div');
+
+          myDataContainer.id = "myDataContainer"
+          const className = 'myDataContainer'
+          myDataContainer.className = className
+
+              // 错了，appendChild 报错 : Failed to execute 'appendChild' on 'Node': parameter 1 is not of type 'Node'.
+              // options = {
+              //   docked:true,
+              //   showTitle:true
+              // },
+              // myDataContainer = this.renderDataContainer(options);
+
+            
+          if(oldContainer.id == "myDataContainer"){
+            layout.removeChild(oldContainer)
+          }
+          layout.appendChild(myDataContainer)
+
+          
       })
     }).catch((error)=>{
+
       console.log('NewDataManagementExtension 加载出现了错误',error)
     })
 
@@ -820,7 +849,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     
   }
 
-  //注释：资料视点的点击事件
+  //注释：资料视点的点击事件触发这个方法
+  //将 item 过滤之后，调用 this.viewer.restoreState 来翻转 3D 视图？
   onRestoreState (
     viewerState, immediate = this.options.restoreImmediate) {
 
@@ -838,7 +868,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     
   }
 
-  //
+  //TODO：不优先，这里需要增加确认删除的弹窗？
   deleteItem (id) {
 
     const state = this.react.getState()
@@ -1412,9 +1442,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     })
 
     this.emit('state.toggled', selectedItem)
-    
-    //TODO:在这里弹窗展示资料
-    alert("该视点未上传任何资料!")
 
     this.react.setState({
       items
@@ -1428,12 +1455,14 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     const items = state.items.map((item) => {
 
+      //对 item.name 进行前端过滤防止 xss 攻击
       const text = DOMPurify.sanitize(item.name)
 
       //TODO：用于视点的图片 src
       const thumbnailUrl =
       `/resources/img/newDM/${item.filename}`
 
+      //选中或者hover变蓝色
       const className = "item" +
         (state.stateSelection ? ' selectable' : '') +
         (this.itemToggling ? ' toggable' : '') +
@@ -1444,12 +1473,10 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           
           <div data-id={item.id} data-name={text}
               className={className}
-              key={item.id}
               onClick={async() => {
 
-                console.log(`数据视点 item : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>`)
-                console.log(item)
-                console.log(`<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`)
+                console.log(`>>>>点击数据视点 item : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>`,item)
+
                 if(state.stateSelection) {
                   if (this.itemToggling) {
                     console.log(`>>>>>>>>这里执行了this.toggleItem(item)>>>>>>>>>>>`)
@@ -1457,29 +1484,46 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                   } else {
                     console.log(`>>>>>>>>?>>>>>这里执行了this.onRestoreState (item)>>>>>>>>>>>>>>`)
                     this.onRestoreState (item)
-
+                  }
                     //注释：获取所点击视点的资料图片
-                    //TODO： 似乎这句 getData 不需要？！
-                    await this.api.getData(state.sequence.id, item.id);
+                    //TODO： 这个 getData 方法获取图片实体，多写了
+                    // await this.api.getData(state.sequence.id, item.id);
                         
                     var newImg = document.createElement("img"),
-                        showDataContainer = document.getElementById("showDataContainer"),
+                        showDataContainer = document.getElementById("myDataContainer"),
                         oldImg = showDataContainer.lastChild;
                     newImg.id = "itemImg";
-                    newImg.style.cssText="height:200px;wight:200px;overflow:hidden"
-                    console.log(`_______-newImg: ${newImg}`)
-                    console.log(`_______showDataContainer: ${showDataContainer}`)
-                    oldImg.id == "itemImg" && showDataContainer.removeChild(showDataContainer.lastChild);
+                    newImg.style.cssText="height:200px;wight:200px;overflow:hidden";
+
+                    //如果存在缓存照片，则 remove
+                    if((oldImg && oldImg.id) && oldImg.id == "itemImg"){
+                      showDataContainer.removeChild(showDataContainer.lastChild);
+                    }
                     newImg.onload = ()=>{
                       console.log('+++++++++++图片加载 src 成功， onload+++++++++++=+++++++')
                     }
-                    newImg.src = "http://localhost:3000/resources/img/newDM/"+item.filename;
+                    newImg.onerror=(e)=>{
+                      console.log('!!!!!!资料图片加载失败!!!!!!: 错误:',e)
+                    }
+
+                    //newImg.src = "http://localhost:3000/resources/img/newDM/"+item.filename;
+
+                    newImg.src = "/resources/img/newDM/"+item.filename;
                     showDataContainer.appendChild(newImg);
-                    // window.location.href = window.location.href;
-                    //TODO：在这里写弹窗展示视点资料的逻辑
+
+                    //设置 show 状态为 true ，显示弹窗
                     this.handleShow()
-                  }
+
+                    //在全局  reflex-layout.reflex-container.vertical.configurator 这个元素下弹窗展示图片
+                    // const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0],
+                    //       oldImage = layout.lastChild;
+                    // newImg.style.cssText="position:absolute;top:20%;left:20%;z-index:1000";
+                    // newImg.id = "itemImage"
+                    // oldImage.id == "itemImage" && layout.removeChild(oldImage);
+                    // layout.appendChild(newImg);
                 }
+
+                console.log('<<<<<<<<<<<<<<< reflex-container 的 dom 列表！！！！>>>>>>>>>>>',document.getElementsByClassName('reflex-layout reflex-container vertical configurator'))
               }}>
 
               <Label text={text}/>
@@ -1497,10 +1541,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
               }
 
         </div>
-
-          {/* <div className="image-container">
-            <Image src={thumbnailUrl}/>
-          </div> */}
 
         </div>
             
@@ -1536,6 +1576,29 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       </div>
       
       
+    )
+  }
+
+  //渲染资料弹窗容器
+  renderDataContainer (opts) {
+
+    const state = this.react.getState()
+
+    // this.closeExt = opts.closeExt
+
+    return (
+      <WidgetContainer
+        renderTitle={() => this.renderTitle(opts.docked)}
+        showTitle={opts.showTitle}
+        className={this.className}>
+        {
+            // state.disabled &&
+            // <div className="disabled-overlay"/>
+        }
+        {/* { this.renderControls() } */}
+        {/* { this.renderItems() } */}
+
+      </WidgetContainer>
     )
   }
 

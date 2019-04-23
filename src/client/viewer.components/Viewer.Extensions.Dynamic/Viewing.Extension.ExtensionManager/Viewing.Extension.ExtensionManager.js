@@ -353,9 +353,9 @@ class ExtensionManager extends MultiModelExtensionBase {
           react: this.reactOpts
         })
 
-      console.log(`执行到了 extensionManager 的 loadDynamicExtension 函数，传入的 extension 是:>>>>>>>>>>>>>>>`)
-      console.log(extension)
-      console.log(`extension 其中的 native 决定是否使用 viewer.loadDynamicExtension 方法 ，值为 ： ${extension.native}`)
+      // console.log(`执行到了 extensionManager 的 loadDynamicExtension 函数，传入的 extension 是:>>>>>>>>>>>>>>>`)
+      // console.log(extension)
+      // console.log(`extension 其中的 native 决定是否使用 viewer.loadDynamicExtension 方法 ，值为 ： ${extension.native}`)
       // native extensions are the ones available
       // with the viewer API
       if (extension.native) {

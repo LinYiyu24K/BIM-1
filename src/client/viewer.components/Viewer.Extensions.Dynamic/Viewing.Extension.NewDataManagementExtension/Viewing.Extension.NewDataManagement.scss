@@ -1,3 +1,18 @@
+.myDataContainer{
+  position:absolute;
+  top:20%;
+  left: 30%;
+  height:40%;
+  width:40%;
+  overflow: scroll;
+  background-color: rgba(255, 255, 255, 0.70);
+  z-index: 1000;
+  // opacity: 0.6;
+  // filter:Alpha(opacity=60);//兼容IE8以下
+
+}
+
+
 .config-manager .title {
   display: inline-flex;
   float: left;
