@@ -6,7 +6,7 @@
   width:40%;
   overflow: scroll;
   background-color: rgba(255, 255, 255, 0.70);
-  z-index: 1000;
+  z-index: 9; //低于 dialog 的 z-index
   // opacity: 0.6;
   // filter:Alpha(opacity=60);//兼容IE8以下
 

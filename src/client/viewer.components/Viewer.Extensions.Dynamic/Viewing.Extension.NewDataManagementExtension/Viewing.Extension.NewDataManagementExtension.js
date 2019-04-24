@@ -17,6 +17,7 @@ import ReactDOM from 'react-dom'
 import Switch from 'Switch'
 import Label from 'Label'
 import React from 'react'
+import DataContainerDlg from 'Dialogs/DataContainerDlg'
 import {
   Modal,
   DropdownButton,
@@ -282,28 +283,32 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
             this.loadSequences()  //175行
           }
-
+          //////////////////////////////////////////////////////////////////////////////////////////////////////
           //在 layout 下创建资料的容器
-          const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0],
-                oldContainer = layout.lastChild,
-                myDataContainer = document.createElement('div');
+          //可用
+          //////////////////////////////////////////////////////////////////////////////////////////////////////////
+          // const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0],
+          //       oldContainer = layout.lastChild,
+          //       myDataContainer = document.createElement('div');
+          //
+          // myDataContainer.id = "myDataContainer"
+          // const className = 'myDataContainer'
+          // myDataContainer.className = className
+          //
+          // if(oldContainer.id == "myDataContainer"){
+          //   layout.removeChild(oldContainer)
+          // }
+          // layout.appendChild(myDataContainer)
+          //
+          ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-          myDataContainer.id = "myDataContainer"
-          const className = 'myDataContainer'
-          myDataContainer.className = className
+          //使用 this.react.pushViewerPanel API 传入 DataContainerDlg 实例创建资料容器
 
-              // 错了，appendChild 报错 : Failed to execute 'appendChild' on 'Node': parameter 1 is not of type 'Node'.
-              // options = {
-              //   docked:true,
-              //   showTitle:true
-              // },
-              // myDataContainer = this.renderDataContainer(options);
-
-            
-          if(oldContainer.id == "myDataContainer"){
-            layout.removeChild(oldContainer)
-          }
-          layout.appendChild(myDataContainer)
+          const myDataContainerDlg = new DataContainerDlg()
+          await this.react.pushViewerPanel(myDataContainerDlg, {
+            height: 250,
+            width: 300
+          })
 
           
       })
@@ -968,13 +973,16 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     viewer.restoreState(state, filter, immediate)
   }
 
-  //
+  //注释：将视点包含框设置为可拖动
+  //TODO: 触发了 updateSequence 方法，需要改动！！！
   activateDrag () {
 
+    //domItems 是包含在 items 外面的 div
     const domItems =
       document.getElementsByClassName(
         this.itemsClass)[0]
 
+    //有可拖动框，则销毁，否则使用 Dragula 将视点设置为可以拖动
     if (this.drake) {
 
       this.drake.destroy()
@@ -982,6 +990,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     this.drake = Dragula([domItems])
 
+    //如果有视点拖入这个视点框（可拖动区域）,则触发 onUpdateSequence
     this.drake.on('drop', () => {
 
       this.onUpdateSequence()
@@ -1124,7 +1133,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     }
   }
 
-  //TODO：这个是切换窗口模式的函数，可以用来研究样式
+  //      切换窗口模式的函数
   //      popRenderExtension 在 Viewing.Extension.ExtensionManagerToolbar\Viewing.Extension.ExtensionManagerToolbar.js
   //      pushViewerPanel 疑似在 src\client\viewer.components\Viewer.Configurator\Viewer.Configurator.js
   async setDocking (docked) {
@@ -1137,6 +1146,10 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
       await this.react.popRenderExtension(id)
 
+      // this.react.pushViewerPanel方法用于将组件实例推入 Panels , Panel 组件用于拖拽
+      //若用于资料的展示，则需要新建一个实例
+      //重要！在 ViewingApplication.js 中为的 didcomponentUpdata 生命周期函数中，当 state 变化，为所有的 panels 遍历的 一个 emit('update')，可用于
+      //src\client\viewer.components\Viewer.ViewingApplication\ViewingApplication.js
       const panel = await this.react.pushViewerPanel(this, {
           height: 250,
           width: 300
@@ -1555,7 +1568,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           //修改：新增了弹窗用来展示资料
           //TODO：样式好看点
         }
-        <div style={{"height":200,"backgroundColor":"red"}}>
+        {/* <div style={{"height":200,"backgroundColor":"red"}}>
 
         </div>
         <div id = "showDataContainer" style={{"width":400,"height":400,"backgroundColor":"#ededed","position":"static"
@@ -1572,7 +1585,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
             style={{"width":"200px","height":"200px","backgroundColor":"red","overflow":"hidden"}} 
             src="http:localhost:3000/resources/img/newDM/60cf0f5bd0e56d818079e73af9395f77.png" 
             alt="图片"/>
-        </div>
+        </div> */}
       </div>
       
       
@@ -1587,18 +1600,9 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     // this.closeExt = opts.closeExt
 
     return (
-      <WidgetContainer
-        renderTitle={() => this.renderTitle(opts.docked)}
-        showTitle={opts.showTitle}
-        className={this.className}>
-        {
-            // state.disabled &&
-            // <div className="disabled-overlay"/>
-        }
-        {/* { this.renderControls() } */}
-        {/* { this.renderItems() } */}
+      <div id = "myDataContainer">
 
-      </WidgetContainer>
+      </div>
     )
   }
 

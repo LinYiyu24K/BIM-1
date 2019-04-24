@@ -14,7 +14,7 @@ models.js
 
 Viewer.Configurator.js
 (Viewer.Configurator\Viewer.Configurator.js)
-拓展生命周期函数
+Panel、拓展的初始化底层封装，一些功能函数和生命周期，比如Panel 的 popRenderExtension 方法
 
 HomeView.js
 （src\client\routes\Home\components\HomeView.js）
@@ -50,3 +50,7 @@ ClientAPI.js
 WidgetContainer.js
 (E:\work\BIM\src\client\components\WidgetContainer\WidgetContainer.js)
 一个组件，extension 的最外层框架，包括 title 和主体的 children
+
+Panel.js
+(E:\work\BIM\src\client\components\Panel\Panel.js)
+可拖动框的组件封装！！！！！！

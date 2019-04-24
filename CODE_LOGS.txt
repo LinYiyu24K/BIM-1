@@ -21,3 +21,7 @@ users:{
       }
 增加 users-modelsvc 的服务
 
+
+
+重要逻辑：
+Viewer.Configurator 的 state 疑似是 Panel (或者整个项目？) 最初始的 state ， 并且提供了 react.setState 和 getState 这个方法
