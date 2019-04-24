@@ -220,6 +220,8 @@ export default class AppNavbar extends React.Component {
             this.storageSvc.save('user',user)
           }
 
+          window.location.reload()
+
           console.log(`此时 sessionStorage 中的 user 值是:>>>>>>>>>>>>>>>>>${window.sessionStorage.getItem('user')}`)
 
         }else{
@@ -284,10 +286,10 @@ export default class AppNavbar extends React.Component {
       ? `${user}`
       : sessionStorageUser ?`${sessionStorageUser}`:``
 
-      console.log(`此时 appNavbar render中 appState 的 user 值是:>>>>>>>>>>>>>>>>>${user}`)
-      console.log(`此时 appNavbar render中 sessionStorage 的 user 值是:>>>>>>>>>>>>>>>>>${sessionStorageUser}`)
-      console.log(`此时 appNavbar render中 sessionStorage 的 user 类型是:>>>>>>>>>>>>>>>>>${sessionStorageUser}`)
-      console.log(`此时 appNavbar render中 最终填充的 的 username 值是:>>>>>>>>>>>>>>>>>${username}`)
+      // console.log(`此时 appNavbar render中 appState 的 user 值是:>>>>>>>>>>>>>>>>>${user}`)
+      // console.log(`此时 appNavbar render中 sessionStorage 的 user 值是:>>>>>>>>>>>>>>>>>${sessionStorageUser}`)
+      // console.log(`此时 appNavbar render中 sessionStorage 的 user 类型是:>>>>>>>>>>>>>>>>>${sessionStorageUser}`)
+      // console.log(`此时 appNavbar render中 最终填充的 的 username 值是:>>>>>>>>>>>>>>>>>${username}`)
 
     return appState.navbar.visible && (
 

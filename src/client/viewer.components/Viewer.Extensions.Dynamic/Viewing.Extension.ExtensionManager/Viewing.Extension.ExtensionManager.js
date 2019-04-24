@@ -234,8 +234,8 @@ class ExtensionManager extends MultiModelExtensionBase {
       //   this.onExtensionItemClicked(extension);
       // }
       var myThis = this
-      viewer.loadDynamicExtension('Viewing.Extension.NewDataManagement').then(function(){
-        let extension = myThis.getExtensionbyId("Viewing.Extension.NewDataManagement");
+      viewer.loadDynamicExtension('Viewing.Extension.NewDataManagementExtension').then(function(){
+        let extension = myThis.getExtensionbyId("Viewing.Extension.NewDataManagementExtension");
         let curExtension = myThis.getCurrentOpenExtension();
 
         if(curExtension){//存在已经打开的extension，把它关掉
@@ -296,6 +296,7 @@ class ExtensionManager extends MultiModelExtensionBase {
     this.subToolbar.addControl(saveViewButton);
 
     viewer.toolbar.addControl(this.subToolbar);
+
   }
   /////////////////////////////////////////////////////////
   // Unload callback
@@ -352,6 +353,9 @@ class ExtensionManager extends MultiModelExtensionBase {
           react: this.reactOpts
         })
 
+      // console.log(`执行到了 extensionManager 的 loadDynamicExtension 函数，传入的 extension 是:>>>>>>>>>>>>>>>`)
+      // console.log(extension)
+      // console.log(`extension 其中的 native 决定是否使用 viewer.loadDynamicExtension 方法 ，值为 ： ${extension.native}`)
       // native extensions are the ones available
       // with the viewer API
       if (extension.native) {

@@ -2,7 +2,11 @@
 
 修改日志：
 
-疑问:为什么 AppNavbar 中登录弹窗中输入一个字符就 render 一次
+疑问:
+为什么 AppNavbar 中登录弹窗中输入一个字符就 render 一次
+src\client\viewer.components\Viewer.Configurator\Viewer.Configurator.js 中的 loadDynamicExtension 方法不起效果！！！
+\src\client\viewer.components\Viewer.Extensions.Dynamic\Viewing.Extension.ExtensionManager\Viewing.Extension.ExtensionManager.js 
+的339行 loadDynamicExtension 函数是每个拓展的回调
 
 1、登录逻辑
 APPNavbar.js 中登录
@@ -17,3 +21,7 @@ users:{
       }
 增加 users-modelsvc 的服务
 
+
+
+重要逻辑：
+Viewer.Configurator 的 state 疑似是 Panel (或者整个项目？) 最初始的 state ， 并且提供了 react.setState 和 getState 这个方法

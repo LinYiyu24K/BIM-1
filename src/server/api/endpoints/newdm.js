@@ -253,11 +253,11 @@ module.exports = function() {
       const modelSvc = ServiceManager.getService (
         db + '-ModelSvc')
 
-      console.log('进到了file接口>>>>>>>>>>这是req.file:',req.file)
-      console.log(`进到了file接口>>>>>>>>>>这是req.params.sequenceId: ${JSON.stringify(req.params.sequenceId)}`)
+      console.log('进到了file接口>>>>>>>>>>这是req.file:>>>>>>>>',req.file)
+      console.log(`进到了file接口>>>>>>>>>>这是req.params.sequenceId:>>>>>>> ${JSON.stringify(req.params.sequenceId)}`)
       console.log("________________________________")
-      console.log("state的类型是： ",Object.prototype.toString.call(req.body.state))
-      console.log("state的类型是isArray： ",Array.isArray(req.body.state))
+      // console.log("state的类型是： ",Object.prototype.toString.call(req.body.state))
+      console.log("state的类型是isArray：>>>>>>>> ",Array.isArray(req.body.state))
       
 
       const file = req.file ? req.file : null ;
@@ -275,13 +275,16 @@ module.exports = function() {
         }
         )
 
-      console.log("++++++++",state)
+      // console.log("++++++++",state)
       console.log('进到了file接口>>>>>>>>>>这是req.body.state.id:',state.id)
       const response =
         await modelSvc.addDataSequenceFile (
           req.params.modelId,
           req.params.sequenceId,
           state)
+
+      console.log(`保存好图片文件后得到的 response 为:>>>>>>>>>>>>>>>>>>>>>>>>>>`)
+      console.log(response)
 
       res.json(response)
 

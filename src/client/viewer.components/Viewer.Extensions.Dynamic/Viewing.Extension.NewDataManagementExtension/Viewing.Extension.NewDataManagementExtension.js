@@ -17,6 +17,7 @@ import ReactDOM from 'react-dom'
 import Switch from 'Switch'
 import Label from 'Label'
 import React from 'react'
+import DataContainerDlg from 'Dialogs/DataContainerDlg'
 import {
   Modal,
   DropdownButton,
@@ -37,8 +38,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     this.state = {
       show:false
     }
-
-    // console.log(`NewDataManagement 的 options:>>>>>\n${JSON.stringify(options)}`)
 
     this.renderTitle = this.renderTitle.bind(this)
     this.toggleItem = this.toggleItem.bind(this)
@@ -94,11 +93,44 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     this.react.setState({ show: true });
   }
 
-/////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////
+  //
+  //用户进入资料管理拓展，未登陆，则弹窗提示
+  /////////////////////////////////////////////////////////
+  showMissUserDlg () {
+
+    const onClose = (result) => {
+
+      this.dialogSvc.off('dialog.close', onClose)
+
+      if (result === 'OK') {
+
+        return
+      }
+
+    }
+
+    this.dialogSvc.on('dialog.close', onClose)
+
+    this.dialogSvc.setState({
+      onRequestClose: () => {},
+      className: 'login-dlg',
+      title: '请登录',
+      content:
+        <div>
+          数据管理与单独用户绑定，请先行登录...
+        </div>,
+      open: true
+      // TODO:将open设为true
+      // open: false
+    })
+  }
+
+  /////////////////////////////////////////////////////////
   //
   //修改：上传资料时候用户没有在模型中选中焦点
   /////////////////////////////////////////////////////////
-  showMissPoint () {
+  showMissPointDlg () {
 
     const onClose = (result) => {
 
@@ -131,7 +163,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
   //
   //修改：上传资料时候用户没有选择资料类型
   /////////////////////////////////////////////////////////
-  showMissDataType () {
+  showMissDataTypeDlg () {
 
     const onClose = (result) => {
 
@@ -168,7 +200,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
   // Extension Id
   static get ExtensionId() {
-    return 'Viewing.Extension.NewDataManagement'
+    return 'Viewing.Extension.NewDataManagementExtension'
   }
 
   // Load callback
@@ -181,12 +213,14 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         }
       })
 
+    //作用未知，在 renderItem 方法中用这个变量进行if判断，true 时 item 的 onClick 事件会触发 toggleItem 方法
+    //然而一直执行 onRestoreState ，可见 this.option.itemToggling 为 flase
     this.itemToggling = this.options.itemToggling
 
     this.react.setState({
       emptyStateNameCaption:'新资料的名称 ...',
       disabled: this.options.disabled,
-      stateSelection: true,
+      stateSelection: true,//作用未知，在 renderItem 方法中用这个变量进行if判断，true 时 item 的 onClick 事件才会触发
       stateCreation: true,
       newSequenceName: '',
       newStateName: '',
@@ -240,6 +274,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     }).then (() => {
 
+      const that = this
+
       this.react.pushRenderExtension(this).then(
         async() => {
 
@@ -247,14 +283,43 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
             this.loadSequences()  //175行
           }
+          //////////////////////////////////////////////////////////////////////////////////////////////////////
+          //在 layout 下创建资料的容器
+          //可用
+          //////////////////////////////////////////////////////////////////////////////////////////////////////////
+          // const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0],
+          //       oldContainer = layout.lastChild,
+          //       myDataContainer = document.createElement('div');
+          //
+          // myDataContainer.id = "myDataContainer"
+          // const className = 'myDataContainer'
+          // myDataContainer.className = className
+          //
+          // if(oldContainer.id == "myDataContainer"){
+          //   layout.removeChild(oldContainer)
+          // }
+          // layout.appendChild(myDataContainer)
+          //
+          ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+          //使用 this.react.pushViewerPanel API 传入 DataContainerDlg 实例创建资料容器
+
+          const myDataContainerDlg = new DataContainerDlg()
+          await this.react.pushViewerPanel(myDataContainerDlg, {
+            height: 250,
+            width: 300
+          })
+
+          
       })
     }).catch((error)=>{
-      console.log('NewDataManagement 加载出现了错误',error)
+
+      console.log('NewDataManagementExtension 加载出现了错误',error)
     })
 
     console.log(this.react.getState())
 
-    console.log('Viewing.Extension.NewDataManagement loaded')
+    console.log('Viewing.Extension.NewDataManagementExtension loaded')
 
     return true
   }
@@ -264,7 +329,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     this.react.popViewerPanel(this)
 
-    console.log('Viewing.Extension.NewDataManagement unloaded')
+    console.log('Viewing.Extension.NewDataManagementExtension unloaded')
 
     return true
   }
@@ -289,8 +354,12 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     if(window.sessionStorage){
 
+      console.log(`hasUserLogin 使用了 sessionStorage>>>>>>>>>>>>>>>>>>>>>`)
+
       hasUserLogin = window.sessionStorage.getItem('user');
     }else{
+
+      console.log(`hasUserLogin 使用了 storageSvc>>>>>>>>>>>>>>>>>>>>>`)
 
       let usernameArr = Object.values(this.storageSvc.load('user'));
       usernameArr.pop();
@@ -298,11 +367,11 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     }
 
     
-    console.log(`存储 storageSvc 的 hasUserLogin 的值是 :>>>>>>>>> ${hasUserLogin}`)
+    console.log(` hasUserLogin 的值是 :>>>>>>>>> ${hasUserLogin}`)
 
-    if(hasUserLogin.length === 0){
+    if(hasUserLogin == null || hasUserLogin.length === 0){
       
-      alert('请登录！')
+      this.showMissUserDlg()
       
       return 
     }
@@ -639,7 +708,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     //注释：viewer.getState()得到一个视点的所有的信息，根据viewer判断当前视点位置？？？？？？？/
     //      dataType 是用户上传视点的类型
-    const viewerState = Object.assign({},
+    let viewerState = Object.assign({},
       this.viewer.getState(), {
         id: this.guid(),
         name,
@@ -648,12 +717,12 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     
     //更改：新增。判断用户是否选择焦点，如果没有选择，则弹窗提示
     if(viewerState.objectSet[0].id.length === 0){
-      this.showMissPoint()
+      this.showMissPointDlg()
       return
     }
     //更改：新增。判断用户是否选择资料类型，如果没有选择，则弹窗提示
     if(viewerState.dataType.id == 0){
-      this.showMissDataType()
+      this.showMissDataTypeDlg()
       return
     }
 
@@ -693,10 +762,15 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         //这个请求会调用 upLoadSvc 的upload方法，解析data字段，
         //所以在将视点信息存在data中的 states 中，并且转为字符串
         if(file != null ){
-          this.api.addStateFile(
+          const newState =  await this.api.addStateFile(
             state.user.id,
             file,
             {"data":{"state":JSON.stringify(viewerState)}})
+
+            viewerState = newState.body
+
+            console.log(`新增加的 file 数据视点的所有信息:>>>>>>>>>>>>>>>>>>`)
+            console.log(newState)
         }else{
           this.api.addState(
             state.user.id,
@@ -780,7 +854,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     
   }
 
-  //注释：资料视点的点击事件
+  //注释：资料视点的点击事件触发这个方法
+  //将 item 过滤之后，调用 this.viewer.restoreState 来翻转 3D 视图？
   onRestoreState (
     viewerState, immediate = this.options.restoreImmediate) {
 
@@ -798,7 +873,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     
   }
 
-  //
+  //TODO：不优先，这里需要增加确认删除的弹窗？
   deleteItem (id) {
 
     const state = this.react.getState()
@@ -898,13 +973,16 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     viewer.restoreState(state, filter, immediate)
   }
 
-  //
+  //注释：将视点包含框设置为可拖动
+  //TODO: 触发了 updateSequence 方法，需要改动！！！
   activateDrag () {
 
+    //domItems 是包含在 items 外面的 div
     const domItems =
       document.getElementsByClassName(
         this.itemsClass)[0]
 
+    //有可拖动框，则销毁，否则使用 Dragula 将视点设置为可以拖动
     if (this.drake) {
 
       this.drake.destroy()
@@ -912,6 +990,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     this.drake = Dragula([domItems])
 
+    //如果有视点拖入这个视点框（可拖动区域）,则触发 onUpdateSequence
     this.drake.on('drop', () => {
 
       this.onUpdateSequence()
@@ -1054,7 +1133,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     }
   }
 
-  //TODO：这个是切换窗口模式的函数，可以用来研究样式
+  //      切换窗口模式的函数
   //      popRenderExtension 在 Viewing.Extension.ExtensionManagerToolbar\Viewing.Extension.ExtensionManagerToolbar.js
   //      pushViewerPanel 疑似在 src\client\viewer.components\Viewer.Configurator\Viewer.Configurator.js
   async setDocking (docked) {
@@ -1067,6 +1146,10 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
       await this.react.popRenderExtension(id)
 
+      // this.react.pushViewerPanel方法用于将组件实例推入 Panels , Panel 组件用于拖拽
+      //若用于资料的展示，则需要新建一个实例
+      //重要！在 ViewingApplication.js 中为的 didcomponentUpdata 生命周期函数中，当 state 变化，为所有的 panels 遍历的 一个 emit('update')，可用于
+      //src\client\viewer.components\Viewer.ViewingApplication\ViewingApplication.js
       const panel = await this.react.pushViewerPanel(this, {
           height: 250,
           width: 300
@@ -1372,28 +1455,27 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     })
 
     this.emit('state.toggled', selectedItem)
-    
-    //TODO:在这里弹窗展示资料
-    alert("该视点未上传任何资料!")
 
     this.react.setState({
       items
     })
   }
 
-  //注释：资料视点在这里渲染
+  //注释：资料视点组在这里渲染
   renderItems () {
 
     const state = this.react.getState()
 
     const items = state.items.map((item) => {
 
+      //对 item.name 进行前端过滤防止 xss 攻击
       const text = DOMPurify.sanitize(item.name)
 
       //TODO：用于视点的图片 src
       const thumbnailUrl =
       `/resources/img/newDM/${item.filename}`
 
+      //选中或者hover变蓝色
       const className = "item" +
         (state.stateSelection ? ' selectable' : '') +
         (this.itemToggling ? ' toggable' : '') +
@@ -1404,38 +1486,57 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           
           <div data-id={item.id} data-name={text}
               className={className}
-              key={item.id}
               onClick={async() => {
+
+                console.log(`>>>>点击数据视点 item : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>`,item)
+
                 if(state.stateSelection) {
                   if (this.itemToggling) {
-                    console.log(`>>>>>>>>这里执行了this.toggleItem(item)`)
+                    console.log(`>>>>>>>>这里执行了this.toggleItem(item)>>>>>>>>>>>`)
                     this.toggleItem(item)
                   } else {
-                    console.log(`>>>>>>>>?>>>>>这里执行了his.onRestoreState (item)`)
+                    console.log(`>>>>>>>>?>>>>>这里执行了this.onRestoreState (item)>>>>>>>>>>>>>>`)
                     this.onRestoreState (item)
-
+                  }
                     //注释：获取所点击视点的资料图片
-                    //TODO： 似乎这句 getData 不需要？！
-                    await this.api.getData(state.sequence.id, item.id);
+                    //TODO： 这个 getData 方法获取图片实体，多写了
+                    // await this.api.getData(state.sequence.id, item.id);
                         
                     var newImg = document.createElement("img"),
-                        showDataContainer = document.getElementById("showDataContainer"),
+                        showDataContainer = document.getElementById("myDataContainer"),
                         oldImg = showDataContainer.lastChild;
                     newImg.id = "itemImg";
-                    newImg.style.cssText="height:200px;wight:200px;overflow:hidden"
-                    console.log(`_______-newImg: ${newImg}`)
-                    console.log(`_______showDataContainer: ${showDataContainer}`)
-                    oldImg.id == "itemImg" && showDataContainer.removeChild(showDataContainer.lastChild);
+                    newImg.style.cssText="height:200px;wight:200px;overflow:hidden";
+
+                    //如果存在缓存照片，则 remove
+                    if((oldImg && oldImg.id) && oldImg.id == "itemImg"){
+                      showDataContainer.removeChild(showDataContainer.lastChild);
+                    }
                     newImg.onload = ()=>{
                       console.log('+++++++++++图片加载 src 成功， onload+++++++++++=+++++++')
                     }
-                    newImg.src = "http://localhost:3000/resources/img/newDM/"+item.filename;
+                    newImg.onerror=(e)=>{
+                      console.log('!!!!!!资料图片加载失败!!!!!!: 错误:',e)
+                    }
+
+                    //newImg.src = "http://localhost:3000/resources/img/newDM/"+item.filename;
+
+                    newImg.src = "/resources/img/newDM/"+item.filename;
                     showDataContainer.appendChild(newImg);
-                    // window.location.href = window.location.href;
-                    //TODO：在这里写弹窗展示视点资料的逻辑
+
+                    //设置 show 状态为 true ，显示弹窗
                     this.handleShow()
-                  }
+
+                    //在全局  reflex-layout.reflex-container.vertical.configurator 这个元素下弹窗展示图片
+                    // const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0],
+                    //       oldImage = layout.lastChild;
+                    // newImg.style.cssText="position:absolute;top:20%;left:20%;z-index:1000";
+                    // newImg.id = "itemImage"
+                    // oldImage.id == "itemImage" && layout.removeChild(oldImage);
+                    // layout.appendChild(newImg);
                 }
+
+                console.log('<<<<<<<<<<<<<<< reflex-container 的 dom 列表！！！！>>>>>>>>>>>',document.getElementsByClassName('reflex-layout reflex-container vertical configurator'))
               }}>
 
               <Label text={text}/>
@@ -1454,10 +1555,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
         </div>
 
-          {/* <div className="image-container">
-            <Image src={thumbnailUrl}/>
-          </div> */}
-
         </div>
             
         
@@ -1471,7 +1568,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           //修改：新增了弹窗用来展示资料
           //TODO：样式好看点
         }
-        <div style={{"height":200,"backgroundColor":"red"}}>
+        {/* <div style={{"height":200,"backgroundColor":"red"}}>
 
         </div>
         <div id = "showDataContainer" style={{"width":400,"height":400,"backgroundColor":"#ededed","position":"static"
@@ -1486,12 +1583,26 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           <img
             id='itemImg'
             style={{"width":"200px","height":"200px","backgroundColor":"red","overflow":"hidden"}} 
-            src="http:localhost:3000/resources/img/newDM/3.png" 
+            src="http:localhost:3000/resources/img/newDM/60cf0f5bd0e56d818079e73af9395f77.png" 
             alt="图片"/>
-        </div>
+        </div> */}
       </div>
       
       
+    )
+  }
+
+  //渲染资料弹窗容器
+  renderDataContainer (opts) {
+
+    const state = this.react.getState()
+
+    // this.closeExt = opts.closeExt
+
+    return (
+      <div id = "myDataContainer">
+
+      </div>
     )
   }
 
@@ -1500,8 +1611,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     const state = this.react.getState()
 
-    console.log("数据管理拓展 render ，此时的 state 为>>>>>>>>>>>>>>")
-    console.log(state)
+    // console.log("数据管理拓展 render ，此时的 state 为>>>>>>>>>>>>>>")
+    // console.log(state)
 
     this.closeExt = opts.closeExt
 

@@ -31,7 +31,7 @@ class Panel extends EventsEmitter {
   static defaultProps = {
     maxHeight: Infinity,
     maxWidth: Infinity,
-    draggable: true,
+    draggable: true,//可拖动
     minHeight: 35,
     minWidth: 300,
     className: '',
@@ -61,6 +61,7 @@ class Panel extends EventsEmitter {
 
     this.document = this.props.document
 
+    //绑定 mouseUp 和 mouseMove 事件，并做了移动设备 touch 事件兼容
     this.document.addEventListener(
       'touchend', this.onMouseUp)
 
@@ -73,6 +74,7 @@ class Panel extends EventsEmitter {
     this.document.addEventListener(
       'touchmove', this.onMouseMove)
 
+    // 从 viewer.Configurator 传了 react 对象，包含 setState 和 getState 方法，从上层组件设置和获取 state
     this.react = this.props.react
 
     this.id = this.props.id
@@ -80,12 +82,13 @@ class Panel extends EventsEmitter {
     this.react.setState({
 
       width: props.width || 300,
-      left: props.left || 10,
+      left: props.left || 10,//设置弹框初始位置 left 和 top，以及初始宽高 width,height
       top: props.top || 10,
-      height: 35
+      height: 35 
 
     }).then(() => {
-
+      
+      //35毫秒内展开至指定的高度
       const targetHeight = props.height || 300
 
       this.runAnimation(
@@ -111,6 +114,7 @@ class Panel extends EventsEmitter {
     this.document.removeEventListener(
       'touchmove', this.onMouseMove)
 
+    // 清空所有事件！
     this.off()
 
     const state = this.react.getState()
@@ -360,7 +364,7 @@ class Panel extends EventsEmitter {
 
   /////////////////////////////////////////////////////////
   //
-  //
+  //如果传入 rederTitle 函数，则通过该方法进行渲染
   /////////////////////////////////////////////////////////
   renderTitle () {
 
@@ -382,7 +386,7 @@ class Panel extends EventsEmitter {
 
   /////////////////////////////////////////////////////////
   //
-  //
+  //如果传入 render 函数，则通过该方法进行渲染
   /////////////////////////////////////////////////////////
   renderContent () {
 
