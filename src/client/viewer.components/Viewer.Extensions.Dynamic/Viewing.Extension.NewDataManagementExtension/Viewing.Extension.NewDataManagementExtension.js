@@ -48,6 +48,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
 
+
     this.dialogSvc =
       ServiceManager.getService(
         'DialogSvc')
@@ -69,6 +70,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     this.restoreStates = {}
 
     this.drake = null
+
+    this.dataPanel = null
 
     if (this.options.apiUrl) {
 
@@ -154,8 +157,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           请在视图模型中选中焦点，再行上传...
         </div>,
       open: true
-      // TODO:将open设为true
-      // open: false
     })
   }
 
@@ -274,8 +275,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     }).then (() => {
 
-      const that = this
-
       this.react.pushRenderExtension(this).then(
         async() => {
 
@@ -301,14 +300,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           // layout.appendChild(myDataContainer)
           //
           ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-          //使用 this.react.pushViewerPanel API 传入 DataContainerDlg 实例创建资料容器
-
-          const myDataContainerDlg = new DataContainerDlg()
-          await this.react.pushViewerPanel(myDataContainerDlg, {
-            height: 250,
-            width: 300
-          })
 
           
       })
@@ -1466,6 +1457,27 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     const state = this.react.getState()
 
+    
+    const that = this
+
+    const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0];
+
+    const handleImgClick = function(e){
+
+      const oldContainer = layout.lastChild,
+      myDataContainer = document.createElement('div');
+
+      myDataContainer.id = "myDataContainer"
+      // const className = 'myDataContainer'
+      myDataContainer.className = className
+
+      if(oldContainer.id == "myDataContainer"){
+        layout.removeChild(oldContainer)
+      }
+      layout.appendChild(myDataContainer)
+    }
+
+
     const items = state.items.map((item) => {
 
       //对 item.name 进行前端过滤防止 xss 攻击
@@ -1491,10 +1503,13 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                 console.log(`>>>>点击数据视点 item : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>`,item)
 
                 if(state.stateSelection) {
+
                   if (this.itemToggling) {
+
                     console.log(`>>>>>>>>这里执行了this.toggleItem(item)>>>>>>>>>>>`)
                     this.toggleItem(item)
                   } else {
+
                     console.log(`>>>>>>>>?>>>>>这里执行了this.onRestoreState (item)>>>>>>>>>>>>>>`)
                     this.onRestoreState (item)
                   }
@@ -1502,11 +1517,37 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                     //TODO： 这个 getData 方法获取图片实体，多写了
                     // await this.api.getData(state.sequence.id, item.id);
                         
+                    if(!this.dataPanel){
+                          //使用 this.react.pushViewerPanel API 传入 DataContainerDlg 实例创建资料容器
+
+                          const myDataContainerDlg = new DataContainerDlg()
+                          this.dataPanel = await this.react.pushViewerPanel(myDataContainerDlg, {
+                            height: 250,
+                            width: 300
+                          })
+
+
+                          // 获取 弹窗的关闭按钮，注册其 onClick 事件关闭弹窗
+                          const dataTitleClose = document.getElementById('dataTitleClose');
+                          
+                          dataTitleClose.addEventListener('click',()=>{
+                            
+                            that.react.popViewerPanel(myDataContainerDlg.id).then(()=>{
+                              that.dataPanel = null
+                            })
+                          })
+                    }
                     var newImg = document.createElement("img"),
                         showDataContainer = document.getElementById("myDataContainer"),
                         oldImg = showDataContainer.lastChild;
+
                     newImg.id = "itemImg";
                     newImg.style.cssText="height:200px;wight:200px;overflow:hidden";
+                    newImg.addEventListener('click',(e)=>{
+                      alert(`点击了照片`)
+                      console.log(e.target.width)
+                      console.log(e.target.height)
+                    })
 
                     //如果存在缓存照片，则 remove
                     if((oldImg && oldImg.id) && oldImg.id == "itemImg"){
@@ -1519,24 +1560,16 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                       console.log('!!!!!!资料图片加载失败!!!!!!: 错误:',e)
                     }
 
-                    //newImg.src = "http://localhost:3000/resources/img/newDM/"+item.filename;
-
-                    newImg.src = "/resources/img/newDM/"+item.filename;
+                    // newImg.src = "/resources/img/newDM/"+item.filename;
+                    newImg.src = thumbnailUrl;
+                    
                     showDataContainer.appendChild(newImg);
 
                     //设置 show 状态为 true ，显示弹窗
                     this.handleShow()
 
-                    //在全局  reflex-layout.reflex-container.vertical.configurator 这个元素下弹窗展示图片
-                    // const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0],
-                    //       oldImage = layout.lastChild;
-                    // newImg.style.cssText="position:absolute;top:20%;left:20%;z-index:1000";
-                    // newImg.id = "itemImage"
-                    // oldImage.id == "itemImage" && layout.removeChild(oldImage);
-                    // layout.appendChild(newImg);
                 }
 
-                console.log('<<<<<<<<<<<<<<< reflex-container 的 dom 列表！！！！>>>>>>>>>>>',document.getElementsByClassName('reflex-layout reflex-container vertical configurator'))
               }}>
 
               <Label text={text}/>
