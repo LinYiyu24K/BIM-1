@@ -799,7 +799,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         selectedDataType = state.selectedDataType,
         user = state.user;
 
-    console.log('/////////////////////////////////state'+JSON.stringify(state))
+    console.log('触发 searchItem 方法，此时的state>>>>>>： ',state)
 
     if(user!=''){
       if (this.api) {
@@ -808,13 +808,12 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           await this.api.getStates(
             user.id)
   
-        console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!----`+states)
-        console.log("_____________::_______",dataName)
+        console.log("_____________dataName______",dataName)
   
         var states = allStates.filter(item =>{
           if(dataName.length>0){
-            console.log("_____________::_______",item.name)
-            console.log("_____________::_______",item.name.indexOf(dataName)>-1)
+            console.log("_____________item.name_______",item.name)
+            console.log("____________item.name.indexOf(dataName)>-1_______",item.name.indexOf(dataName)>-1)
             if(selectedDataType.id==0){
               return item.name.indexOf(dataName)>-1 ? true : false;
             }else{
@@ -832,7 +831,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
             }
           }
         })
-        console.log('筛选后的视点：========================================'+JSON.stringify(states))
+        console.log('筛选后的视点：========================================',states)
     
         await this.react.setState({
           items: states
@@ -1174,11 +1173,12 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       : 'fa fa-chain'
 
     // TODO: onClick={() => this.closeExt() closeExt 不是一个函数？无法关闭拓展
+    // 重新开几次之后都会有 bug 状态无法读取！！！
 
     return (
       <div className="title">
 
-        <button onClick={() => this.closeExt()}
+        <button onClick={this.closeExt}
                 title="关闭控件" className="closeExtensionButton">
         </button>
 
@@ -1202,25 +1202,10 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
   //
   renderControls () {
 
-    // const dataType = ['请选择','安全','质量','进度']
 
     const state = this.react.getState()
 
-    /////////////////////////////////////////////////////////////
-    //修改：注释掉的源码，sequences 为下拉菜单，点击则执行setActiveSequence 方法更新当前视点
-    // const sequences = state.sequences.map((sequence) => {
 
-    //   const id = sequence.id
-
-    //   return (
-    //     <MenuItem eventKey={id} key={id} onClick={() => {
-
-    //       this.setActiveSequence(sequence)
-    //     }}>
-    //       { sequence.name }
-    //     </MenuItem>
-    //   )
-    // })
     ///////////////////////////////////////////////////////////
     //TODO：922行 this.setActiveSequence(data) 待修改为setState
     // dataType 为原状态 sequences
@@ -1269,38 +1254,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     return (
       <div className="controls">
-
-
-        {//注释：源码样式，视点组的第一行
-          /* <div className="row">
-
-          <DropdownButton
-            title={"当前视点序列: " +  sequenceName}
-            className="sequence-dropdown"
-            disabled={!sequence}
-            key="sequence-dropdown"
-            id="sequence-dropdown">
-           { sequences }
-          </DropdownButton>
-
-          <button onClick={() => this.addSequence()}
-            title="Add sequence">
-            <span className="fa fa-plus"/>
-          </button>
-
-          <button onClick={() => this.copySequence()}
-            disabled={!sequence}
-            title="Copy sequence">
-            <span className="fa fa-copy"/>
-          </button>
-
-          <button onClick={() => this.deleteSequence()}
-            disabled={!sequence || sequence.readonly}
-            title="Delete sequence">
-            <span className="fa fa-times"/>
-          </button>
-
-        </div> */}
 
         {
           //注释：资料管理样式修改
@@ -1494,10 +1447,10 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         (item.active ? ' active' :'')
 
       return (
-        <div key={item.id}>
-          
+        
           <div data-id={item.id} data-name={text}
               className={className}
+              key={item.id}
               onClick={async() => {
 
                 console.log(`>>>>点击数据视点 item : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>`,item)
@@ -1566,7 +1519,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                     showDataContainer.appendChild(newImg);
 
                     //设置 show 状态为 true ，显示弹窗
-                    this.handleShow()
+                    // this.handleShow()
 
                 }
 
@@ -1588,7 +1541,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
         </div>
 
-        </div>
             
         
       )
@@ -1630,8 +1582,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     const state = this.react.getState()
 
-    // this.closeExt = opts.closeExt
-
     return (
       <div id = "myDataContainer">
 
@@ -1644,10 +1594,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     const state = this.react.getState()
 
-    // console.log("数据管理拓展 render ，此时的 state 为>>>>>>>>>>>>>>")
-    // console.log(state)
-
-    this.closeExt = opts.closeExt
+    this.closeExt = ()=>opts.closeExt()
 
     return (
       <WidgetContainer

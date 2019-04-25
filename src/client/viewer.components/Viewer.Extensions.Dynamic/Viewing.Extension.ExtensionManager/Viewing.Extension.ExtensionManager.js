@@ -28,6 +28,8 @@ class ExtensionManager extends MultiModelExtensionBase {
     this.renderTitle = this.renderTitle.bind(this)
 
     this.render = this.render.bind(this)
+    
+    this.closeExt = this.closeExt.bind(this)
 
     this.reactOpts = {
       pushRenderExtension: (extension) => {
@@ -233,17 +235,17 @@ class ExtensionManager extends MultiModelExtensionBase {
       // if(extension){
       //   this.onExtensionItemClicked(extension);
       // }
-      var myThis = this
+      var that = this
       viewer.loadDynamicExtension('Viewing.Extension.NewDataManagementExtension').then(function(){
-        let extension = myThis.getExtensionbyId("Viewing.Extension.NewDataManagementExtension");
-        let curExtension = myThis.getCurrentOpenExtension();
+        let extension = that.getExtensionbyId("Viewing.Extension.NewDataManagementExtension");
+        let curExtension = that.getCurrentOpenExtension();
 
         if(curExtension){//存在已经打开的extension，把它关掉
-          myThis.onExtensionItemClicked(curExtension);
+          that.onExtensionItemClicked(curExtension);
         }
 
         if(extension){
-          myThis.onExtensionItemClicked(extension);
+          that.onExtensionItemClicked(extension);
         }
       });
 
@@ -258,20 +260,20 @@ class ExtensionManager extends MultiModelExtensionBase {
     saveViewButton.onClick = function(e) {
       //viewer.setViewCube('front');//设为后面的视图
       
-      var myThis = this;
+      var that = this;
       viewer.loadDynamicExtension('Viewing.Extension.ConfigManager').then(function(){
 
-        console.log(myThis);
+        console.log(that);
         console.log('!!!!!!!!!!!!!!!!!!!!')
-        let extension = myThis.getExtensionbyId("Viewing.Extension.ConfigManager");
-        let curExtension = myThis.getCurrentOpenExtension();
+        let extension = that.getExtensionbyId("Viewing.Extension.ConfigManager");
+        let curExtension = that.getCurrentOpenExtension();
   
         if(curExtension){//存在已经打开的extension，把它关掉
-          myThis.onExtensionItemClicked(curExtension);
+          that.onExtensionItemClicked(curExtension);
         }
   
         if(extension){
-          myThis.onExtensionItemClicked(extension);
+          that.onExtensionItemClicked(extension);
         }
 
       });
@@ -298,6 +300,21 @@ class ExtensionManager extends MultiModelExtensionBase {
     viewer.toolbar.addControl(this.subToolbar);
 
   }
+
+  ////////////////////////////////////////////////////////
+  //用来关闭某个extension的
+  //
+  ///////////////////////////////////////////////////////
+  closeExt(){
+    console.log("test 成功！！！");
+
+    let curExtension = this.getCurrentOpenExtension();
+
+    if(curExtension){//存在已经打开的extension，把它关掉
+      this.onExtensionItemClicked(curExtension);
+    }
+  }
+
   /////////////////////////////////////////////////////////
   // Unload callback
   //
@@ -603,9 +620,11 @@ class ExtensionManager extends MultiModelExtensionBase {
             key={extension.id}
             {...flexProp}>
             {
+              //TODO:这里关闭拓展的逻辑仅仅是获取当前打开的拓展然后关闭，没有根据 id 来关闭
               extension.render({
                 showTitle: false,
-                docked: true
+                docked: true,
+                closeExt: ()=>this.closeExt()
               })
             }
           </ExtensionPane>

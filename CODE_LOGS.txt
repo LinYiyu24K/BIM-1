@@ -2,11 +2,12 @@
 
 修改日志：
 
-疑问:
-为什么 AppNavbar 中登录弹窗中输入一个字符就 render 一次
-src\client\viewer.components\Viewer.Configurator\Viewer.Configurator.js 中的 loadDynamicExtension 方法不起效果！！！
+疑问 || TODO:
+1、为什么 AppNavbar 中登录弹窗中输入一个字符就 render 一次
+2、src\client\viewer.components\Viewer.Configurator\Viewer.Configurator.js 中的 loadDynamicExtension 方法不起效果！！！
 \src\client\viewer.components\Viewer.Extensions.Dynamic\Viewing.Extension.ExtensionManager\Viewing.Extension.ExtensionManager.js 
 的339行 loadDynamicExtension 函数是每个拓展的回调
+3、拓展关闭之后，再打开， getState() 得到的数据变化了，产生了bug！
 
 1、登录逻辑
 APPNavbar.js 中登录
