@@ -170,39 +170,45 @@
   cursor: pointer;
 }
 
-.config-manager .items > .item,
-.gu-mirror.item {
-  transition-property: border, background;
+//添加 reflex-layout 类增强选择器权重
+.reflex-layout .config-manager .items > .item,
+.reflex-layout  .gu-mirror.item {
+  transition-property:  background-color;
   transition-timing-function: ease;
-  transition-duration: 1.0s;
+  transition-duration: 0.5s;
   transition-delay: 0.0s;
 
-  border: 1px solid #aeaeae;
-  width: calc(80% - 6px);//joe
-  float:left;//joe
-  background: #ededed;
+  border: 1px solid #fff ;
+  width: calc(100% - 6px);//joe
+  // float:left;//joe
+  background-color: #fff;
   white-space: nowrap;
   cursor: not-allowed;
-  border-radius: 4px;
+  border-radius: 0;
   overflow: hidden;
-  height: 26px;
-  padding: 2px;//joe:本来这个值是5，但我加了float:right之后，就要变成原来的一半
-  margin: 2px;
+  height: 6%;
+  min-height: 35px;
+  padding: 5px;
+    margin: 0;
 }
 
-.config-manager .items > .item:first-child {
+.reflex-layout .config-manager .items > .item:first-child {
   margin-top: 0px;
 }
 
-.config-manager .items > .item.selectable:hover {
+.reflex-layout .config-manager .items > .item:nth-child(even){
+  background-color:#F2F7FA;
+}
+
+.reflex-layout .config-manager .items > .item.selectable:hover {
   background: rgba(0, 105, 245, 0.10);
-  border: 1px solid #1bb1f4;
+  // border: 1px solid rgba(0, 105, 245, 0.10);
 }
 
 .config-manager .items > .item.active:hover,
 .config-manager .items > .item.active {
   background: rgba(0, 105, 245, 0.35);
-  border: 1px solid #1bb1f4;
+  border: 1px solid rgba(0, 105, 245, 0.35);
 }
 
 .config-manager .items > .item > div,

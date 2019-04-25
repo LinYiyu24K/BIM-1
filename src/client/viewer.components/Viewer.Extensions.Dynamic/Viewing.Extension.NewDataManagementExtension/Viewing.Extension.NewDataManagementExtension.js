@@ -1026,7 +1026,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           await this.api.getStates(
             sequence.id)
 
-        console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!----`+states)
+        // console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!----`+states)
 
         states.forEach((state) => {
 
