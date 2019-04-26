@@ -1431,6 +1431,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     }
 
 
+    console.log("renderItems->items ： ",state.items)
+
     const items = state.items.map((item) => {
 
       //对 item.name 进行前端过滤防止 xss 攻击
