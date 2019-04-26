@@ -43,6 +43,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     this.toggleItem = this.toggleItem.bind(this)
     this.addItem = this.addItem.bind(this)
     this.searchItem = this.searchItem.bind(this)
+    this.renderItemTitle = this.renderItemTitle.bind(this)
 
     //修改：新增弹窗 Modal 控制事件
     this.handleShow = this.handleShow.bind(this);
@@ -1405,6 +1406,34 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     })
   }
 
+  renderItemTitle(){
+
+    const state = this.react.getState()
+
+    const className = "itemTitle"
+
+    const userDataName = "数据资料名"
+
+    const status = "状态"
+
+    const oparation  = "操作"
+
+    return (
+
+        <div
+        className={className}
+        >
+
+              <Label text={userDataName}/>
+
+              <Label text={status}/>
+
+              <Label text={oparation}/>
+
+        </div>
+        )
+  }
+
   //注释：资料视点组在这里渲染
   renderItems () {
 
@@ -1430,11 +1459,14 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       layout.appendChild(myDataContainer)
     }
 
+    console.log()
 
     const items = state.items.map((item) => {
 
       //对 item.name 进行前端过滤防止 xss 攻击
       const text = DOMPurify.sanitize(item.name)
+
+      const status = DOMPurify.sanitize(item.dataType.name)
 
       //TODO：用于视点的图片 src
       const thumbnailUrl =
@@ -1447,7 +1479,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         (item.active ? ' active' :'')
 
       return (
-        
+
           <div data-id={item.id} data-name={text}
               className={className}
               key={item.id}
@@ -1527,6 +1559,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
               <Label text={text}/>
 
+              <Label text={status}/>
+
               {
                 !state.sequence.readonly &&
                 <button onClick={(e) => {
@@ -1541,53 +1575,21 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
         </div>
 
-            
-        
+
       )
     })
 
+    const itemTitle = this.renderItemTitle()
+
     return (
-        <div className={`items ${this.itemsClass}`}>
+      <div className={`items ${this.itemsClass}`}>
+        {itemTitle}
         { items }
-        {
-          //修改：新增了弹窗用来展示资料
-          //TODO：样式好看点
-        }
-        {/* <div style={{"height":200,"backgroundColor":"red"}}>
-
-        </div>
-        <div id = "showDataContainer" style={{"width":400,"height":400,"backgroundColor":"#ededed","position":"static"
-        ,"display":state.show?"block":"none"}}>
-          <button 
-            style={{"positon":"absolute","right":0,"top":0,"height":50,"width":50}}
-            onClick = {this.handleClose}
-          >
-              <span className="fa fa-times"/>
-          </button>
-          <div>该视点尚未上传任何资料</div>
-          <img
-            id='itemImg'
-            style={{"width":"200px","height":"200px","backgroundColor":"red","overflow":"hidden"}} 
-            src="http:localhost:3000/resources/img/newDM/60cf0f5bd0e56d818079e73af9395f77.png" 
-            alt="图片"/>
-        </div> */}
       </div>
-      
-      
+
     )
   }
 
-  //渲染资料弹窗容器
-  renderDataContainer (opts) {
-
-    const state = this.react.getState()
-
-    return (
-      <div id = "myDataContainer">
-
-      </div>
-    )
-  }
 
   //
   render (opts) {
