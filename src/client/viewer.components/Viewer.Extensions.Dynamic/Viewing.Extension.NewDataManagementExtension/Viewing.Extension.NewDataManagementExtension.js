@@ -1142,8 +1142,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       //重要！在 ViewingApplication.js 中为的 didcomponentUpdata 生命周期函数中，当 state 变化，为所有的 panels 遍历的 一个 emit('update')，可用于
       //src\client\viewer.components\Viewer.ViewingApplication\ViewingApplication.js
       const panel = await this.react.pushViewerPanel(this, {
-          height: 250,
-          width: 300
+          height: 400,
+          width: 500
         })
 
       panel.on('update', () => {
@@ -1256,11 +1256,94 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     return (
       <div className="controls">
 
+
+        {/* 资料上传栏 */}
+
+        <div className="row">
+          <h4>资料上传</h4>
+        </div>
+
+        <div className="row">
+
+        {
+          stateCreationDisabled &&
+          <ContentEditable
+            onChange={(e) => this.onInputChanged(e, 'newStateName')}
+            data-placeholder={state.emptyStateNameCaption}
+            onKeyDown={(e) => this.onKeyDown(e)}
+            className="state-name-input"
+            html={state.newStateName}
+            disabled={true}
+          />
+        }
+
+        {
+          !stateCreationDisabled &&
+          <ContentEditable
+            onChange={(e) => this.onInputChanged(e, 'newStateName')}
+            data-placeholder={state.emptyStateNameCaption}
+            onKeyDown={(e) => this.onKeyDown(e)}
+            className="state-name-input"
+            html={state.newStateName}
+          />
+        }
+
+        <DropdownButton
+          title={state.uploadDataType.name}
+          className="sequence-dropdown"
+          disabled={!uploadDataType}
+          key="sequence-dropdown"
+          id="sequence-dropdown">
+        { uploadDataType }
+        </DropdownButton>
+
+        <form name='uploadForm'
+          id='uploadForm'
+          onSubmit={this.returnFalse}
+          method='POST'
+          action='#'
+          encType='multipart/form-data'
+          style={{"width":170}}>
+          
+          <a className="uploadOuter">
+          {/* TODO:优先级高，在这里要显示已经选择的文件名，下一行？ */}
+          选择文件
+          <input 
+            type="file" 
+            name="myUpload" 
+            id="myUpload"
+            className="replyFileid"
+            >
+          </input>
+
+          </a>
+
+        </form>
+
+
+        <button disabled={stateCreationDisabled}
+          onClick={this.addItem}
+          title="上传视点资料"
+          style={{"width":100}}>
+          <span className="fa fa-plus-square">
+          上传视点
+          </span>
+        </button>
+
+        </div>
+
+
         {
           //注释：资料管理样式修改
           //899行的onInputChanged为用户搜索的资料名 dataName，在this.state中
           //onKKeyDown中的13是指回车键enter,TODO:应该执行搜索，需要重写onKeyDown
         }
+        {/* 资料上传栏 */}
+
+        <div className="row">
+          <h4>资料列表</h4>
+        </div>
+
         <div className='row'>
           
         <ContentEditable
@@ -1292,87 +1375,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           </button>
 
         </div>
-        
-        {//注释：资料管理样式修改
-        }
 
-        <div className="row">
-
-          {
-            stateCreationDisabled &&
-            <ContentEditable
-              onChange={(e) => this.onInputChanged(e, 'newStateName')}
-              data-placeholder={state.emptyStateNameCaption}
-              onKeyDown={(e) => this.onKeyDown(e)}
-              className="state-name-input"
-              html={state.newStateName}
-              disabled={true}
-            />
-          }
-
-          {
-            !stateCreationDisabled &&
-            <ContentEditable
-              onChange={(e) => this.onInputChanged(e, 'newStateName')}
-              data-placeholder={state.emptyStateNameCaption}
-              onKeyDown={(e) => this.onKeyDown(e)}
-              className="state-name-input"
-              html={state.newStateName}
-            />
-          }
-
-          <DropdownButton
-            title={state.uploadDataType.name}
-            className="sequence-dropdown"
-            disabled={!uploadDataType}
-            key="sequence-dropdown"
-            id="sequence-dropdown">
-           { uploadDataType }
-          </DropdownButton>
-
-          <form name='uploadForm'
-            id='uploadForm'
-            onSubmit={this.returnFalse}
-            method='POST'
-            action='#'
-            encType='multipart/form-data'
-            style={{"width":170}}>
-
-            <input type="file" name="myUpload" id="myUpload"></input>
-
-          </form>
-
-          
-          <button disabled={stateCreationDisabled}
-            onClick={this.addItem}
-            title="上传视点资料"
-            style={{"width":100}}>
-            <span className="fa fa-plus-square">
-            上传视点
-            </span>
-          </button>
-            {/* <input type='button'
-              disabled={stateCreationDisabled}
-              onClick={this.addItem}
-              value='上传视点资料'>
-            </input> */}
-
-
-          {/* <button
-            title={state.play ? "Pause sequence" : "Play sequence"}
-            onClick={() => this.playSequence()}
-            disabled={!sequence}>
-            <span className={"fa fa-" + (state.play ? "pause" : "play")}/>
-          </button> */}
-
-          {/* <Switch isChecked={true} className="loop"
-            onChange={(loop) => {
-              this.react.setState({
-                loop
-              })
-            }}/> */}
-
-        </div>
 
       </div>
     )
@@ -1509,8 +1512,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
                           const myDataContainerDlg = new DataContainerDlg()
                           this.dataPanel = await this.react.pushViewerPanel(myDataContainerDlg, {
-                            height: 250,
-                            width: 300
+                            height: 350,
+                            width: 400
                           })
 
 

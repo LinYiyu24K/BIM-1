@@ -19,23 +19,53 @@
   float: left;
 }
 
-.config-manager .content > .controls {
+.reflex-layout .config-manager .content > .controls {
   margin: 6px 6px 0px 5px;
   display: inline-block;
   white-space: nowrap;
-  height: 54px;
+  height: 170px;
   width: 100%;
 }
 
-.config-manager .content > .controls > .row {
+.reflex-layout .config-manager .content > .controls > .row {
   display: flex;
   width: 100%;
   margin: 0;
+  h4{
+    font-size: 16px;
+    color: #0A131C;
+  }
+  //上传组件样式覆盖
+  .uploadOuter{
+    position: relative;
+    height: 35px;
+    line-height: 35px;
+    text-decoration: none;
+    color: #4d90d3;
+    cursor: pointer;
+  }
+  .replyFileid{
+    position: absolute;
+    width:100%;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    filter:Alpha(opacity=0);
+    cursor: pointer;
+  }
 }
 
-.config-manager .content > .controls .dropdown {
-  width: calc(100% - 114px);
+.reflex-layout .config-manager .content > .controls > .row:nth-child(3) {
+  margin-top:10px
+}
+
+.reflex-layout .config-manager .content > .controls .dropdown {
+  width: 200px;
+  // width: calc(100% - 114px);
   margin-bottom: 6px;
+  margin-left: 4px;
+  margin-right: 4px;
   float: left;
 
   .dropdown-menu {
@@ -45,15 +75,16 @@
   }
 }
 
-.config-manager .content > .controls .dropdown > button {
+.reflex-layout .config-manager .content > .controls .dropdown > button {
   padding: 0 10px 0 10px;
   overflow: hidden;
-  height: 26px;
+  height: 35px;
+  line-height: 30px;
   width: 100%;
   margin: 0;
 }
 
-.config-manager .content > .controls button {
+.reflex-layout .config-manager .content > .controls button {
   justify-content: center;
   align-items: center;
   display: flex;
@@ -62,7 +93,8 @@
   border-radius: 4px;
   margin-left: 4px;
   outline: none;
-  height: 26px;
+  height: 35px;
+  line-height: 30px;
   width: 30px;
   float: left;
   padding: 0;
@@ -102,7 +134,7 @@
   float: left;
 }
 
-.config-manager .content > .controls .state-name-input {
+.reflex-layout .config-manager .content > .controls .state-name-input {
   border: 1px solid #aeaeae;
   width: calc(100% - 148px);
   padding: 3px 0 0 10px;
@@ -110,9 +142,15 @@
   border-radius: 4px;
   text-align: left;
   overflow: hidden;
-  height: 26px;
+  height: 35px;
+  line-height: 30px;
   float: left;
 }
+
+
+.reflex-layout .config-manager .content > .controls  .state-name-input:focus{
+    border:1px solid #1bb1f4
+  }
 
 ///////////////////////////////////////////////////////////
 // Switch
@@ -160,8 +198,8 @@
 // Items
 //
 ///////////////////////////////////////////////////////////
-.config-manager .items {
-  height: calc(100% - 74px);
+.reflex-layout .config-manager .items {
+  height: calc(100% - 170px);
   margin: 10px 6px 0px 0px;
   overflow: scroll;
 }
