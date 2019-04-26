@@ -170,6 +170,35 @@
   cursor: pointer;
 }
 
+//渲染数据资料列表头
+.reflex-layout .config-manager .items > .itemTitle,
+.reflex-layout  .gu-mirror.itemTitle {
+
+  border: 1px solid #fff ;
+  width: calc(100% - 6px);//joe
+  /*// float:left;//joe*/
+  background: rgba(0, 105, 245, 0.10);;
+  white-space: nowrap;
+  /*cursor: not-allowed;*/
+  border-radius: 0;
+  /*overflow: hidden;*/
+  height: 6%;
+  /*line-height: 6%;*/
+  display: grid;
+  grid-template-columns: 70% 15% 15%;
+  min-height: 35px;
+  padding: 5px;
+    margin: 0;
+  .label-container{
+    white-space: normal;
+    margin-left:12px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
 //添加 reflex-layout 类增强选择器权重
 .reflex-layout .config-manager .items > .item,
 .reflex-layout  .gu-mirror.item {
@@ -180,23 +209,31 @@
 
   border: 1px solid #fff ;
   width: calc(100% - 6px);//joe
-  // float:left;//joe
+  /*// float:left;//joe*/
   background-color: #fff;
   white-space: nowrap;
-  cursor: not-allowed;
+  /*cursor: not-allowed;*/
   border-radius: 0;
   overflow: hidden;
   height: 6%;
+  /*line-height: 6%;*/
+  display: grid;
+  grid-template-columns: 70% 20% auto;
   min-height: 35px;
   padding: 5px;
     margin: 0;
+  .label-container{
+    white-space: normal;
+
+  }
 }
+
 
 .reflex-layout .config-manager .items > .item:first-child {
   margin-top: 0px;
 }
 
-.reflex-layout .config-manager .items > .item:nth-child(even){
+.reflex-layout .config-manager .items > .item:nth-child(odd){
   background-color:#F2F7FA;
 }
 
