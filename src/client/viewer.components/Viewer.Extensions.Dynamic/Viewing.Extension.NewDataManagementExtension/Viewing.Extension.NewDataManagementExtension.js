@@ -1371,7 +1371,9 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
             title="快速搜索视点资料"
             style={{"width":100}}
             >
+            <span>
             快速搜索
+            </span>
           </button>
 
         </div>
