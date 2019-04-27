@@ -212,7 +212,7 @@ module.exports = {
       { test: /\.otf(\?.*)?$/,   loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=font/opentype' },
       { test: /\.svg(\?.*)?$/,   loader: 'url-loader?prefix=fonts/&name=[path][name].[ext]&limit=10000&mimetype=image/svg+xml' },
       { test: /\.eot(\?.*)?$/,   loader: 'file-loader?prefix=fonts/&name=[path][name].[ext]' },
-      { test: /\.(png|jpg)$/,    loader: 'url-loader?limit=8192' }
+      { test: /\.(png|jpg)$/,    loader: 'url-loader?limit=100000' }/*这里的 limit = 8192 修改为 100000 */
     ]
   }
 }

@@ -1529,33 +1529,53 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                             })
                           })
                     }
-                    var newImg = document.createElement("img"),
-                        showDataContainer = document.getElementById("myDataContainer"),
-                        oldImg = showDataContainer.lastChild;
 
-                    newImg.id = "itemImg";
-                    newImg.style.cssText="height:200px;wight:200px;overflow:hidden";
-                    newImg.addEventListener('click',(e)=>{
+                    let newItemData = null;
+                    
+                    const itemFileName = item.filename
+
+
+
+                    if(/.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4)$/i.test(itemFileName)){
+
+                      console.log("这是视频")
+                      
+                      newItemData = document.createElement("video");
+                      newItemData.controls = "controls"
+                    }else{
+
+                      console.log("这是照片")
+
+                      newItemData = document.createElement("img");
+                    }
+
+
+                    let showDataContainer = document.getElementById("myDataContainer"),
+                        oldItemData = showDataContainer.lastChild;
+
+                    newItemData.id = "itemData";
+                    newItemData.style.cssText="height:200px;wight:200px;overflow:hidden";
+                    newItemData.addEventListener('click',(e)=>{
                       alert(`点击了照片`)
                       console.log(e.target.width)
                       console.log(e.target.height)
                     })
 
                     //如果存在缓存照片，则 remove
-                    if((oldImg && oldImg.id) && oldImg.id == "itemImg"){
+                    if((oldItemData && oldItemData.id) && oldItemData.id == "itemData"){
                       showDataContainer.removeChild(showDataContainer.lastChild);
                     }
-                    newImg.onload = ()=>{
+                    newItemData.onload = ()=>{
                       console.log('+++++++++++图片加载 src 成功， onload+++++++++++=+++++++')
                     }
-                    newImg.onerror=(e)=>{
+                    newItemData.onerror=(e)=>{
                       console.log('!!!!!!资料图片加载失败!!!!!!: 错误:',e)
                     }
 
-                    // newImg.src = "/resources/img/newDM/"+item.filename;
-                    newImg.src = thumbnailUrl;
+                    // newItemData.src = "/resources/img/newDM/"+item.filename;
+                    newItemData.src = thumbnailUrl;
                     
-                    showDataContainer.appendChild(newImg);
+                    showDataContainer.appendChild(newItemData);
 
                     //设置 show 状态为 true ，显示弹窗
                     // this.handleShow()
