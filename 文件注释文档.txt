@@ -54,3 +54,7 @@ WidgetContainer.js
 Panel.js
 (E:\work\BIM\src\client\components\Panel\Panel.js)
 可拖动框的组件封装！！！！！！
+
+style.css
+（E:\work\BIM\resources\libs\lmv\4.0.1\style.css）
+公共样式所在的文件，包括拓展的icon图标类

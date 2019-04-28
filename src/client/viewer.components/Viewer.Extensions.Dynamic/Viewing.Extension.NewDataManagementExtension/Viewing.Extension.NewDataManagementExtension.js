@@ -721,7 +721,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     //修改：新增了 FormData 对象 , 并发起请求
     //TODO：未完待续
-    let files = document.getElementById("myUpload").files || null;
+    let files = document.getElementById("myUpload").files;
 
     console.log("上传的文件 files：>>>>>>>>>>>>>>>",files)
 
@@ -731,7 +731,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     if (this.api) {
 
-        if(files != null ){
+        if(files.length>0){
 
           console.log("有上传文件的情况_____________:)____")
 
@@ -739,11 +739,18 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
           console.log("files的索引数组是:>>>>>>>>>>>>>>>>>>>",keys.toString())
 
-          this.api.addStateFile(state.user.id,files,{
+
+          const responseView = await this.api.addStateFile(state.user.id,files,{
             "data":{
               "state":JSON.stringify(viewerState),
               "keys":keys
             }})
+
+            console.log("_________________________test:________:",responseView)
+            console.log("_________________________testbody:________:",responseView.body)
+
+            viewerState = Object.assign({},viewerState,responseView.body)
+
 
           // const newState =  await this.api.addStateFile(
           //   state.user.id,
@@ -1452,22 +1459,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0];
 
-    const handleImgClick = function(e){
-
-      const oldContainer = layout.lastChild,
-      myDataContainer = document.createElement('div');
-
-      myDataContainer.id = "myDataContainer"
-      // const className = 'myDataContainer'
-      myDataContainer.className = className
-
-      if(oldContainer.id == "myDataContainer"){
-        layout.removeChild(oldContainer)
-      }
-      layout.appendChild(myDataContainer)
-    }
-
-    console.log()
 
     console.log("renderItems->items ： ",state.items)
 
@@ -1476,11 +1467,18 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       //对 item.name 进行前端过滤防止 xss 攻击
       const text = DOMPurify.sanitize(item.name)
 
-      const status = DOMPurify.sanitize(item.dataType.name)
+      const status = DOMPurify.sanitize(item.dataType.name) || ""
 
-      //TODO：用于视点的图片 src
-      const thumbnailUrl =
-      `/resources/img/newDM/${item.filename}`
+      //TODO：dev 环境使用，用于视点的图片 src
+      const thumbnailUrl = item.filename? item.filename.split(",").map(filename=>{
+            return {
+              'filepath':`/resources/img/newDM/${filename}`,
+              'filename':filename
+            }
+      }):[]
+
+      // TODO:布到服务器的时候使用这个地址，获得数据资料的地址数组
+      // const thumbnailUrl = item.filePath ? item.filePath.split(","):[]
 
       //选中或者hover变蓝色
       const className = "item" +
@@ -1508,12 +1506,15 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                     console.log(`>>>>>>>>?>>>>>这里执行了this.onRestoreState (item)>>>>>>>>>>>>>>`)
                     this.onRestoreState (item)
                   }
-                    //注释：获取所点击视点的资料图片
+                    //注释：获取所点击视点的资料图片,如果不存在图片，就不弹窗了
                     //TODO： 这个 getData 方法获取图片实体，多写了
                     // await this.api.getData(state.sequence.id, item.id);
-                        
+                    
                     if(!this.dataPanel){
                           //使用 this.react.pushViewerPanel API 传入 DataContainerDlg 实例创建资料容器
+                          if(thumbnailUrl.length<1){
+                              return
+                          }
 
                           const myDataContainerDlg = new DataContainerDlg()
                           this.dataPanel = await this.react.pushViewerPanel(myDataContainerDlg, {
@@ -1532,54 +1533,70 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                             })
                           })
                     }
+                  //点击没有资料的视点，关闭 Panel
+                  if(thumbnailUrl.length<1  && this.dataPanel){
+                    this.react.popViewerPanel(this.dataPanel.id).then(()=>{
+                      that.dataPanel = null;
+                      return 
+                    })
+                  }
 
-                    let newItemData = null;
-                    
-                    const itemFileName = item.filename
+                  // 遍历 filePath ，添加到弹窗里面
+                  let showDataContainer = document.getElementById("myDataContainer");
+                      showDataContainer.style.display = "none";
+                      showDataContainer.innerHTML = "";
 
+                  let newItemData = null;//资料的节点
+                  
+                  let itemFileName = null
 
+                  thumbnailUrl.forEach(file=>{
+                    itemFileName = file.filename
 
-                    if(/.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4)$/i.test(itemFileName)){
-
+                    if(/.(swf|avi|flv|mpg|rm|mov|wav|asf|3gp|mkv|rmvb|mp4|m2v)$/i.test(itemFileName)){
+  
                       console.log("这是视频")
                       
                       newItemData = document.createElement("video");
                       newItemData.controls = "controls"
-                    }else{
-
+                    }else if(/.(jpg|png|jpeg|bmp|gif)$/i.test(itemFileName)){
                       console.log("这是照片")
-
+  
                       newItemData = document.createElement("img");
+                    }else{
+                      //TODO:其他文档资料没有判定
+                      alert("该资料出现不支持的文档类型，错误！")
+                      return
                     }
 
+                  newItemData.addEventListener('click',(e)=>{
+                    alert(`点击了文件`)
+                    console.log(e.target.width)
+                    console.log(e.target.height)
+                  })
 
-                    let showDataContainer = document.getElementById("myDataContainer"),
-                        oldItemData = showDataContainer.lastChild;
+                  //如果存在缓存照片，则 remove
+                  // if((oldItemData && oldItemData.id) && oldItemData.id == "itemData"){
+                    // showDataContainer.removeChild(showDataContainer.lastChild);
+                  // }
 
-                    newItemData.id = "itemData";
-                    newItemData.style.cssText="height:200px;wight:200px;overflow:hidden";
-                    newItemData.addEventListener('click',(e)=>{
-                      alert(`点击了照片`)
-                      console.log(e.target.width)
-                      console.log(e.target.height)
-                    })
+                  // showDataContainer.removeChild(showDataContainer.lastChild);
 
-                    //如果存在缓存照片，则 remove
-                    if((oldItemData && oldItemData.id) && oldItemData.id == "itemData"){
-                      showDataContainer.removeChild(showDataContainer.lastChild);
-                    }
-                    newItemData.onload = ()=>{
-                      console.log('+++++++++++图片加载 src 成功， onload+++++++++++=+++++++')
-                    }
-                    newItemData.onerror=(e)=>{
-                      console.log('!!!!!!资料图片加载失败!!!!!!: 错误:',e)
-                    }
+                  newItemData.className = "itemData"
+                  newItemData.onload = ()=>{
+                    console.log('+++++++++++资料加载 src 成功， onload+++++++++++=+++++++')
+                  }
+                  newItemData.onerror=(e)=>{
+                    console.log('!!!!!!资料加载失败!!!!!!: 错误:',e)
+                  }
 
-                    // newItemData.src = "/resources/img/newDM/"+item.filename;
-                    newItemData.src = thumbnailUrl;
-                    
-                    showDataContainer.appendChild(newItemData);
+                  // newItemData.src = "/resources/img/newDM/"+item.filename;
+                  newItemData.src = file.filepath;
+                  
+                  showDataContainer.appendChild(newItemData);
+                })
 
+                showDataContainer.style.display = "grid"
                     //设置 show 状态为 true ，显示弹窗
                     // this.handleShow()
 

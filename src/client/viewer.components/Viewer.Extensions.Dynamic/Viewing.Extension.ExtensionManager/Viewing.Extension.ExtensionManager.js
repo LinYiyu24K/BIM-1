@@ -250,9 +250,9 @@ class ExtensionManager extends MultiModelExtensionBase {
       });
 
     }.bind(this);
-    dataManagement.addClass('dataManagement');
+    dataManagement.addClass('dataManagementButton');
     // dataManagement.addClass('adsk-icon-fullscreen');
-    dataManagement.setToolTip('资料管理');
+    dataManagement.setToolTip('数据管理');
 
     
     // saveViewButton 视点保存
