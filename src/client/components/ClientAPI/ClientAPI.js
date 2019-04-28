@@ -129,4 +129,49 @@ export default class ClientAPI {
       })
     })
   }
+
+  /////////////////////////////////////////////////////////////
+  //
+  //修改：对 files 进行遍历操作，实现多文件上传
+  /////////////////////////////////////////////////////////////
+  myUpload (url, files, opts = {}) {
+
+    return new Promise ((resolve, reject) => {
+
+      const req = superAgent.post(this.buildURL(url))
+
+      req.on('progress', (e) => {
+
+        if (opts.progress) {
+
+          opts.progress(e.percent)
+        }
+      })
+
+      for(let i in files){
+        if(files.hasOwnProperty(i)){
+          console.log(`{files[i]}的值是:>>>>>>>>>>>>>>>>> `,files[i])
+          req.attach(`${i}`, files[i])
+        }
+      }
+
+      if (opts.data) {
+
+        for (var key in opts.data) {
+
+          req.field(key, opts.data[key])
+        }
+      }
+
+      req.end((err, response) => {
+
+        if (err) {
+
+          return reject (err)
+        }
+
+        resolve (response)
+      })
+    })
+  }
 }

@@ -124,8 +124,11 @@ if(process.env.NODE_ENV === 'development') {
   app.use('/api/', limiter)
 }
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+// app.use(bodyParser.urlencoded({extended: false }))
+// app.use(bodyParser.json())
+
+app.use(bodyParser.urlencoded({ limit:'100mb',extended: true }))
+app.use(bodyParser.json({limit:'50mb'}))
 app.set('trust proxy', 1)
 app.use(cookieParser())
 

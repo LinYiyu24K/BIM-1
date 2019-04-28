@@ -141,7 +141,6 @@ export default class ConfigAPI extends ClientAPI {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
-          //修改：将 'Content-Type': 'application/json' 改为 application/x-www-form-urlencoded
           'Content-Type': 'application/json'
         },
         data: JSON.stringify(payload)
@@ -152,59 +151,43 @@ export default class ConfigAPI extends ClientAPI {
 
   /////////////////////////////////////////////////////////
   //
-  // 修改：新增。添加资料视点的文件上传 请求发起
-  // 新增了 file 后台路由接口
+  // 新增。添加资料视点的文件上传 请求发起
+  // 多文件上传，使用 formData 技术上传
   //
   /////////////////////////////////////////////////////////
-  addStateFile1 (sequenceId, formData) {
+  addStateFiles (sequenceId, formData) {
 
-    //  const payload = {
-    //   file
-    // }
+    const payload = {
+      formData
+    }
 
-    const url = `/api/newdm/configurator/234567890123456789012345/sequences/${sequenceId}/file`
-    // const url = `usersData/${sequenceId}/file`
+    const url = `/sequences/${sequenceId}/file`
 
-    console.log('这里是前端第二个处理文件的formdata：',formData)
-    console.log('这里是前端第二个处理文件的file：',formData.get('file'))
-
-    return $.ajax({
-      url: url,
-      type: 'POST',
-      async:true,
-      ContentType: false,
-      processData: false,
-        // 'Accept': 'application/json',
-        //修改：将 'Content-Type': 'application/json' 改为 application/x-www-form-urlencoded
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      data: formData,
-      success:function(data){
-        console.log(`上传成功，addStateFile返回的数据为：${JSON.stringify(data)}`)
-      },
-      error:function(jqXHR,textStatus,error){
-        console.log(`上传文件API发生错误 Error：${JSON.stringify(error)}`)
-        throw new Error(error)
-      }
+    return this.ajax({
+        url,
+        method:"POST",
+        data:JSON.stringify(payload),
+        processData:false,
+        cache:false,
+        "Content-Type": false
     })
   }
 
 
   /////////////////////////////////////////////////////////
   //
-  // 修改：上传文件的新函数
+  // 修改：上传文件的新函数,使用 super.upload 函数上传
   //
   /////////////////////////////////////////////////////////
-  addStateFile (sequenceId, file, opts = {}) {
+  addStateFile (sequenceId, files, opts = {}) {
 
     const url = `/sequences/${sequenceId}/file`
 
-    const options = Object.assign({}, {
-      tag: 'myUpload'
-    }, opts)
+    /*const options = Object.assign({}, {
+      keys: keys.toString()
+    }, opts)*/
 
-    return super.upload (url, file, options)
+    return super.myUpload (url, files, opts)
 
   }
 

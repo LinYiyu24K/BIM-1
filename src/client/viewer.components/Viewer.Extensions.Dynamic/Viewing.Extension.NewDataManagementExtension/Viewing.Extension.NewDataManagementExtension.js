@@ -2,7 +2,7 @@
 //
 /////////////////////////////////////////////////////////
 import MultiModelExtensionBase from 'Viewer.MultiModelExtensionBase'
-import ConfigAPI from './Viewing.Extension.Config.API'
+import NewDMAPI from './Viewing.Extension.Config.API'
 import ContentEditable from 'react-contenteditable'
 import './Viewing.Extension.NewDataManagement.scss'
 import WidgetContainer from 'WidgetContainer'
@@ -78,7 +78,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
       const modelId = this.options.dbModel._id
     // this.api 是 ConfigAPI的实例，所有 ajax 请求的集合
-      this.api = new ConfigAPI(
+      this.api = new NewDMAPI(
         options.apiUrl +
         `/newdm/${options.database}/${modelId}`)
     }
@@ -440,8 +440,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       this.options.database
 
     const {apiUrl} = this.options
-    //修改：将config改为newdm
-    this.api = new ConfigAPI(
+    //路由为newdm
+    this.api = new NewDMAPI(
       `${apiUrl}/newdm/${database}/${modelId}`)
   }
 
@@ -721,49 +721,51 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     //修改：新增了 FormData 对象 , 并发起请求
     //TODO：未完待续
-    // let formData = new FormData()
-    let file = document.getElementById("myUpload").files[0] || null;
-    console.log("没有上传文件的情况_____________:)____",file)
-    // console.log(file)
-    // formData.append("viewerState",JSON.stringify(viewerState)); 修改失败
-    // formData.append("name","上传文件名称")
-    // formData.append("file",file,file.name);
-    // console.log('这里是前端第一个处理文件的file：',formData.get('file'))
-    // console.log(`viewerState的值是全部视点还是单一视点？？？${JSON.stringify(viewerState)}`)
+    let files = document.getElementById("myUpload").files || null;
 
+    console.log("上传的文件 files：>>>>>>>>>>>>>>>",files)
 
-    // //plan2
-    // let fileInput = document.getElementById('uploadFile');
-    // fileInput.onchange = function(){
-    //   let files = !!this.files ? this.files : [];
-    //   if(!files.length || !window.FileReader){
-    //     console.log('浏览器不支持html5');
-    //     return false;
-    //   }
-    //   let fd = new FormData();
-    //   fd.append('file',files[0]);
-    //   fd.append('name','上传文件名称')
-    //   console.log('this.files是什么：'+this.files)
-    // }
-
-    // console.log(`这里是前端第一个处理文件的formdata：${formData.get('file')}`)
+    //修改：增加了this.api.addStateFile请求，
+    //这个请求会调用 upLoadSvc 的upload方法，解析data字段，
+    //所以在将视点信息存在data中的 states 中，并且转为字符串
 
     if (this.api) {
 
-        //修改：增加了this.api.addStateFile请求，
-        //这个请求会调用 upLoadSvc 的upload方法，解析data字段，
-        //所以在将视点信息存在data中的 states 中，并且转为字符串
-        if(file != null ){
-          const newState =  await this.api.addStateFile(
-            state.user.id,
-            file,
-            {"data":{"state":JSON.stringify(viewerState)}})
+        if(files != null ){
 
-            viewerState = newState.body
+          console.log("有上传文件的情况_____________:)____")
 
-            console.log(`新增加的 file 数据视点的所有信息:>>>>>>>>>>>>>>>>>>`)
-            console.log(newState)
+          const keys = Object.keys(files).toString()
+
+          console.log("files的索引数组是:>>>>>>>>>>>>>>>>>>>",keys.toString())
+
+          this.api.addStateFile(state.user.id,files,{
+            "data":{
+              "state":JSON.stringify(viewerState),
+              "keys":keys
+            }})
+
+          // const newState =  await this.api.addStateFile(
+          //   state.user.id,
+          //   files,
+          //   {"data":{"state":JSON.stringify(viewerState)}})
+
+
+          /*let formData = new FormData(document.getElementById("uploadForm")[0]);
+          let formData = new FormData()
+          for(let i in files){
+            if(files.hasOwnProperty(i)){
+              console.log(`files属性 i 的 value是：>>>>>>>>>> `,files[i])
+              formData.append("myUpload",files[i]);
+            }
+          }
+          formData.append("state",JSON.stringify(viewerState));
+          console.log("上传文件的 formData 对象：>>>>>>>",formData)
+          console.log("上传文件的 formData 对象的第一个值是：>>>>>>>",formData.get("myUpload"))
+          await this.api.addStateFiles(state.user.id,formData)*/
+
         }else{
+    console.log("没有上传文件的情况_____________:)____")
           this.api.addState(
             state.user.id,
             viewerState
@@ -1305,18 +1307,19 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           encType='multipart/form-data'
           style={{"width":170}}>
           
-          <a className="uploadOuter">
+          {/*<a className="uploadOuter">*/}
           {/* TODO:优先级高，在这里要显示已经选择的文件名，下一行？ */}
-          选择文件
+          {/*选择文件*/}
           <input 
             type="file" 
             name="myUpload" 
             id="myUpload"
+            multiple="multiple" /*多文件上传*/
             className="replyFileid"
             >
           </input>
 
-          </a>
+          {/*</a>*/}
 
         </form>
 

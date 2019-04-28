@@ -13,9 +13,6 @@ module.exports = function() {
   
   const router = express.Router()
 
-  //修改：引入multer库，用于读取文件
-  var fs = require('fs'); 
-  var multer = require('multer');
   const uploadSvc = ServiceManager.getService(
     'UploadSvc') 
 
@@ -240,10 +237,11 @@ module.exports = function() {
   /////////////////////////////////////////////////////////
   // add state to specific sequence.
   // body.state can be a single state or an array of states
-  //修改：新增。接收前端资料视点的文件上传
+  //修改：新增。接收前端资料视点的文件上传,限制最多同时接受12个文件
   /////////////////////////////////////////////////////////
   router.post('/:db/:modelId/sequences/:sequenceId/file',
-    uploadSvc.dataUploader.single('myUpload'),
+    uploadSvc.dataUploader.any(),
+    //单 uploadSvc.dataUploader.single('myUpload'),
     async(req, res) => {
       console.log("------------------------------------------上传文件日志start------------------------------------------")
     try {
@@ -253,17 +251,54 @@ module.exports = function() {
       const modelSvc = ServiceManager.getService (
         db + '-ModelSvc')
 
-      console.log('进到了file接口>>>>>>>>>>这是req.file:>>>>>>>>',req.file)
-      console.log(`进到了file接口>>>>>>>>>>这是req.params.sequenceId:>>>>>>> ${JSON.stringify(req.params.sequenceId)}`)
+      console.log('进到了file接口>>>>>>>>>>这是req.files:>>>>>>>>')
+      console.log(`进到了file接口>>>>>>>>>>这是req.params.sequenceId:>>>>>>> ${req.params.sequenceId}`)
       console.log("________________________________")
-      // console.log("state的类型是： ",Object.prototype.toString.call(req.body.state))
-      console.log("state的类型是isArray：>>>>>>>> ",Array.isArray(req.body.state))
-      
 
-      const file = req.file ? req.file : null ;
-      const filename = file.filename ;
-      const destination = file.destination ;
-      const path = file.path ;
+      console.log("文件上传得到的 req.body 是:>>>>>>>",req.body)
+
+      const keys =`${req.body.keys}`
+      console.log("获得 keys 的值是:>>>>>>>>>>>",keys)
+      console.log("获得 keys 的类型是:>>>>>>>>>>>>>>>>>",typeof req.body.keys)
+
+      const keysArr = keys.split(",");
+
+      //单 const file = req.file ? req.file : null ;
+      //单 const filename = file.filename ;
+      //单 const destination = file.destination ;
+      //单 const path = file.path ;
+
+      const files = req.files ? req.files : [] ;
+      console.log("文件上传得到的 files 是:>>>>>>>",files)
+
+      const filenameArr = [],
+            pathArr = []
+
+      keysArr.forEach(key=>{
+        filenameArr.push(files[key].filename);
+        pathArr.push(files[key].path)
+      })
+
+      const filename = filenameArr.join(",")
+      const path = pathArr.join(",")
+
+
+      /*const filename = files.reduce((ac,cv)=>{
+
+        if(ac){
+          return ac + "," + cv.filename
+        }else{
+          return ac + cv.filename
+        }
+      },'');
+
+      const path = files.reduce((ac,cv)=>{
+        if(ac){
+          return ac + "," + cv.path
+        }else{
+          return ac + cv.path
+        }
+      },'')*/
 
       //注释：合并视点信息 req.body.state 和文件路径 path 到一个 Object 中
       var state = Object.assign(
@@ -275,8 +310,7 @@ module.exports = function() {
         }
         )
 
-      // console.log("++++++++",state)
-      console.log('进到了file接口>>>>>>>>>>这是req.body.state.id:',state.id)
+      console.log("合并视点信息 req.body.state 和文件路径 path 到一个 Object 中，state:>>>>>>>>",state)
       const response =
         await modelSvc.addDataSequenceFile (
           req.params.modelId,
@@ -293,6 +327,9 @@ module.exports = function() {
 
       res.status(error.statusCode || 500)
       res.json(error)
+
+      console.log("文件上传 file 接口发成了错误！！！")
+      console.log(error)
     }
 })
 
