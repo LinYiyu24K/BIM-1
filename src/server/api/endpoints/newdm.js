@@ -219,7 +219,7 @@ module.exports = function() {
         db + '-ModelSvc')
 
       const response =
-        await modelSvc.addDataSequenceFile (
+        await modelSvc.adduserDataFile (
           req.params.modelId,
           req.params.sequenceId,
           state)
@@ -241,7 +241,6 @@ module.exports = function() {
   /////////////////////////////////////////////////////////
   router.post('/:db/:modelId/sequences/:sequenceId/file',
     uploadSvc.dataUploader.any(),
-    //单 uploadSvc.dataUploader.single('myUpload'),
     async(req, res) => {
       console.log("------------------------------------------上传文件日志start------------------------------------------")
     try {
@@ -251,22 +250,9 @@ module.exports = function() {
       const modelSvc = ServiceManager.getService (
         db + '-ModelSvc')
 
-      console.log('进到了file接口>>>>>>>>>>这是req.files:>>>>>>>>')
-      console.log(`进到了file接口>>>>>>>>>>这是req.params.sequenceId:>>>>>>> ${req.params.sequenceId}`)
-      console.log("________________________________")
-
-      console.log("文件上传得到的 req.body 是:>>>>>>>",req.body)
-
       const keys =`${req.body.keys}`
-      console.log("获得 keys 的值是:>>>>>>>>>>>",keys)
-      console.log("获得 keys 的类型是:>>>>>>>>>>>>>>>>>",typeof req.body.keys)
 
       const keysArr = keys.split(",");
-
-      //单 const file = req.file ? req.file : null ;
-      //单 const filename = file.filename ;
-      //单 const destination = file.destination ;
-      //单 const path = file.path ;
 
       const files = req.files ? req.files : [] ;
       console.log("文件上传得到的 files 是:>>>>>>>",files)
@@ -282,24 +268,6 @@ module.exports = function() {
       const filename = filenameArr.join(",")
       const path = pathArr.join(",")
 
-
-      /*const filename = files.reduce((ac,cv)=>{
-
-        if(ac){
-          return ac + "," + cv.filename
-        }else{
-          return ac + cv.filename
-        }
-      },'');
-
-      const path = files.reduce((ac,cv)=>{
-        if(ac){
-          return ac + "," + cv.path
-        }else{
-          return ac + cv.path
-        }
-      },'')*/
-
       //注释：合并视点信息 req.body.state 和文件路径 path 到一个 Object 中
       var state = Object.assign(
         {},
@@ -312,7 +280,7 @@ module.exports = function() {
 
       console.log("合并视点信息 req.body.state 和文件路径 path 到一个 Object 中，state:>>>>>>>>",state)
       const response =
-        await modelSvc.addDataSequenceFile (
+        await modelSvc.adduserDataFile (
           req.params.modelId,
           req.params.sequenceId,
           state)

@@ -752,54 +752,39 @@ export default class ModelSvc extends BaseSvc {
   // 修改：新增的，资料管理上传文件的数据库操作逻辑
   /////////////////////////////////////////////////////////
   
-  addDataSequenceFile (modelId, sequenceId, states) {
-
+  adduserDataFile (modelId, userId, userData) {
     return new Promise(async(resolve, reject) => {
-
       try {
-
         const dbSvc = ServiceManager.getService(
           this._config.dbName)
-
         const collection = await dbSvc.getCollection(
           this._config.collection)
-
-        console.log(`》》》》》》》执行到了！！上传文件!!!的数据库`)
-
-        const statesArray = Array.isArray(states)
-          ? states : [states]
-
-        console.log(`>>>>>>>数据库这里statesArr的值是>>>>>>>>>>>>>>： `)
-        console.log(statesArray)
-        console.log(`>>>>>>>statesArray是个数组吗？>>>>>>>>>>>>>>： `)
-        
-        const stateIds = statesArray.map((item) => {
+        const userDataArray = Array.isArray(userData)
+          ? userData : [userData]
+        console.log(userDataArray)
+        const userDataIds = userDataArray.map((item) => {
           return item.id
         })
-
         collection.update(
           {
             '_id': new mongo.ObjectID(modelId),
-            'users.id': sequenceId
+            'users.id': userId
           },
           {
             $push: {
-              'users.$.stateIds': {
-                $each: stateIds
+              'users.$.userDataIds': {
+                $each: userDataIds
               },
               'userData': {
-                $each: statesArray
+                $each: userDataArray
               }
             }
           }, (err) => {
-
             return err
               ? reject(err)
-              : resolve (states)
+              : resolve (userData)
           })
-
       } catch (ex) {
-
         return reject(ex)
       }
     })

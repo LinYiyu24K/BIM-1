@@ -18,6 +18,7 @@ import Switch from 'Switch'
 import Label from 'Label'
 import React from 'react'
 import DataContainerDlg from 'Dialogs/DataContainerDlg'
+import DataDetailContainerDlg from 'Dialogs/DataDetailContainerDlg'
 import {
   Modal,
   DropdownButton,
@@ -73,6 +74,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     this.drake = null
 
     this.dataPanel = null
+
+    this.dataDetailPanel = null
 
     if (this.options.apiUrl) {
 
@@ -281,7 +284,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
           if (this.api) {
 
-            this.loadSequences()  //175行
+            this.loadUsers()  //175行
           }
           //////////////////////////////////////////////////////////////////////////////////////////////////////
           //在 layout 下创建资料的容器
@@ -339,8 +342,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
   //      1、加载视点序列,只加载 sequences 数组的第一个sequence,
   //      2、* 使用 setState 方法初始化 sequences 状态，使得 sequences 保存所有的视点组
   //      3、2秒后执行 setActiveSequence 方法（参数：传入视点组集合的第一个视点组sequence）（*显示视点）
-  
-  async loadSequences () {
+  //  loadSequences
+  async loadUsers () {
 
     let hasUserLogin = ''
 
@@ -427,7 +430,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     this.setModel(event.model)
 
-    this.loadSequences()
+    this.loadUsers()
   }
 
   //
@@ -1314,7 +1317,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           encType='multipart/form-data'
           style={{"width":170}}>
           
-          {/*<a className="uploadOuter">*/}
+          <a className="uploadOuter">
           {/* TODO:优先级高，在这里要显示已经选择的文件名，下一行？ */}
           {/*选择文件*/}
           <input 
@@ -1326,7 +1329,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
             >
           </input>
 
-          {/*</a>*/}
+          </a>
 
         </form>
 
@@ -1460,7 +1463,10 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0];
 
 
-    console.log("renderItems->items ： ",state.items)
+    const layoutHeight = document.body.clientHeight;
+    const layoutWidth = layout.offsetWidth;
+
+    console.log("渲染的资料 -> renderItems->items ： ",state.items)
 
     const items = state.items.map((item) => {
 
@@ -1540,6 +1546,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                       return 
                     })
                   }
+                  
 
                   // 遍历 filePath ，添加到弹窗里面
                   let showDataContainer = document.getElementById("myDataContainer");
@@ -1558,7 +1565,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                       console.log("这是视频")
                       
                       newItemData = document.createElement("video");
-                      newItemData.controls = "controls"
+                      // newItemData.controls = "controls"
                     }else if(/.(jpg|png|jpeg|bmp|gif)$/i.test(itemFileName)){
                       console.log("这是照片")
   
@@ -1568,11 +1575,52 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                       alert("该资料出现不支持的文档类型，错误！")
                       return
                     }
+                  
 
-                  newItemData.addEventListener('click',(e)=>{
-                    alert(`点击了文件`)
-                    console.log(e.target.width)
-                    console.log(e.target.height)
+                  newItemData.addEventListener('click',async(e)=>{
+
+                    if(!that.dataDetailPanel){
+                      //使用 this.react.pushViewerPanel API 传入 DataContainerDlg 实例创建资料容器
+
+                      console.log("这个容器第一次创建___________")
+                      const myDetailDataContainerDlg = new DataDetailContainerDlg()
+                      that.dataDetailPanel = await this.react.pushViewerPanel(myDetailDataContainerDlg, {
+                        height: 750,
+                        width: 750
+                      })
+                      // 获取 弹窗的关闭按钮，注册其 onClick 事件关闭弹窗
+                      const dataDetailTitleClose = document.getElementById('dataDetailTitleClose');
+                      
+                      dataDetailTitleClose.addEventListener('click',()=>{
+                        
+                        that.react.popViewerPanel(myDetailDataContainerDlg.id).then(()=>{
+                          that.dataDetailPanel = null
+                        })
+                      })
+                    }
+
+                    let showDataDetailContainer = document.getElementById("myDataDetailContainer");
+                    
+                    const lastDataDetail = showDataDetailContainer.firstChild
+
+                    if(lastDataDetail){
+                      showDataDetailContainer.removeChild(lastDataDetail)
+                    }
+
+                    const dataDetailContainer = document.createElement(e.target.nodeName);
+                    if(e.target.nodeName=="VIDEO"){
+                      
+                      dataDetailContainer.controls = "controls"
+                    }
+                    dataDetailContainer.className = "itemData"
+                    dataDetailContainer.onload = ()=>{
+                      console.log('+++++++++++资料详情放大图加载成功， onload+++++++++++=+++++++')
+                    }
+                    dataDetailContainer.onerror=(e)=>{
+                      console.log('!!!!!!资料详情放大图加载失败!!!!!!: 错误:',e)
+                    }
+                    dataDetailContainer.src = e.target.src;
+                    showDataDetailContainer.appendChild(dataDetailContainer)
                   })
 
                   //如果存在缓存照片，则 remove
