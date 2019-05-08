@@ -42528,6 +42528,36 @@ Autodesk.Viewing.Extensions.ViewerPropertyPanel = ViewerPropertyPanel;
 
 
 })();
+
+;(function(){
+    'use strict';
+
+    /**
+     * 数据管理模块的数据上传面板面板
+     */
+
+    var av = Autodesk.Viewing;
+    var avu = av.UI;
+    
+    /** @constructor */
+    var ViewerUploadDataPanel = function (viewer) {
+        this.viewer = viewer;
+        this.currentNodeIds = [];
+        this.currentModel = null;
+        this.isDirty = true;
+        this.propertyNodeId = null;
+        this.normalTitle = 'Upload Data';
+        this.loadingTitle = 'Object UploadData Loading...';
+    
+        avu.PropertyPanel.call(this, viewer.container, 'ViewerUploadDataPanel', this.loadingTitle);
+    };
+
+    ViewerUploadDataPanel.prototype = Object.create(avu.PropertyPanel.prototype);
+    ViewerUploadDataPanel.prototype.constructor = ViewerUploadDataPanel;
+    av.Extensions.ViewerPanelMixin.call( ViewerUploadDataPanel.prototype );
+
+})();
+
 ;(function() {
 
 "use strict";
@@ -43145,6 +43175,17 @@ ViewerObjectContextMenu.prototype.buildMenu = function (event, status) {
                 that.viewer.impl.visibilityManager.aggregateIsolate(selection);
                 that.viewer.clearSelection();
                 avp.logger.track({name: 'isolate_count', aggregate: 'count'});
+            }
+        });
+        menu.push({
+            title: "Upload Data",
+            target: function () {
+                var selection = that.viewer.getAggregateSelection();
+                console.log(selection)
+                // that.viewer.impl.visibilityManager.aggregateIsolate(selection);
+                // that.viewer.clearSelection();
+                const myPanel = that.viewer.getUploadDataPanel(true);
+                myPanel.setVisible(true);
             }
         });
         if (status.hasVisible) {
@@ -51454,6 +51495,44 @@ var stringToDOM = avp.stringToDOM = function(str) {
         return this.propertygrid;
     };
 
+
+        /**
+     * Sets the property panel.
+     * @param {Autodesk.Viewing.UI.PropertyPanel} propertyPanel - The property panel to use, or null.
+     * @returns {boolean} True if the panel or null was set successfully, and false otherwise.
+     */
+    GuiViewer3D.prototype.setUploadDataPanel = function (propertyPanel) {
+        var self = this;
+        if (propertyPanel instanceof av.UI.PropertyPanel || !propertyPanel) {
+            if (this.propertygrid) {
+                this.propertygrid.setVisible(false);
+                this.removePanel(this.propertygrid);
+                this.propertygrid.uninitialize();
+            }
+
+            this.propertygrid = propertyPanel;
+            if (propertyPanel) {
+                this.addPanel(propertyPanel);
+
+                propertyPanel.addVisibilityListener(function (visible) {
+                    if (visible) {
+                        self.onPanelVisible(propertyPanel, self);
+                    }
+                    self.settingsTools.propertiesbutton.setState(visible ? avu.Button.State.ACTIVE : avu.Button.State.INACTIVE);
+                });
+
+            }
+            return true;
+        }
+        return false;
+    };
+
+    GuiViewer3D.prototype.getUploadDataPanel = function (createDefault) {
+        if (!this.propertygrid && createDefault) {
+            this.setPropertyPanel(new ave.ViewerUploadDataPanel(this));
+        }
+        return this.propertygrid;
+    };
 
     /**
      * Sets the viewer's settings panel.

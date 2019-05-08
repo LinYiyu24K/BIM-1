@@ -373,14 +373,16 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     //注释：this.api 就是 Viewing.Extension.Config.API.js导出的实例
     //      这里返回的 sequences 是一个只有一个用户的数组，["cangshu"]
-    let sequences =
-      await this.api.getSequences({
+    let users =
+      await this.api.getUsers({
         sortByName: true
       })
     //TODO:这里应该返回一个用户的sequence
-    //修改：将const sequences = sequences.length 修改为 const user = sequences.length
-    let user = sequences.length ?
-      sequences[0] : null
+    //修改：将const sequences = sequences.length 修改为 const user = users.length
+    let user = users.length ?
+    users[0] : null
+
+      console.log("user的值是——————————————————————：",user)
     
     if(!user){
 
@@ -398,13 +400,13 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
         await this.api.addSequence(loginUser)
 
-        sequences =
-        await this.api.getSequences({
+        users =
+        await this.api.getUsers({
           sortByName: true
         })
 
-        user = sequences.length ?
-          sequences[0] : null
+        user = users.length ?
+        users[0] : null
       }
 
     }
@@ -414,7 +416,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     //     })                                   })
     this.react.setState({
       user,
-      sequences
+      sequences:users
     })
 
     //await this.sleep(2000)
@@ -1017,7 +1019,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     this.react.setState({
       play: false,
       items: [],
-      sequence
+      sequence,
+      user:sequence
     })
 
     if (this.drake) {
@@ -1039,7 +1042,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           await this.api.getStates(
             sequence.id)
 
-        // console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!----`+states)
+        console.log(`state的值!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!----`,states)
 
         states.forEach((state) => {
 
@@ -1578,7 +1581,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                       newItemData.className = "itemData"
 
                       newItemData.download = itemFileName;
-                      newItemData.innerText = "此文件为资料文档，请点击下载文件";
+                      newItemData.innerText = `文件 ${itemFileName} 为资料文档，请点击下载文件`;
                       // newItemData.src = "/resources/img/newDM/"+item.filename;
                       newItemData.href = file.filepath;
 

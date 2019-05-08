@@ -38,7 +38,6 @@ module.exports = function() {
     try {
 
       const db = req.params.db
-      console.log(`>>>>>>>>>>>db的值是！！??！：${db}`)
       const modelSvc = ServiceManager.getService(
         db + '-ModelSvc')
 
@@ -174,7 +173,7 @@ module.exports = function() {
   // 修改：新增接口，获取指定视点组的视点资料
   //
   /////////////////////////////////////////////////////////
-  router.get('/:db/:modelId/usersData/:sequenceId/states',
+  router.get('/:db/:modelId/usersData/:userId/states',
     async(req, res) => {
 
     try {
@@ -187,7 +186,7 @@ module.exports = function() {
       const response =
         await modelSvc.getUserDataStates (
           req.params.modelId,
-          req.params.sequenceId)
+          req.params.userId)
 
       res.json(response)
 

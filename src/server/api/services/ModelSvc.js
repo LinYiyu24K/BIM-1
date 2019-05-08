@@ -388,7 +388,7 @@ export default class ModelSvc extends BaseSvc {
   }
 
   /////////////////////////////////////////////////////////
-  // 注释：新增，添加 users , 相当于 sequences
+  // 注释：添加 users , 相当于 sequences
   //
   /////////////////////////////////////////////////////////
   addUserData (modelId, user) {
@@ -414,9 +414,11 @@ export default class ModelSvc extends BaseSvc {
           },
           (err) => {
 
+            console.log("_______________________error",err)
+
             return err
               ? reject(err)
-              : resolve (sequence)
+              : resolve (user)
           })
 
       } catch (ex) {
@@ -663,19 +665,19 @@ export default class ModelSvc extends BaseSvc {
             return reject({error: 'Not Found'})
           }
 
-          const sequence = result[0].users
+          const user = result[0].users
 
           const stateMap = {};
 
           result[0].userData.forEach((state) => {
 
-            if (sequence.stateIds.indexOf(state.id) > -1){
+            if (user.userDataIds.indexOf(state.id) > -1){
 
               stateMap[state.id] = state
             }
           })
 
-          const states = sequence.stateIds.map((id) => {
+          const states = user.userDataIds.map((id) => {
             return stateMap[id]
           })
 

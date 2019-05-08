@@ -43147,6 +43147,15 @@ ViewerObjectContextMenu.prototype.buildMenu = function (event, status) {
                 avp.logger.track({name: 'isolate_count', aggregate: 'count'});
             }
         });
+        menu.push({
+            title: "Upload Data",
+            target: function () {
+                var selection = that.viewer.getAggregateSelection();
+                that.viewer.impl.visibilityManager.aggregateIsolate(selection);
+                that.viewer.clearSelection();
+                avp.logger.track({name: 'upload_data_count', aggregate: 'count'});
+            }
+        });
         if (status.hasVisible) {
             menu.push({
                 title: "Hide Selected",

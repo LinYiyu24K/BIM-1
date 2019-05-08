@@ -21,7 +21,7 @@ export default class ConfigAPI extends ClientAPI {
   // 注释：获取所有视点队列（组）sequences
   // 更改：改为 获取所有用户的存有数据的视点组
   /////////////////////////////////////////////////////////
-  getSequences (opts) {
+  getUsers (opts) {
 
     return new Promise ((resolve, reject) => {
 
@@ -105,11 +105,11 @@ export default class ConfigAPI extends ClientAPI {
   // 注释：这里的sequenceId应该是userId
   // * 返回的 res 是根据 sequenceId 指定的视点组 sequence 中的 statesId 中所有视点得具体信息组合得数组
   /////////////////////////////////////////////////////////
-  async getStates (sequenceId) {
+  async getStates (userId) {
 
     try {
 
-      const url = `/usersData/${sequenceId}/states`
+      const url = `/usersData/${userId}/states`
 
       const res = await this.ajax(url)
 

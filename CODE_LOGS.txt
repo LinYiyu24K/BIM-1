@@ -22,6 +22,21 @@ users:{
       }
 增加 users-modelsvc 的服务
 
+2、右键菜单更改
+viewer3d原型更改
+在路径 \resources\libs\lmv\4.0.1\viewer3D.js 中 43150 行，增加
+menu.push({
+            title: "Upload Data",
+            target: function () {
+                var selection = that.viewer.getAggregateSelection();
+                console.log(selection)
+                that.viewer.impl.visibilityManager.aggregateIsolate(selection);
+                that.viewer.clearSelection();
+                avp.logger.track({name: 'upload_data_count', aggregate: 'count'});
+            }
+        });
+添加上传数据资料的按钮，然后在 allstrings,json 中添加中文转义的键值对，将 uploadData 转为中文 上传数据资料，Object UploadData Loading...转为数据上传模块正在加载...，路径为
+resources\libs\lmv\4.0.1\res\locales\zh-HANS\allstrings.json 和 resources\libs\lmv\4.0.1\res\locales\en\allstrings.json
 
 
 重要逻辑：
