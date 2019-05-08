@@ -1572,7 +1572,17 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
                       newItemData = document.createElement("img");
                     }else{
                       //TODO:其他文档资料没有判定
-                      alert("该资料出现不支持的文档类型，错误！")
+                      console.log("该资料其他形式的文档类型！")
+
+                      newItemData = document.createElement("a")
+                      newItemData.className = "itemData"
+
+                      newItemData.download = itemFileName;
+                      newItemData.innerText = "此文件为资料文档，请点击下载文件";
+                      // newItemData.src = "/resources/img/newDM/"+item.filename;
+                      newItemData.href = file.filepath;
+
+                      showDataContainer.appendChild(newItemData);
                       return
                     }
                   
