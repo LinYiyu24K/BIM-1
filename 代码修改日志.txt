@@ -1,0 +1,23 @@
+
+201804281922
+E:\forgeProjects\forge-rcdb.nodejs-master\config\development.config.js
+59行
+clientSecret: process.env.FORGE_DEV_CLIENT_SECRET,
+clientId: process.env.FORGE_DEV_CLIENT_ID,
+改为
+clientSecret: 'jaQoAJ4cevjjLc5i',
+clientId: 'cwW6sKsFWFE85hBjtIRJpHlh3m3SOQRM',
+
+???? start.js? bin????????28行require('./src/server')?????
+
+
+
+
+
+2018 06 17
+改了界面的控制，通过按钮点击 来控制extension的开关：
+1. 按钮控制的是 它开源的extensionManager。
+2. src\client\viewer.components\Viewer.Extensions.Dynamic\Viewing.Extension.ExtensionManagerToolbar和src\client\viewer.components\Viewer.Configurator之间的数据传递是通过loadDynamicExtension疑似是它和Viewer联系的唯一通道，然后再修改一下layout.rightFlex的值。
+
+
+

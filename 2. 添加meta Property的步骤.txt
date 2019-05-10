@@ -1,0 +1,35 @@
+1. 打开mongoDB数据库：mongo
+2. use forge-recd
+3. 输入
+db.configurator.models.find(
+    { 
+    "name" : "Meta Properties", 
+    "env" : "Local", 
+    "git" : "https://github-joezxh.com", 
+    "desc" : "Meta Property Test", 
+    "layout" : {
+        "type" : "flexLayoutRight", 
+        "rightFlex" : 0.4
+    }, 
+    "model" : { 
+        "role" : "3d", 
+        "path" : "resources/models/dev/buildingrvt/Resource/3D View/{3D} 168550/{3D}.svf"
+    }, 
+    "dynamicExtensions" : [
+        {
+            "id" : "Viewing.Extension.MetaProperties", 
+            "enabled" : true
+        }
+    ], 
+    "metaProperties" : [
+    ]
+    }
+)
+
+其中，"git"的位置 可以每次不同，作为 key到时用来查询 这个对象的ID，"path"为svf的位置。
+metaProperties里面的数据为空。
+
+3. 查看这个对象的ID值：
+db.configurator.models.find({"git" : "https://github-joezxh.com"}).pretty()
+
+4. 在浏览器中打开：http://localhost:3000/configurator?id=id值

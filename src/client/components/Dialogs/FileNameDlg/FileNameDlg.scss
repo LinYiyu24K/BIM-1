@@ -1,0 +1,27 @@
+.fileName {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%)
+}
+.steps {
+  list-style: none;
+  text-align: left;
+  margin: 10px auto;
+  padding: 0 50px;
+}
+
+.step {
+  margin: 10px 0;
+
+  .path {
+    width: 350px;
+    display: block;
+    margin: 5px 0 0 0;
+  }
+}
+
+.foot button {
+  margin: 15px 0 10px 0;
+  width: 270px;
+}

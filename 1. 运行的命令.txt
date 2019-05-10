@@ -1,0 +1,22 @@
+﻿开启mongoDB数据库：D:\MongoDB\Server\3.4\bin\mongod --dbpath d:\data\db
+mongod --dbpath E:\mongodb\mongodb\data\db
+//npm install
+SET NODE_ENV=development&&SET HOT_RELOADING=true&&npm start
+在浏览器里面打开 http://localhost:3000
+
+//production环境
+npm run build-prod&&SET NODE_ENV=production&&npm start
+
+
+备注：如果打开localhost之后没能查看到模型，那么去检查一下mongodb的数据库是否已经打开。
+
+数据库导入：
+mongoimport --db forge-rcdb --collection rcdb.models --file D:\work\EBIM\BIM\resources\db\dev\rcdb.models.json
+
+mongoimport --db forge-rcdb --collection configurator.models --file D:\work\EBIM\BIM\resources\db\dev\configurator.models.json
+
+mongoimport --db forge-rcdb --collection gallery.models --file D:\work\EBIM\BIM\resources\db\dev\gallery.models.json
+
+mongoimport --db forge-rcdb --collection rcdb.materials --file D:\work\EBIM\BIM\resources\db\dev\rcdb.materials.json
+
+mongoimport --db forge-rcdb --collection users --file D:\work\EBIM\BIM\resources\db\dev\users.json
