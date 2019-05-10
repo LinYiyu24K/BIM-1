@@ -28,7 +28,6 @@ class ExtensionManager extends MultiModelExtensionBase {
     this.renderTitle = this.renderTitle.bind(this)
 
     this.render = this.render.bind(this)
-
     this.closeExt = this.closeExt.bind(this)
 
     this.reactOpts = {
@@ -253,7 +252,6 @@ class ExtensionManager extends MultiModelExtensionBase {
     dataManagement.addClass('dataManagementButton');
     // dataManagement.addClass('adsk-icon-fullscreen');
     dataManagement.setToolTip('数据管理');
-
 
     // saveViewButton 视点保存
     var saveViewButton = new Autodesk.Viewing.UI.Button('saveViewButton');

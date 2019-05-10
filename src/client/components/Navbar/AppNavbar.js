@@ -171,7 +171,6 @@ export default class AppNavbar extends React.Component {
     onKeyDown (e) {
 
       if (e.keyCode === 13) {
-
         e.stopPropagation()
         e.preventDefault()
       }
@@ -226,7 +225,6 @@ export default class AppNavbar extends React.Component {
 
             window.sessionStorage.setItem('user',user)
           }else{
-
             this.storageSvc.save('user',user)
           }
 
