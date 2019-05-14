@@ -66,6 +66,7 @@ class ChoosePropertiesExtension extends MultiModelExtensionBase {
   addModel () {
 
     console.log('触发',this.viewer)
+    let _this = this
     this.panel = new ViewerPropertyPanel(
       this.viewer, this.options)
 
@@ -84,6 +85,7 @@ class ChoosePropertiesExtension extends MultiModelExtensionBase {
 
       if (presentPanel instanceof ViewerPropertyPanel && presentPanel.isVisible()) {
         presentPanel.setVisible(!presentPanel.isVisible())
+        chooseButton.removeClass('active')
         return
       }
 
@@ -98,6 +100,9 @@ class ChoosePropertiesExtension extends MultiModelExtensionBase {
       this.viewer.loadDynamicExtension ('ChooseProperties').then( () => {
         var propertyPanel = this.viewer.getPropertyPanel(true);
         propertyPanel.setVisible(!propertyPanel.isVisible());
+        chooseButton.addClass('active')
+        //消除平台本身properties按钮的高亮显示
+        _this.viewer.toolbar._controls[3].propertiesbutton.removeClass('active')
       });
     };
 
@@ -126,71 +131,6 @@ class ChoosePropertiesExtension extends MultiModelExtensionBase {
     };
   }
 
-
-  // var propertiesButton = new avu.Button('toolbar-propertiesTool');
-  // propertiesButton.setToolTip('Properties');
-  // propertiesButton.setIcon("adsk-icon-properties");
-  // propertiesButton.onClick = function (e) {
-  //     var propertyPanel = viewer.getPropertyPanel(true);
-  //     propertyPanel.setVisible(!propertyPanel.isVisible());
-  // };
-  // propertiesButton.setVisible(!viewer.prefs.openPropertiesOnSelect);
-  // this.settingsTools.addControl(propertiesButton);
-  // this.settingsTools.propertiesbutton = propertiesButton;
-  /////////////////////////////////////////////////////////
-  //
-  //
-  /////////////////////////////////////////////////////////
-  // setChoosePanel (viewer, propertyPanel) {
-  //   console.log('setChooosePanel')
-  //   var self = this;
-  //   if (propertyPanel instanceof av.UI.PropertyPanel || !propertyPanel) {
-  //     viewer.choosegrid = propertyPanel;
-  //       if (propertyPanel) {
-  //         viewer.addPanel(propertyPanel);
-
-  //           propertyPanel.addVisibilityListener(function (visible) {
-  //               if (visible) {
-  //                 viewer.onPanelVisible(propertyPanel, viewer);
-  //               }
-  //               viewer.settingsTools.propertiesbutton.setState(visible ? avu.Button.State.ACTIVE : avu.Button.State.INACTIVE);
-  //           });
-
-  //       }
-  //       return true;
-  //   }
-  //   return false;
-  // }
-
-/////////////////////////////////////////////////////////
-  //
-  //
-  /////////////////////////////////////////////////////////
-//   GuiViewer3D.prototype.setPropertyPanel = function (propertyPanel) {
-//     var self = this;
-//     if (propertyPanel instanceof av.UI.PropertyPanel || !propertyPanel) {
-//         if (this.propertygrid) {
-//             this.propertygrid.setVisible(false);
-//             this.removePanel(this.propertygrid);
-//             this.propertygrid.uninitialize();
-//         }
-
-//         this.propertygrid = propertyPanel;
-//         if (propertyPanel) {
-//             this.addPanel(propertyPanel);
-
-//             propertyPanel.addVisibilityListener(function (visible) {
-//                 if (visible) {
-//                     self.onPanelVisible(propertyPanel, self);
-//                 }
-//                 self.settingsTools.propertiesbutton.setState(visible ? avu.Button.State.ACTIVE : avu.Button.State.INACTIVE);
-//             });
-
-//         }
-//         return true;
-//     }
-//     return false;
-// };
   /////////////////////////////////////////////////////////
   //
   //
