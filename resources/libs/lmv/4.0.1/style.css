@@ -40,6 +40,10 @@
     background-size: 100% 100%;
 }
 
+.choosePropertyButton.active {
+  color: orange;
+}
+
 
 .filterButton {
     background: url(过滤器.png) center no-repeat;
@@ -2357,7 +2361,11 @@ div.leaf.selected > lmvheader {
   color: red;
 }
 
-.adsk-viewing-viewer .property-panel .add,.adsk-viewing-viewer .property-panel .delete {
+.adsk-viewing-viewer .property-panel .add {
+  font-size: 18px;
+}
+
+.adsk-viewing-viewer .property-panel .delete {
   font-size: 20px;
 }
 

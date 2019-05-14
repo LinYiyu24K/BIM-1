@@ -687,7 +687,7 @@ export default class ViewerPropertiesPanel extends
     const value = document.createElement('span')
     var properties = this.state.properties
 
-    value.textContent = '+'
+    value.textContent = '＋'
     value.id = metaProperty.id || this.guid()
     value.title = metaProperty.displayValue
     value.className = 'add'
@@ -717,7 +717,7 @@ export default class ViewerPropertiesPanel extends
     const value = document.createElement('span')
     let properties = this.state.properties
     // let message = { content: '删除成功！'}
-    value.textContent = '-'
+    value.textContent = '－'
     value.id = metaProperty.id || this.guid()
     value.title = metaProperty.displayValue
     value.className = 'delete'

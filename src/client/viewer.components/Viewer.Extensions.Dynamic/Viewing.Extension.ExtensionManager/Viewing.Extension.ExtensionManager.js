@@ -253,6 +253,11 @@ class ExtensionManager extends MultiModelExtensionBase {
     // dataManagement.addClass('adsk-icon-fullscreen');
     dataManagement.setToolTip('数据管理');
 
+    //属性选择按钮
+    var choosePropertyButton = new Autodesk.Viewing.UI.Button('choosePropertyButton');
+
+    choosePropertyButton.addClass('choosePropertyButton');
+    choosePropertyButton.setToolTip('Choose Property');
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // SubToolbar
