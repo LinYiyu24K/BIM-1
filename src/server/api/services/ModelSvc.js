@@ -657,11 +657,16 @@ export default class ModelSvc extends BaseSvc {
 
           if (err) {
 
+            consooe.log("getUserDataStates 资料视点数据操作服务发生错误>>>>>>>>>>>>: ",err)
+
             return reject(err)
           }
 
+
+          //此处使用 result[0]做判断
           if(!result || !result.length){
 
+          console.log("getUserDataStates 资料视点数据操作服务未找到数据,result:>>>>>>>>",result)
             return reject({error: 'Not Found'})
           }
 
@@ -763,7 +768,8 @@ export default class ModelSvc extends BaseSvc {
           this._config.collection)
         const userDataArray = Array.isArray(userData)
           ? userData : [userData]
-        console.log(userDataArray)
+        console.log(">>>>>>>>>>>>>这是modelId:>>>>>>>>>>>>>>>>>>>>>>>>>>",modelId)
+        console.log(">>>>>>>>>>>>>这是userId:>>>>>>>>>>>>>>>>>>>>>>>>>>",userId)
         const userDataIds = userDataArray.map((item) => {
           return item.id
         })
@@ -857,7 +863,7 @@ export default class ModelSvc extends BaseSvc {
           },
           {
             '$pull': {
-              'users.$.stateIds': stateId,
+              'users.$.userDataIds': stateId,
               'userData': {id: stateId}
             }
           },

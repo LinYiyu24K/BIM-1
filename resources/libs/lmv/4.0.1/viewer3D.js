@@ -42529,34 +42529,7 @@ Autodesk.Viewing.Extensions.ViewerPropertyPanel = ViewerPropertyPanel;
 
 })();
 
-;(function(){
-    'use strict';
 
-    /**
-     * 数据管理模块的数据上传面板面板
-     */
-
-    var av = Autodesk.Viewing;
-    var avu = av.UI;
-    
-    /** @constructor */
-    var ViewerUploadDataPanel = function (viewer) {
-        this.viewer = viewer;
-        this.currentNodeIds = [];
-        this.currentModel = null;
-        this.isDirty = true;
-        this.propertyNodeId = null;
-        this.normalTitle = 'Upload Data';
-        this.loadingTitle = 'Object UploadData Loading...';
-    
-        avu.PropertyPanel.call(this, viewer.container, 'ViewerUploadDataPanel', this.loadingTitle);
-    };
-
-    ViewerUploadDataPanel.prototype = Object.create(avu.PropertyPanel.prototype);
-    ViewerUploadDataPanel.prototype.constructor = ViewerUploadDataPanel;
-    av.Extensions.ViewerPanelMixin.call( ViewerUploadDataPanel.prototype );
-
-})();
 
 ;(function() {
 
@@ -43180,12 +43153,95 @@ ViewerObjectContextMenu.prototype.buildMenu = function (event, status) {
         menu.push({
             title: "Upload Data",
             target: function () {
-                var selection = that.viewer.getAggregateSelection();
-                console.log(selection)
-                // that.viewer.impl.visibilityManager.aggregateIsolate(selection);
-                // that.viewer.clearSelection();
-                const myPanel = that.viewer.getUploadDataPanel(true);
-                myPanel.setVisible(true);
+                // TODO:这里根据 sessionStorage 中是否存在用户名进行判断用户 loggined ,待改进
+                var username = null;
+                if(window.sessionStorage){
+                    username = window.sessionStorage.getItem("user");
+                }
+                if(!username){
+                    alert("此功能与用户账号绑定，请先登陆");
+                    return;
+                }
+                that.viewer.getAggregateSelection(function(model,dbId){
+                    //TODO: 这里的 URL 都是写死的，待优化
+                    var getUsersURL = "http://localhost:3000/api/newdm/rcdb/"+model.dbModelId+"/usersData";
+                    var addUsersURL = "http://localhost:3000/api/newdm/rcdb/"+model.dbModelId+"/usersData";
+                    var guid  = function() {
+                        var format = 'xxxxxxxxxxxx';
+                        var d = new Date().getTime()
+                        var guid = format.replace(
+                          /[xy]/g,
+                          function (c) {
+                            var r = (d + Math.random() * 16) % 16 | 0
+                            d = Math.floor(d / 16)
+                            return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16)
+                          })
+
+                        return guid
+                      }
+                    if(typeof XMLHttpRequest == "undefined"){
+                        alert("此功能不支持 IE 浏览器！");
+                        return
+                    }
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function(){
+                        if(xhr.readyState == 4){
+                            if((xhr.status >= 200 && xhr.status <300) || xhr.status == 304){
+                                console.log("这是 xhr.response：>>>>>>>>>>>>> ",JSON.parse(xhr.response));
+                                var response = JSON.parse(xhr.response);
+                                if(response.length>0){
+                                    var loginUser = response.filter((user) =>{
+                                        if(user.user == username){
+                                            return true
+                                        }else{
+                                            return false
+                                        }
+                                    })[0];
+                                    console.log("已存在数据账户:>>>>>>>>>> ",loginUser)
+                                    window.sessionStorage.setItem("userId",loginUser.id);
+                                    //弹窗
+                                    const myPanel = that.viewer.getUploadDataPanel(true,model.dbModelId);
+                                    myPanel.setVisible(true);
+                                    
+                                }else{
+                                    console.log("未存在数据账户:>>>>>>>>>> ")
+                                    //增加用户到视点
+                                    var loginUser = {
+                                        id: guid(),
+                                        userDataIds: [],
+                                        user:username
+                                      }
+                                    const payload = {
+                                        user:loginUser
+                                    }
+                                      var xhr1 = new XMLHttpRequest();
+                                      xhr1.onreadystatechange = function(){
+                                        if(xhr1.readyState == 4){
+                                            if((xhr1.status >= 200 && xhr1.status <300) || xhr1.status == 304){
+                                                console.log("右键增加用户的返回值：>>>>>>>",JSON.parse(xhr1.response));
+                                                var resUser = JSON.parse(xhr1.response);
+                                                window.sessionStorage.setItem("userId",resUser.id);
+                                                //弹窗
+                                                const myPanel = that.viewer.getUploadDataPanel(true,model.dbModelId);
+                                                myPanel.setVisible(true);
+                                            }else{
+                                                alert("用户数据请求出错： "+xhr.status)
+                                            }
+                                        }
+                                    }
+                                    xhr1.open("POST",addUsersURL,true);
+                                    xhr1.send(JSON.stringify(payload));
+                                }
+
+                            }else{
+                                alert("用户数据请求出错： "+xhr.status)
+                            }
+                        }
+                    }
+                    xhr.open("GET",getUsersURL,true);
+                    xhr.send(null);
+
+                })
             }
         });
         if (status.hasVisible) {
@@ -43436,6 +43492,181 @@ Extension.prototype.getCache = function() {
 Autodesk.Viewing.Extension = Extension;
 
 })();
+
+
+;(function(){
+    'use strict';
+
+    /**
+     * 数据管理模块的数据上传面板面板
+     */
+
+    var av = Autodesk.Viewing;
+    var avu = av.UI;
+    var avp = av.Private;
+    
+    /** @constructor */
+    var ViewerUploadDataPanel = function (viewer,dbModelId) {
+        this.viewer = viewer;
+        this.normalTitle = 'Upload Data';
+    
+        avu.DockingPanel.call(this, viewer.container, 'ViewerUploadDataPanel', this.normalTitle);
+
+        this.title.classList.add("docking-panel-delimiter-shadow");
+        this.container.classList.add('uploaddata-panel');
+        this.container.dockRight = true;
+        // this.createScrollContainer({left: false, heightAdjustment: 70, marginTop:0});
+
+        ////////////////////////////////////////////////////////////////////////////////
+        //TODO：这里的 域名、数据库名称是写死的，如果更改的话这里需要变动，modelId 是自动变化的
+        //用户 id 这里从session中读取
+        /////////////////////////////////////////////////////////////////////////////////
+        var host = "http://localhost:3000";//域名配置
+        var database = "rcdb";
+        var username = window.sessionStorage.getItem("user");
+        var userId = window.sessionStorage.getItem("userId");
+        var URL=host+"/api/newdm/"+database+"/"+dbModelId+"/usersData/"+userId+"/rkfile";
+        var forms = document.createElement("div");
+        forms.className = "rk-content-box"
+
+        var userDataName = document.createElement("input");
+        userDataName.id = "rkuserDataName";
+        userDataName.placeholder = "请输入新资料的名称..."
+        userDataName.className = "rk-userDataName-Input";
+        forms.appendChild(userDataName)
+
+        var userDataType = document.createElement("select");
+        userDataType.id = "rkuserDataType";
+        userDataType.className = "rk-userDataType-Select";
+        var option1 = document.createElement("option");
+        option1.value = '1';
+        option1.innerText = "安全";
+        var option2 = document.createElement("option");
+        option2.value = '2';
+        option2.innerText = "质量";
+        var option3 = document.createElement("option");
+        option3.value = '3';
+        option3.innerText = "进度";
+        userDataType.appendChild(option1);
+        userDataType.appendChild(option2);
+        userDataType.appendChild(option3);
+
+        forms.appendChild(userDataType);
+
+        var uploadFileOuter = document.createElement("a");
+        uploadFileOuter.className = "rk-uploadFile-Input-Outer";
+        uploadFileOuter.innerText = "选择文件";
+        var uploadFile = document.createElement("input");
+        uploadFile.type = "file";
+        uploadFile.className = "rk-uploadFile-Input";
+        uploadFile.multiple="multiple";
+        uploadFile.id = "rkuploadFile";
+        uploadFile.onchange = function(e){
+            //TODO:提示用户选择了多少文件
+        }
+
+        uploadFileOuter.appendChild(uploadFile);
+        forms.appendChild(uploadFileOuter);
+
+        var dataSubmitBtn = document.createElement("button");
+        dataSubmitBtn.innerText = "上传";
+        dataSubmitBtn.className = "rk-dataSubmit-Btn";
+        dataSubmitBtn.onclick = function(e){
+            console.log("点击了上传数据")
+            var username = null;
+            if(window.sessionStorage){
+                username = window.sessionStorage.getItem("user");
+            }
+            
+
+            var uploadDataTypes = [{id:1,name:'安全'},{id:2,name:'质量'},{id:3, name:'进度'}];
+
+            var guid  = function() {
+                var format = 'xxxxxxxxxxxx';
+                var d = new Date().getTime()
+                var guid = format.replace(
+                  /[xy]/g,
+                  function (c) {
+                    var r = (d + Math.random() * 16) % 16 | 0
+                    d = Math.floor(d / 16)
+                    return (c == 'x' ? r : (r & 0x7 | 0x8)).toString(16)
+                  })
+
+                return guid
+              }
+
+            var state = new avp.ViewerState( viewer ).getState();
+            var newStateName = !document.getElementById("rkuserDataName").value?new Date().toString('d/M/yyyy H:mm:ss')
+            :document.getElementById("rkuserDataName").value;
+
+
+            var viewerState = Object.assign({},
+              state, {
+                id: guid(),
+                name:newStateName,
+                dataType:uploadDataTypes[document.getElementById("rkuserDataType").value-1]
+              })
+
+            console.log("这里是3D文件里面的展示```ViewerState")
+            console.log("viewerState的值是---",viewerState);
+
+            var files = document.getElementById("rkuploadFile").files;
+
+            var formData = new FormData();
+            for(var j=0;j<files.length;j++){
+                formData.append("files",files[j],files[j].name)
+            }
+            formData.append("data",JSON.stringify(viewerState));
+
+            if(typeof XMLHttpRequest == "undefined"){
+                alert("此功能不支持 IE 浏览器！");
+                return
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function(){
+                if(xhr.readyState == 4){
+                    if((xhr.status >= 200 && xhr.status <300) || xhr.status == 304){
+                        // alert("上传成功，数据若与数据管理拓展不同步请重新打开拓展")
+                        var res = JSON.parse(xhr.response);
+                        console.log("这是上传数据之后的 res",res);
+                        var rkulMsg = document.getElementById("rkuploadMsg");
+                        rkulMsg.innerText = "* 上传构件数据名 "+ res.name +" 成功!\n数据若与数据管理拓展不同步请重新打开拓展.";
+                        rkulMsg.style.cssText = "color:green";
+                    }else{
+                        // alert("上传请求出错： "+xhr.status)
+                        var rkulMsg = document.getElementById("rkuploadMsg");
+                        rkulMsg.innerText = "* 上传请求出错! 错误状态码： "+xhr.status;
+                        rkulMsg.style.cssText = "color:red";
+                    }
+                }
+            }
+            xhr.open("POST",URL,true);
+            xhr.send(formData)
+        }
+        forms.appendChild(dataSubmitBtn);
+
+        var uploadMsg = document.createElement("span");
+        uploadMsg.id = "rkuploadMsg";
+        uploadMsg.className = "rk-upload-Msg";
+
+        forms.appendChild(uploadMsg);
+
+        this.content = forms;
+        this.container.appendChild(this.content)
+
+        this.highlightableElements = {};
+
+        var that = this;
+    };
+
+    ViewerUploadDataPanel.prototype = Object.create(avu.DockingPanel.prototype);
+    ViewerUploadDataPanel.prototype.constructor = ViewerUploadDataPanel;
+    av.Extensions.ViewerPanelMixin.call( ViewerUploadDataPanel.prototype );
+
+    Autodesk.Viewing.Extensions.ViewerUploadDataPanel = ViewerUploadDataPanel;
+
+})();
+
 ;
 (function() {
 
@@ -51501,24 +51732,24 @@ var stringToDOM = avp.stringToDOM = function(str) {
      * @param {Autodesk.Viewing.UI.PropertyPanel} propertyPanel - The property panel to use, or null.
      * @returns {boolean} True if the panel or null was set successfully, and false otherwise.
      */
-    GuiViewer3D.prototype.setUploadDataPanel = function (propertyPanel) {
+    GuiViewer3D.prototype.setUploadDataPanel = function (dockingPanel) {
         var self = this;
-        if (propertyPanel instanceof av.UI.PropertyPanel || !propertyPanel) {
+        if (dockingPanel instanceof av.UI.DockingPanel || !dockingPanel) {
             if (this.propertygrid) {
                 this.propertygrid.setVisible(false);
                 this.removePanel(this.propertygrid);
                 this.propertygrid.uninitialize();
             }
 
-            this.propertygrid = propertyPanel;
-            if (propertyPanel) {
-                this.addPanel(propertyPanel);
+            this.propertygrid = dockingPanel;
+            if (dockingPanel) {
+                this.addPanel(dockingPanel);
 
-                propertyPanel.addVisibilityListener(function (visible) {
+                dockingPanel.addVisibilityListener(function (visible) {
                     if (visible) {
-                        self.onPanelVisible(propertyPanel, self);
+                        self.onPanelVisible(dockingPanel, self);
                     }
-                    self.settingsTools.propertiesbutton.setState(visible ? avu.Button.State.ACTIVE : avu.Button.State.INACTIVE);
+                    // self.settingsTools.propertiesbutton.setState(visible ? avu.Button.State.ACTIVE : avu.Button.State.INACTIVE);
                 });
 
             }
@@ -51527,9 +51758,9 @@ var stringToDOM = avp.stringToDOM = function(str) {
         return false;
     };
 
-    GuiViewer3D.prototype.getUploadDataPanel = function (createDefault) {
-        if (!this.propertygrid && createDefault) {
-            this.setPropertyPanel(new ave.ViewerUploadDataPanel(this));
+    GuiViewer3D.prototype.getUploadDataPanel = function (createDefault,dbModelId) {
+        if (createDefault) {
+            this.setUploadDataPanel(new ave.ViewerUploadDataPanel(this,dbModelId));
         }
         return this.propertygrid;
     };

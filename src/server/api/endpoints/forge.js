@@ -60,7 +60,7 @@ module.exports = function() {
     res.json(`${authURL}&response_type=code&state=${csrf}`)
   })
 
-    // 注释：myLogin接口，用于替代/login
+    // 注释：myLogin接口，用于替代/login,数据管理添加
     router.post('/myLogin', async(req,res) => {
       try{
         const user = req.body;

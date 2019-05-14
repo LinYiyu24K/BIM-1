@@ -286,26 +286,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
             this.loadUsers()  //175行
           }
-          //////////////////////////////////////////////////////////////////////////////////////////////////////
-          //在 layout 下创建资料的容器
-          //可用
-          //////////////////////////////////////////////////////////////////////////////////////////////////////////
-          // const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0],
-          //       oldContainer = layout.lastChild,
-          //       myDataContainer = document.createElement('div');
-          //
-          // myDataContainer.id = "myDataContainer"
-          // const className = 'myDataContainer'
-          // myDataContainer.className = className
-          //
-          // if(oldContainer.id == "myDataContainer"){
-          //   layout.removeChild(oldContainer)
-          // }
-          // layout.appendChild(myDataContainer)
-          //
-          ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-          
       })
     }).catch((error)=>{
 
@@ -358,7 +339,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
       let usernameArr = Object.values(this.storageSvc.load('user'));
       usernameArr.pop();
-      hasUserLogin = usernameArr.join()
+      hasUserLogin = usernameArr.join("")
     }
 
     
@@ -377,14 +358,22 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       await this.api.getUsers({
         sortByName: true
       })
-    //TODO:这里应该返回一个用户的sequence
-    //修改：将const sequences = sequences.length 修改为 const user = users.length
-    let user = users.length ?
-    users[0] : null
 
-      console.log("user的值是——————————————————————：",user)
-    
+
+    console.log("这是所有的用户列表:>>>>>>>>>>>>",users)
+    //TODO:这里根据 sessionStorage 中的用户名在所有数据管理用户队列中进行 filter操作，取第一个，需要让用户名唯一！！！
+    let user = users.filter((userItem) =>{
+      if(userItem.user == hasUserLogin ){
+        return true;
+      }else{
+        return false;
+      }
+    })[0]
+    console.log("过滤得到的 user ： >>>>>>>",user)
+
     if(!user){
+
+      console.log("用户第一次使用数据管理模块，加入数据管理用户队列")
 
       const username = hasUserLogin;
 
@@ -392,28 +381,28 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
       const loginUser = {
         id: this.guid(),
-        stateIds: [],
+        userDataIds: [],
         user:username
       }
 
       if(this.api){
 
-        await this.api.addSequence(loginUser)
+        const resUser = await this.api.addUser(loginUser)
 
+        console.log("增加数据用户的返回值 resUser:>>>>>>",resUser)
+
+        //TODO：这个 users 并不需要
         users =
         await this.api.getUsers({
           sortByName: true
         })
 
-        user = users.length ?
-        users[0] : null
+        user = resUser
       }
 
     }
-      
-    //修改：将 this.react.setState({ 修改为  this.react.setState({
-    //       sequences                                            user
-    //     })                                   })
+
+
     this.react.setState({
       user,
       sequences:users
@@ -423,7 +412,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     setTimeout(() => {
       this.setActiveSequence (user)
-    }, 2000)
+    }, 800)
   }
 
 
@@ -487,7 +476,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         //注释：再向数据库中添加新的视点序列
         if (this.api) {
 
-          this.api.addSequence(sequence)
+          this.api.addUser(sequence)
         }
       }
 
@@ -559,7 +548,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
         if (this.api) {
 
-          this.api.addSequence (Object.assign({},
+          this.api.addUser (Object.assign({},
             sequence, {
               stateIds: []
             })).then(() => {
@@ -712,6 +701,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         dataType:state.uploadDataType
       })
     
+    console.log("this.viewer.getState的值是——————:",this.viewer.getState())
+
     //更改：新增。判断用户是否选择焦点，如果没有选择，则弹窗提示
     if(viewerState.objectSet[0].id.length === 0){
       this.showMissPointDlg()
@@ -742,8 +733,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
           const keys = Object.keys(files).toString()
 
-          console.log("files的索引数组是:>>>>>>>>>>>>>>>>>>>",keys.toString())
-
 
           const responseView = await this.api.addStateFile(state.user.id,files,{
             "data":{
@@ -751,30 +740,8 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
               "keys":keys
             }})
 
-            console.log("_________________________test:________:",responseView)
-            console.log("_________________________testbody:________:",responseView.body)
 
             viewerState = Object.assign({},viewerState,responseView.body)
-
-
-          // const newState =  await this.api.addStateFile(
-          //   state.user.id,
-          //   files,
-          //   {"data":{"state":JSON.stringify(viewerState)}})
-
-
-          /*let formData = new FormData(document.getElementById("uploadForm")[0]);
-          let formData = new FormData()
-          for(let i in files){
-            if(files.hasOwnProperty(i)){
-              console.log(`files属性 i 的 value是：>>>>>>>>>> `,files[i])
-              formData.append("myUpload",files[i]);
-            }
-          }
-          formData.append("state",JSON.stringify(viewerState));
-          console.log("上传文件的 formData 对象：>>>>>>>",formData)
-          console.log("上传文件的 formData 对象的第一个值是：>>>>>>>",formData.get("myUpload"))
-          await this.api.addStateFiles(state.user.id,formData)*/
 
         }else{
     console.log("没有上传文件的情况_____________:)____")
@@ -1342,7 +1309,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           title="上传视点资料"
           style={{"width":100}}>
           <span className="fa fa-plus-square">
-          上传视点
+          上传数据
           </span>
         </button>
 

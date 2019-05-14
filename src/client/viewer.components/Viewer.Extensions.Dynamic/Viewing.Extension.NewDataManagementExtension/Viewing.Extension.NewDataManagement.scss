@@ -35,7 +35,7 @@
     font-size: 16px;
     color: #0A131C;
   }
-  //上传组件样式覆盖
+  /*上传组件样式覆盖*/
   .uploadOuter{
     position: relative;
     height: 35px;
@@ -148,7 +148,8 @@
 }
 
 
-.reflex-layout .config-manager .content > .controls  .state-name-input:focus{
+.reflex-layout .config-manager .content > .controls  .state-name-input:focus,
+.reflex-layout .config-manager .content > .controls  .state-name-input:hover {
     border:1px solid #1bb1f4
   }
 
@@ -221,11 +222,12 @@
   /*cursor: not-allowed;*/
   border-radius: 0;
   /*overflow: hidden;*/
-  height: 6%;
+  /*height: 6%;*/
   /*line-height: 6%;*/
   display: grid;
   grid-template-columns: 70% 15% 15%;
   min-height: 35px;
+  line-height: 25px;
   padding: 5px;
     margin: 0;
   .label-container{
@@ -235,6 +237,9 @@
     align-items: center;
     font-size: 18px;
     font-weight: 500;
+  }
+  p{
+    mairing:0;
   }
 }
 
@@ -254,17 +259,21 @@
   /*cursor: not-allowed;*/
   border-radius: 0;
   overflow: hidden;
-  height: 6%;
+  /*height: 6%;*/
   /*line-height: 6%;*/
   display: grid;
   grid-template-columns: 70% 20% auto;
   min-height: 35px;
+  line-height: 25px;
   padding: 5px;
     margin: 0;
   .label-container{
     width:100%;
     white-space: normal;
 
+  }
+  p{
+    margin:0;
   }
 }
 

@@ -392,10 +392,6 @@
                         }
                     },
                     {
-                        "id" : "Viewing.Extension.ConfigManager",
-                        "enabled" : true
-                    },
-                    {
                         "id" : "Viewing.Extension.Database.Table",
                         "enabled" : true,
                         "options" : {
@@ -497,6 +493,10 @@
                 "parentControl" : "modelTools",
                 "extensions" : [
                     {
+                        "id" : "Viewing.Extension.NewDataManagementExtension",
+                        "enabled" : true
+                    },
+                    {
                         "id" : "Viewing.Extension.Database.Table",
                         "enabled" : true,
                         "options" : {
@@ -561,6 +561,10 @@
                 ],
                 "parentControl" : "modelTools",
                 "extensions" : [
+                    {
+                        "id" : "Viewing.Extension.NewDataManagementExtension",
+                        "enabled" : true
+                    },
                     {
                         "id" : "Viewing.Extension.Database.Table",
                         "enabled" : true,
@@ -658,6 +662,10 @@
                 ],
                 "parentControl" : "modelTools",
                 "extensions" : [
+                    {
+                        "id" : "Viewing.Extension.NewDataManagementExtension",
+                        "enabled" : true
+                    },
                     {
                         "id" : "Viewing.Extension.Database.Table",
                         "enabled" : true,
