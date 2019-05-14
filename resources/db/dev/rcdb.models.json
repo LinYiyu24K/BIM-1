@@ -1,4 +1,359 @@
 {
+  "_id" : ObjectId("5841e13f540a4d30802765e3"),
+  "name" : "北京十九中学",
+  "env" : "Local",
+  "layout" : {
+      "type" : "flexLayoutRight",
+      "rightFlex" : 0.3
+  },
+  "model" : {
+      "path" : "resources/models/dev/北京十九中学/3d.svf",
+      "name" : "北京十九中学"
+  },
+  "dynamicExtensions" : [
+      {
+          "id" : "Viewing.Extension.ExtensionManager",
+          "options" : {
+              "materialCategories" : [
+                  "Material"
+              ],
+              "properties" : [
+                  "Date Created",
+                  "Density",
+                  "Description",
+                  "Material",
+                  "Part Number"
+              ],
+              "parentControl" : "modelTools",
+              "extensions" : [
+                  {
+                      "id" : "Viewing.Extension.Database.Table",
+                      "enabled" : true,
+                      "options" : {
+                          "displayIndex" : NumberInt(0),
+                          "apiUrl" : "/api/materials",
+                          "flex" : 0.4
+                      }
+                  },
+                  {
+                      "id" : "Viewing.Extension.Database.CostBreakdown",
+                      "enabled" : true,
+                      "options" : {
+                          "displayIndex" : NumberInt(1)
+                      }
+                  },
+                  {
+                      "id" : "Viewing.Extension.ViewerProperties",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.VisualReport",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.Markup3D",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.Transform",
+                      "enabled" : true
+                  }
+              ]
+          }
+      }
+  ]
+}
+{
+  "_id" : ObjectId("5841e13f540a4d30802765e2"),
+  "name" : "肇庆一期·轻量化模型",
+  "env" : "Local",
+  "layout" : {
+      "type" : "flexLayoutRight",
+      "rightFlex" : 0.3
+  },
+  "model" : {
+      "path" : "resources/models/dev/肇庆一期·轻量化模型/3d.svf",
+      "name" : "肇庆一期·轻量化模型"
+  },
+  "dynamicExtensions" : [
+      {
+          "id" : "Viewing.Extension.ExtensionManager",
+          "options" : {
+              "materialCategories" : [
+                  "Material"
+              ],
+              "properties" : [
+                  "Date Created",
+                  "Density",
+                  "Description",
+                  "Material",
+                  "Part Number"
+              ],
+              "parentControl" : "modelTools",
+              "extensions" : [
+                  {
+                      "id" : "Viewing.Extension.Database.Table",
+                      "enabled" : true,
+                      "options" : {
+                          "displayIndex" : NumberInt(0),
+                          "apiUrl" : "/api/materials",
+                          "flex" : 0.4
+                      }
+                  },
+                  {
+                      "id" : "Viewing.Extension.Database.CostBreakdown",
+                      "enabled" : true,
+                      "options" : {
+                          "displayIndex" : NumberInt(1)
+                      }
+                  },
+                  {
+                      "id" : "Viewing.Extension.ViewerProperties",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.VisualReport",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.Markup3D",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.Transform",
+                      "enabled" : true
+                  }
+              ]
+          }
+      }
+  ]
+}
+{
+  "_id" : ObjectId("5841e13f540a4d30802765e1"),
+  "name" : "中山机房·风管改造后",
+  "env" : "Local",
+  "layout" : {
+      "type" : "flexLayoutRight",
+      "rightFlex" : 0.3
+  },
+  "model" : {
+      "path" : "resources/models/dev/中山机房·风管改造后/3d.svf",
+      "name" : "中山机房·风管改造后"
+  },
+  "dynamicExtensions" : [
+      {
+          "id" : "Viewing.Extension.ExtensionManager",
+          "options" : {
+              "materialCategories" : [
+                  "结构材质",
+                  "把手材质",
+                  "把手钢板",
+                  "侧门玻璃",
+                  "洞口环",
+                  "机柜材质",
+                  "机柜后门材质",
+                  "机柜前门材质",
+                  "角规",
+                  "螺母",
+                  "硬盘机后柜",
+                  "硬盘机壳",
+                  "硬盘机前柜",
+                  "白色地板",
+                  "灯",
+                  "柜体显示器",
+                  "蓝色柜体",
+                  "铭牌",
+                  "材质",
+                  "轮材质",
+                  "滤网材质",
+                  "面板按钮材质",
+                  "面板材质",
+                  "面板主体材质",
+                  "网络材质",
+                  "主体材质",
+                  "基础槽钢材质",
+                  "柳钉材质",
+                  "箱体材质",
+                  "阀门材质",
+                  "软管材质"
+              ],
+              "properties" : [
+                  "Date Created",
+                  "Density",
+                  "Description",
+                  "Material",
+                  "Part Number"
+              ],
+              "parentControl" : "modelTools",
+              "extensions" : [
+                  {
+                      "id" : "Viewing.Extension.Database.Table",
+                      "enabled" : true,
+                      "options" : {
+                          "displayIndex" : NumberInt(0),
+                          "apiUrl" : "/api/materials",
+                          "flex" : 0.4
+                      }
+                  },
+                  {
+                      "id" : "Viewing.Extension.Database.CostBreakdown",
+                      "enabled" : true,
+                      "options" : {
+                          "displayIndex" : NumberInt(1)
+                      }
+                  },
+                  {
+                      "id" : "Viewing.Extension.ViewerProperties",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.VisualReport",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.Markup3D",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.Transform",
+                      "enabled" : true
+                  }
+              ]
+          }
+      }
+  ]
+}
+{
+  "_id" : ObjectId("5841e13f540a4d30802764e6"),
+  "name" : "11 Jay Street",
+  "env" : "Local",
+  "layout" : {
+      "type" : "flexLayoutRight",
+      "rightFlex" : 0.3
+  },
+  "model" : {
+      "path" : "resources/models/dev/11 Jay Street/Resource/3D_View/3D/3D.svf",
+      "name" : "11 Jay Street"
+  },
+  "dynamicExtensions" : [
+      {
+          "id" : "Viewing.Extension.ExtensionManager",
+          "options" : {
+              "materialCategories" : [
+                  "Material"
+              ],
+              "properties" : [
+                  "Date Created",
+                  "Density",
+                  "Description",
+                  "Material",
+                  "Part Number"
+              ],
+              "parentControl" : "modelTools",
+              "extensions" : [
+                  {
+                      "id" : "Viewing.Extension.Database.Table",
+                      "enabled" : true,
+                      "options" : {
+                          "displayIndex" : NumberInt(0),
+                          "apiUrl" : "/api/materials",
+                          "flex" : 0.4
+                      }
+                  },
+                  {
+                      "id" : "Viewing.Extension.Database.CostBreakdown",
+                      "enabled" : true,
+                      "options" : {
+                          "displayIndex" : NumberInt(1)
+                      }
+                  },
+                  {
+                      "id" : "Viewing.Extension.ViewerProperties",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.VisualReport",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.Markup3D",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.Transform",
+                      "enabled" : true
+                  }
+              ]
+          }
+      }
+  ]
+}
+{
+  "_id" : ObjectId("5841e13f540a4d30802764e5"),
+  "name" : "Engine",
+  "env" : "Local",
+  "layout" : {
+      "type" : "flexLayoutRight",
+      "rightFlex" : 0.3
+  },
+  "model" : {
+      "path" : "resources/models/dev/engine/0.svf",
+      "name" : "Engine"
+  },
+  "dynamicExtensions" : [
+      {
+          "id" : "Viewing.Extension.ExtensionManager",
+          "options" : {
+              "materialCategories" : [
+                  "Material"
+              ],
+              "properties" : [
+                  "Date Created",
+                  "Density",
+                  "Description",
+                  "Material",
+                  "Part Number"
+              ],
+              "parentControl" : "modelTools",
+              "extensions" : [
+                  {
+                      "id" : "Viewing.Extension.Database.Table",
+                      "enabled" : true,
+                      "options" : {
+                          "displayIndex" : NumberInt(0),
+                          "apiUrl" : "/api/materials",
+                          "flex" : 0.4
+                      }
+                  },
+                  {
+                      "id" : "Viewing.Extension.Database.CostBreakdown",
+                      "enabled" : true,
+                      "options" : {
+                          "displayIndex" : NumberInt(1)
+                      }
+                  },
+                  {
+                      "id" : "Viewing.Extension.ViewerProperties",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.VisualReport",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.Markup3D",
+                      "enabled" : true
+                  },
+                  {
+                      "id" : "Viewing.Extension.Transform",
+                      "enabled" : true
+                  }
+              ]
+          }
+      }
+  ]
+}
+{
     "_id" : ObjectId("57efaead77c8eb0a560ef465"),
     "name" : "Car Seat",
     "env" : "Local",

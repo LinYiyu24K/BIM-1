@@ -4,6 +4,8 @@ import DatabaseDlg from 'Dialogs/DatabaseDlg'
 import LayoutDlg from 'Dialogs/LayoutDlg'
 import ThemeDlg from 'Dialogs/ThemeDlg'
 import AboutDlg from 'Dialogs/AboutDlg'
+import FileNameDlg from 'Dialogs/FileNameDlg'
+import FileUploader from 'fileUploader'
 import ServiceManager from 'SvcManager'
 import PropTypes from 'prop-types'
 import './AppNavbar.scss'
@@ -41,7 +43,12 @@ export default class AppNavbar extends React.Component {
       layoutOpen:   false,
       themeOpen:    false,
       aboutOpen:    false,
-      menuIcons:    false
+      menuIcons:    false,
+      filenameOpen: false,
+      menuIcons:    false,
+      choseModel:   false,
+      uploadFile:   null,
+      inputFileName: false
     }
 
     this.forgeSvc = ServiceManager.getService(
@@ -51,12 +58,15 @@ export default class AppNavbar extends React.Component {
     this.storageSvc = ServiceManager.getService(
       'StorageSvc')
 
-    //注释：新增引入 dialogSvc 用于弹窗用户登录,用于 this.myLogin  
+    //注释：新增引入 dialogSvc 用于弹窗用户登录,用于 this.myLogin
     this.dialogSvc =
       ServiceManager.getService(
-        'DialogSvc') 
+        'DialogSvc')
 
     this.formatMessage = this.context.intl.formatMessage
+    this.choseModel = this.choseModel.bind(this)
+    this.onSelectFile = this.onSelectFile.bind(this)
+    this.inputFileName = this.inputFileName.bind(this)
 
 
   }
@@ -138,10 +148,10 @@ export default class AppNavbar extends React.Component {
 
           window.sessionStorage.setItem('user','')
         }else{
-          
+
           this.storageSvc.save('user',null)
         }
-        
+
         console.log("退出登录之后的 stotageSvc 中的 user 的值:>>>>>>>>")
         console.log(this.storageSvc.load('user'))
         console.log("退出登录之后的 sessionStorage 中的 user 的值:>>>>>>>>")
@@ -161,19 +171,18 @@ export default class AppNavbar extends React.Component {
     onKeyDown (e) {
 
       if (e.keyCode === 13) {
-  
         e.stopPropagation()
         e.preventDefault()
       }
     }
-  
+
     //
     onInputChanged (e, key) {
-  
+
       const state = this.state
-  
+
       state[key] = e.target.value
-  
+
       this.setState(state)
     }
 
@@ -207,7 +216,7 @@ export default class AppNavbar extends React.Component {
           console.log("cangshu已登录")
           // window.location.href = url;
           // return myUser.username;
-          
+
           console.log(`登录的用户名是:>>>>>>>>>>>>>>${user}`)
 
           this.props.setUser(user)
@@ -216,7 +225,6 @@ export default class AppNavbar extends React.Component {
 
             window.sessionStorage.setItem('user',user)
           }else{
-            
             this.storageSvc.save('user',user)
           }
 
@@ -234,7 +242,7 @@ export default class AppNavbar extends React.Component {
 
             window.sessionStorage.setItem('user','')
           }else{
-            
+
             this.storageSvc.save('user',null)
           }
 
@@ -269,6 +277,29 @@ export default class AppNavbar extends React.Component {
       open: true
     })
   }
+  /////////////////////////////////////////////////////////
+  //
+  //
+  /////////////////////////////////////////////////////////
+  choseModel () {
+    this.setState({choseModel: true})
+  }
+
+  /////////////////////////////////////////////////////////
+  //
+  //
+  /////////////////////////////////////////////////////////
+  onSelectFile (file) {
+    console.log('file', file)
+  }
+
+    /////////////////////////////////////////////////////////
+  //
+  //
+  /////////////////////////////////////////////////////////
+  inputFileName () {
+    this.setState({filenameOpen: true})
+  }
 
   /////////////////////////////////////////////////////////
   //
@@ -292,6 +323,7 @@ export default class AppNavbar extends React.Component {
       // console.log(`此时 appNavbar render中 最终填充的 的 username 值是:>>>>>>>>>>>>>>>>>${username}`)
 
     return appState.navbar.visible && (
+    <div>
 
       <Navbar className="forge-rcdb-navbar">
         <Navbar.Header>
@@ -349,6 +381,25 @@ export default class AppNavbar extends React.Component {
           }
 
           <Nav pullRight>
+            {
+              appState.navbar.links.choseModel &&
+
+              <NavItem eventKey={6} onClick={() => {this.choseModel()}}>
+                <label className="nav-label">
+                  &nbsp; {this.formatMessage(messages.choseModel)}
+                </label>
+              </NavItem>
+            }
+
+            {
+              appState.navbar.links.inputFileName &&
+
+              <NavItem eventKey={6} onClick={() => {this.inputFileName()}}>
+                <label className="nav-label">
+                  &nbsp; {this.formatMessage(messages.inputFileName )}
+                </label>
+              </NavItem>
+            }
 
             {
 
@@ -449,6 +500,29 @@ export default class AppNavbar extends React.Component {
 
         </Navbar.Collapse>
       </Navbar>
+
+      {
+        this.state.choseModel &&
+        <FileUploader close={()=> {
+          this.setState(Object.assign({}, this.state, {
+            choseModel: false
+          }))
+        }}
+        />
+      }
+
+      {
+        <FileNameDlg
+          close={()=> {
+            this.setState(Object.assign({}, this.state, {
+              filenameOpen: false
+            }))
+          }}
+          open={this.state.filenameOpen}
+        />
+      }
+
+    </div>
     )
   }
 }

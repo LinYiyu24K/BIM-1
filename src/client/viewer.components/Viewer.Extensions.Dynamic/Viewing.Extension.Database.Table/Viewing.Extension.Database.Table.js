@@ -149,8 +149,14 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
   //
   //
   /////////////////////////////////////////////////////////
+  // 对componentIds的每个dbid遍历，每次遍历进行以下操作：
+  // 根据dbid在materialResults找到它的材料名，
+  // 根据材料名创建materialMap的一个属性，把dbid添加到compenents数组里面
+  // 根据材料名在dbmaterals找到记录，作为dbmaterial对象;
+  // 根据dbid在massResult找到相应质量（默认为1），然后与totalMass相加，
+  // 根据totalMass和材料单价，计算出总价格，作为totalCost的值
   buildMaterialMap (model, dbMaterials) {
-    //dbMaterials是rcdb.materials.json的数据
+    //dbMaterials是rcdb.materials.json的数据,是所以模型可能用到的材料，是固定的一个数组
     return new Promise(async(resolve, reject) => {
 
       try {
@@ -160,6 +166,26 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
         const componentIds =
           await Toolkit.getLeafNodes(model)
 
+        model.getProperties('414', (result) => {
+          console.log('properties', result)
+        }, (error) => {
+          console.log(error)
+        })
+        model.getObjectTree((result) => {
+          console.log('object', result)
+        }, (error) => {
+          console.log(error)
+        })
+        model.getBulkProperties(componentIds, null, (result) => {
+
+          console.log('bulkProperties', result)
+
+        }, (error) => {
+
+          console.log(error)
+        })
+
+        //读取材料节点的属性值
         const materialPropResults =
           await Toolkit.getBulkPropertiesAsync(
             model, componentIds,
@@ -173,7 +199,6 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
                 dbId: result.dbId
               })
           })
-
         const massPropResults =
           await Toolkit.getBulkPropertiesAsync(
             model, componentIds, ['Mass'])
@@ -185,6 +210,7 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
               dbId: result.dbId
             })
           })
+        console.log('model',model)
         console.log('dbMaterials',dbMaterials)//一个元素为数组的数组,items也是这个值
         // currency: "USD"
         // name: "Stainless Steel"
@@ -192,6 +218,7 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
         // supplier: "Autodesk"
         // _id: "583ec501c6bad5f3088806ae"
         console.log('componentIds', componentIds)//一个所有材料节点组成的数组，每个元素对应一个dbId
+        console.log('materialPropResults', materialPropResults)
         console.log('materialResult',materialResults)
         // attributeName: "Material"
         // dbId: 177
@@ -202,6 +229,7 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
         // precision: 0
         // type: 20
         // units: null
+        console.log('massPropResults', massPropResults)
         console.log('massResult', massResults)
         // attributeName: "Mass"
         // dbId: 177
@@ -316,6 +344,7 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
   //
   //
   /////////////////////////////////////////////////////////
+  //改变价格后更新rcdb.materals表
   onUpdateItem (item, externalUpdate) {
 
     if (item) {
@@ -484,6 +513,21 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
           data.properties,
           data.nodeId)
       })
+
+    // this.viewer.unloadExtension('Viewing.Extension.ViewerProperties')
+    this.viewer.loadDynamicExtension ('ChooseProperties').then( () => {
+      this.choosePropertiesExtension =
+      this.viewer.getExtension(
+        'ChooseProperties')
+
+      this.choosePropertiesExtension.on(
+      'setProperties', (data) => {
+
+        return this.onSetComponentProperties(
+          data.properties,
+          data.nodeId)
+      })
+    });
   }
 
   /////////////////////////////////////////////////////////

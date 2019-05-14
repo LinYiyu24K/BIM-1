@@ -20,5 +20,13 @@ export default defineMessages({
   about: {
     id: 'About',
     defaultMessage: 'About'
+  },
+  choseModel: {
+    id: 'ChoseModel',
+    defaultMessage: 'ChoseModel'
+  },
+  inputFileName: {
+    id: 'inputFileName',
+    defaultMessage: 'inputFileName'
   }
 })

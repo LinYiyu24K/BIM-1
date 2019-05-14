@@ -7,7 +7,7 @@ coverage
 .vscode
 # resources/img/optimized
 # resources/libs/lmv
-# resources/models/dev
+resources/models/dev
 # resources/db/prod
 # resources/db/dev
 # bin/static

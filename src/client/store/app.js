@@ -218,7 +218,9 @@ const createInitialState = () => {
       links:{
         settings: true,
         home: true,
-        login: true
+        login: true,
+        choseModel: true,
+        inputFileName: true
       }
     },
     viewerEnv: null,
