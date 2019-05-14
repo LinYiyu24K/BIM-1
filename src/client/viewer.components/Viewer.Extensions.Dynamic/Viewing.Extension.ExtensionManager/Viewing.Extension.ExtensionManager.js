@@ -254,48 +254,12 @@ class ExtensionManager extends MultiModelExtensionBase {
     // dataManagement.addClass('adsk-icon-fullscreen');
     dataManagement.setToolTip('数据管理');
 
-    
-    // saveViewButton 视点保存
-    var saveViewButton = new Autodesk.Viewing.UI.Button('saveViewButton');
-    saveViewButton.onClick = function(e) {
-      //viewer.setViewCube('front');//设为后面的视图
-      
-      var that = this;
-      viewer.loadDynamicExtension('Viewing.Extension.ConfigManager').then(function(){
-
-        console.log(that);
-        console.log('!!!!!!!!!!!!!!!!!!!!')
-        let extension = that.getExtensionbyId("Viewing.Extension.ConfigManager");
-        let curExtension = that.getCurrentOpenExtension();
-  
-        if(curExtension){//存在已经打开的extension，把它关掉
-          that.onExtensionItemClicked(curExtension);
-        }
-  
-        if(extension){
-          that.onExtensionItemClicked(extension);
-        }
-
-      });
-
-
-    }.bind(this);
-    saveViewButton.addClass('saveViewButton');
-    saveViewButton.setToolTip('视点保存');
-
-
-
-
-
-
-
 
     /////////////////////////////////////////////////////////////////////////////////////////
     // SubToolbar
     this.subToolbar = new Autodesk.Viewing.UI.ControlGroup('my-custom-view-toolbar');
 
     this.subToolbar.addControl(dataManagement);
-    this.subToolbar.addControl(saveViewButton);
 
     viewer.toolbar.addControl(this.subToolbar);
 

@@ -2175,6 +2175,115 @@ div.leaf.selected > lmvheader {
     border-color: transparent;
 }
 
+/*右键数据上传样式*/
+.adsk-viewing-viewer .uploaddata-panel {
+    top: 180px;
+    left: 220px;
+    width: 300px;
+    height: 400px;
+    min-width:  100px;
+    min-height: 20px;
+    border-color: transparent;
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box {
+    display: flex;
+    flex-direction: column;
+    /*height:calc(100%-80px);*/
+    height:300px;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.7);
+    transition:background ease 1.5s;
+    padding:15px 0;
+    overflow: scroll;
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box:hover {
+    background: rgba(255, 255, 255, 1.0);
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-userDataName-Input {
+    border: 1px solid #aeaeae;
+    width: calc(100% - 80px);
+    padding: 3px 0 0 10px;
+    white-space: nowrap;
+    border-radius: 4px;
+    text-align: left;
+    overflow: hidden;
+    height: 35px;
+    line-height: 30px;
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-userDataName-Input:focus,
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-userDataName-Input:hover {
+    border:1px solid #1bb1f4;
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-userDataType-Select {
+    border: 1px solid #aeaeae;
+    width: calc(100% - 80px);
+    padding: 3px 0 0 10px;
+    white-space: nowrap;
+    background-color: whitesmoke;
+    border-radius: 4px;
+    overflow: hidden;
+    height: 35px;
+    line-height: 30px;
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box option{
+    background-color: #fff;
+    padding:2px 0;
+}
+
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-uploadFile-Input-Outer {
+    border: 1px solid #aeaeae;
+    width: calc(100% - 80px);
+    position: relative;
+    height: 35px;
+    line-height: 35px;
+    text-decoration: none;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 4px;
+    color: #4d90d3;
+    cursor: pointer;
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-uploadFile-Input-Outer .rk-uploadFile-Input {
+    position: absolute;
+    width:100%;
+    overflow: hidden;
+    top: 0;
+    right: 0;
+    opacity: 0;
+    filter:Alpha(opacity=0);
+    cursor: pointer;
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-dataSubmit-Btn {
+    border: 1px solid #aeaeae;
+    width: calc(100% - 80px);
+    padding: 3px 0 0 10px;
+    white-space: nowrap;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: whitesmoke;
+    height: 35px;
+    line-height: 30px;
+}
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-upload-Msg {
+    display: block;
+    width: calc(100% - 80px);
+    line-height: 25px;
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-dataSubmit-Btn:hover{
+    font-color:origin;
+}
+
 .adsk-viewing-viewer .property-panel .treeview {
     margin-left: 0px;
     padding: 0;

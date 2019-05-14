@@ -44,15 +44,16 @@ export default class ConfigAPI extends ClientAPI {
   // 注释：这个功能应该需要改动，addSequence类似增加用户
   //
   /////////////////////////////////////////////////////////
-  addSequence (user) {
+  addUser (user) {
 
+    return new Promise((resolve,reject) => {
     const payload = {
       user
     }
 
-    const url = '/userdata'
+    const url = '/usersdata'
 
-    return this.ajax({
+    this.ajax({
       url: url,
       method: 'POST',
       headers: {
@@ -60,7 +61,13 @@ export default class ConfigAPI extends ClientAPI {
         'Content-Type': 'application/json'
       },
       data: JSON.stringify(payload)
+    }).then((result)=>{
+
+      resolve(result)
+
+    }, (error)=>reject(error))
     })
+
   }
 
   /////////////////////////////////////////////////////////
@@ -179,9 +186,9 @@ export default class ConfigAPI extends ClientAPI {
   // 修改：上传文件的新函数,使用 super.upload 函数上传
   //
   /////////////////////////////////////////////////////////
-  addStateFile (sequenceId, files, opts = {}) {
+  addStateFile (userId, files, opts = {}) {
 
-    const url = `/sequences/${sequenceId}/file`
+    const url = `/usersData/${userId}/file`
 
     /*const options = Object.assign({}, {
       keys: keys.toString()

@@ -58,7 +58,7 @@ module.exports = function() {
   // add sequence
   //
   /////////////////////////////////////////////////////////
-  router.post('/:db/:modelId/userdata',
+  router.post('/:db/:modelId/usersdata',
     async(req, res) => {
 
     try {
@@ -238,7 +238,7 @@ module.exports = function() {
   // body.state can be a single state or an array of states
   //修改：新增。接收前端资料视点的文件上传,限制最多同时接受12个文件
   /////////////////////////////////////////////////////////
-  router.post('/:db/:modelId/sequences/:sequenceId/file',
+  router.post('/:db/:modelId/usersData/:userId/file',
     uploadSvc.dataUploader.any(),
     async(req, res) => {
       console.log("------------------------------------------上传文件日志start------------------------------------------")
@@ -281,7 +281,7 @@ module.exports = function() {
       const response =
         await modelSvc.adduserDataFile (
           req.params.modelId,
-          req.params.sequenceId,
+          req.params.userId,
           state)
 
       console.log(`保存好图片文件后得到的 response 为:>>>>>>>>>>>>>>>>>>>>>>>>>>`)
@@ -296,6 +296,73 @@ module.exports = function() {
       res.json(error)
 
       console.log("文件上传 file 接口发成了错误！！！")
+      console.log(error)
+    }
+})
+
+  //模型右键上传数据的接口，使用 FormData 对象
+  router.post('/:db/:modelId/usersData/:userId/rkfile',
+  uploadSvc.dataUploader.any(),
+    async(req, res) => {
+      console.log("------------------------------------------RK上传文件日志start------------------------------------------")
+    try {
+      
+      const db = req.params.db
+      
+      const modelSvc = ServiceManager.getService (
+        db + '-ModelSvc')
+
+      const files = req.files ? req.files : [] ;
+
+      var state = null;
+
+      if(files.length>0){
+        const filenameArr = [],
+              pathArr = []
+
+        files.forEach(file=>{
+          filenameArr.push(file.filename);
+          pathArr.push(file.path)
+        })
+
+        const filename = filenameArr.join(",")
+        const path = pathArr.join(",")
+
+        //注释：合并视点信息 req.body.state 和文件路径 path 到一个 Object 中
+        state = Object.assign(
+          {},
+          JSON.parse(req.body.data),
+          {
+            "filePath":path,
+            "filename":filename
+          }
+          )
+        console.log("上传文件的情况，合并视点信息 req.body.state 和文件路径 path 到一个 Object 中")
+      }else{
+        console.log("未上传文件的情况")
+        state = JSON.parse(req.body.data)
+      }
+
+      console.log("state:>>>>>>>>",state)
+
+      const response =
+        await modelSvc.adduserDataFile (
+          req.params.modelId,
+          req.params.userId,
+          state)
+
+      console.log(`保存好图片文件后得到的 response 为:>>>>>>>>>>>>>>>>>>>>>>>>>>`)
+      console.log(response)
+
+      res.json(response)
+
+      console.log("----------------------------------------RK上传文件日志end-------------------------------------------")
+    } catch (error) {
+
+      res.status(error.statusCode || 500)
+      res.json(error)
+
+      console.log("模型右键文件上传 rkfile 接口发成了错误！！！")
       console.log(error)
     }
 })
