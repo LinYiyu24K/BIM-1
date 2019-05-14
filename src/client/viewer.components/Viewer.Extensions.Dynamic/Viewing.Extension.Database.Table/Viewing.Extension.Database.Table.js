@@ -519,7 +519,7 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
       this.choosePropertiesExtension =
       this.viewer.getExtension(
         'ChooseProperties')
-
+      //给拓展定义属性设置事件
       this.choosePropertiesExtension.on(
       'setProperties', (data) => {
 
@@ -540,6 +540,7 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
 
     // filter out all 'Material' props because
     // it is added in 'Database' category
+    //properties是非DateBase类属性，dbProperties是DateBase类属性，可在面板里看到分类
     let properties = viewerProps.filter((prop)=> {
 
       const included =
@@ -576,7 +577,24 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
   //
   //
   /////////////////////////////////////////////////////////
+  //定义ViewerPropertyPanel的DateBase类属性，跟Database.table的显示无关
   buildViewerPanelProperties (material) {
+
+    // const entry = material.entry()
+    // const list = []
+
+    // for( {key, value} in entry) {
+    //   let element = {
+    //     id: material._id + '-' + key,
+    //     displayName: 'Material',
+    //     displayValue: value,
+    //     dataType: 'text',
+    //     displayCategory: 'Database'
+    //   }
+    //   list.push(element)
+    // }
+
+    // return list
 
     return [ {
       id: material._id + '-material',
@@ -594,6 +612,13 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
       id: material._id + '-price',
       displayName: 'Price',
       displayValue: material.price,
+      dataType: 'text',
+      displayCategory: 'Database'
+    },{
+    },{
+      id: material._id + '-new',
+      displayName: 'New',
+      displayValue: material.new,
       dataType: 'text',
       displayCategory: 'Database'
     },{
@@ -651,6 +676,7 @@ class DatabaseTableExtension extends MultiModelExtensionBase {
           selectedItem={selectedItem}
           items={items}
           guid={guid}
+          react={this.react}
         />
       </div>
     )

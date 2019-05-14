@@ -447,7 +447,7 @@
               break;
 
             case 'select':
-
+              if (!options.select[name]) break;
               const selectOpts = options.select[name].map((item) => {
                 let isSelected = (value === item.value ? 'selected':'')
                 return `
