@@ -43563,10 +43563,28 @@ Autodesk.Viewing.Extension = Extension;
         uploadFile.id = "rkuploadFile";
         uploadFile.onchange = function(e){
             //TODO:提示用户选择了多少文件
+            var inputFile = e.target;
+            var rksFMsg = document.getElementById("rkselectFileMsg");
+            var filesNum = inputFile.files.length;
+            if(filesNum == 0){
+                rksFMsg.innerText = "未选择文件";
+            }else if(filesNum == 1){
+                rksFMsg.innerText = inputFile.files[0].name || "1 个文件";
+            }else{
+                rksFMsg.innerText = filesNum+ " 个文件";
+            }
         }
 
         uploadFileOuter.appendChild(uploadFile);
+
+        var rkselectFileMsg = document.createElement("div");
+        rkselectFileMsg.id = "rkselectFileMsg";
+        rkselectFileMsg.className = "rk-selectFile-Msg";
+        rkselectFileMsg.innerText = "未选择文件";
+        uploadFileOuter.appendChild(rkselectFileMsg);
+
         forms.appendChild(uploadFileOuter);
+
 
         var dataSubmitBtn = document.createElement("button");
         dataSubmitBtn.innerText = "上传";
@@ -43630,7 +43648,7 @@ Autodesk.Viewing.Extension = Extension;
                         var res = JSON.parse(xhr.response);
                         console.log("这是上传数据之后的 res",res);
                         var rkulMsg = document.getElementById("rkuploadMsg");
-                        rkulMsg.innerText = "* 上传构件数据名 "+ res.name +" 成功!\n数据若与数据管理拓展不同步请重新打开拓展.";
+                        rkulMsg.innerText = "* 上传构件数据名 "+ res.name +" 成功!\n数据不同步请重新打开拓展.";
                         rkulMsg.style.cssText = "color:green";
                     }else{
                         // alert("上传请求出错： "+xhr.status)

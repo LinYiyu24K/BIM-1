@@ -49,6 +49,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     //修改：新增弹窗 Modal 控制事件
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.uploadFileChange = this.uploadFileChange.bind(this);
 
 
     this.dialogSvc =
@@ -98,6 +99,17 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     console.log(`这里执行了handleShow`)
     this.react.setState({ show: true });
+  }
+
+  uploadFileChange(e) {
+    const filesNum = e.target.files.length;
+    if(filesNum == 0){
+      this.react.setState({"uploadFileMsg":"未选择文件"})
+    }else if(filesNum == 1){
+      this.react.setState({"uploadFileMsg":`${e.target.files[0].name}` || `1 个文件`})
+    }else{
+      this.react.setState({"uploadFileMsg":`${filesNum} 个文件`})
+    }
   }
 
   /////////////////////////////////////////////////////////
@@ -275,6 +287,7 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
           name:'进度'
         }
       ],//用户上传视点的下拉框
+      uploadFileMsg:"未选择文件",//用户选择文件之后变化
       show:false
 
     }).then (() => {
@@ -714,9 +727,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
       return
     }
 
-
-    //修改：新增了 FormData 对象 , 并发起请求
-    //TODO：未完待续
     let files = document.getElementById("myUpload").files;
 
     console.log("上传的文件 files：>>>>>>>>>>>>>>>",files)
@@ -1178,9 +1188,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
     )
   }
 
-  returnFalse (){
-    return false
-  }
 
   //
   renderControls () {
@@ -1279,29 +1286,24 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
         { uploadDataType }
         </DropdownButton>
 
-        <form name='uploadForm'
-          id='uploadForm'
-          onSubmit={this.returnFalse}
-          method='POST'
-          action='#'
-          encType='multipart/form-data'
-          style={{"width":170}}>
           
           <a className="uploadOuter">
           {/* TODO:优先级高，在这里要显示已经选择的文件名，下一行？ */}
-          {/*选择文件*/}
+          选择文件
           <input 
             type="file" 
             name="myUpload" 
             id="myUpload"
             multiple="multiple" /*多文件上传*/
             className="replyFileid"
+            onChange={this.uploadFileChange}
             >
           </input>
+          <span>
+            {state.uploadFileMsg}
+          </span>
 
           </a>
-
-        </form>
 
 
         <button disabled={stateCreationDisabled}
@@ -1429,12 +1431,6 @@ class NewDataManagementExtension extends MultiModelExtensionBase {
 
     
     const that = this
-
-    const layout = document.getElementsByClassName('reflex-layout reflex-container vertical configurator')[0];
-
-
-    const layoutHeight = document.body.clientHeight;
-    const layoutWidth = layout.offsetWidth;
 
     console.log("渲染的资料 -> renderItems->items ： ",state.items)
 

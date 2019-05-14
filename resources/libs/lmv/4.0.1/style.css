@@ -2233,7 +2233,17 @@ div.leaf.selected > lmvheader {
     border-radius: 4px;
     overflow: hidden;
     height: 35px;
+    cursor: pointer;
     line-height: 30px;
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-userDataType-Select:hover {
+    border: 1px solid #ccc;
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-userDataType-Select:active {
+    outline:none;
+    box-shadow: 2px 4px 5px  #ccc inset;
 }
 
 .adsk-viewing-viewer .uploaddata-panel .rk-content-box option{
@@ -2244,16 +2254,22 @@ div.leaf.selected > lmvheader {
 
 .adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-uploadFile-Input-Outer {
     border: 1px solid #aeaeae;
+    border-radius: 4px;
     width: calc(100% - 80px);
     position: relative;
     height: 35px;
     line-height: 35px;
     text-decoration: none;
     text-align: center;
-    overflow: hidden;
+    /*overflow: hidden;*/
     border-radius: 4px;
     color: #4d90d3;
     cursor: pointer;
+    /*transition: box-shadow ease .3s;*/
+}
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-uploadFile-Input-Outer:hover {
+    border: 1px solid #ccc;
 }
 
 .adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-uploadFile-Input-Outer .rk-uploadFile-Input {
@@ -2267,25 +2283,43 @@ div.leaf.selected > lmvheader {
     cursor: pointer;
 }
 
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-selectFile-Msg {
+    position: absolute;
+    top:38px;
+    right:0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 25px;
+    text-align: center;
+    color:#8e8e8e;
+}
+
 .adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-dataSubmit-Btn {
     border: 1px solid #aeaeae;
     width: calc(100% - 80px);
     padding: 3px 0 0 10px;
+    margin-top:20px;
     white-space: nowrap;
     border-radius: 4px;
     overflow: hidden;
     background-color: whitesmoke;
     height: 35px;
     line-height: 30px;
+    color: #9b9b9b;
+    font-size: 16px;
+    transition: box-shadow ease .3s;
 }
+
+
+.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-dataSubmit-Btn:hover{
+    color:orange;
+    box-shadow: 1px 8px 7px 0 rgba(0,0,0,0.24);
+}
+
 .adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-upload-Msg {
     display: block;
     width: calc(100% - 80px);
     line-height: 25px;
-}
-
-.adsk-viewing-viewer .uploaddata-panel .rk-content-box .rk-dataSubmit-Btn:hover{
-    font-color:origin;
 }
 
 .adsk-viewing-viewer .property-panel .treeview {

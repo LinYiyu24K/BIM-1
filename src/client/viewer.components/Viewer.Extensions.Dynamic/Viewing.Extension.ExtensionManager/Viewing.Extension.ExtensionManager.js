@@ -259,7 +259,7 @@ class ExtensionManager extends MultiModelExtensionBase {
     this.subToolbar = new Autodesk.Viewing.UI.ControlGroup('my-custom-view-toolbar');
 
     this.subToolbar.addControl(dataManagement);
-    this.subToolbar.addControl(choosePropertyButton);
+    // this.subToolbar.addControl(choosePropertyButton);
 
     viewer.toolbar.addControl(this.subToolbar);
 
