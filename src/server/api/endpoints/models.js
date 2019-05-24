@@ -6,6 +6,7 @@ import express from 'express'
 import {Buffer} from 'buffer'
 import config from'c0nfig'
 import path from 'path'
+import mongo from 'mongodb'
 
 module.exports = function() {
 
@@ -479,7 +480,7 @@ module.exports = function() {
   //新增：2019.4.29
   //模型上传
   /////////////////////////////////////////////////////////
-  router.get('/:db/addmodel', async (req, res) => {
+  router.get('/:db/amodel', async (req, res) => {
     // 生成随机id
     var uuid = require("node-uuid")
     var uid = uuid.v1();
@@ -492,7 +493,7 @@ module.exports = function() {
       // const modelId = req.query.id
       // const modelpath = req.query.path
       const modelname = req.query.name
-      const modelId = uid 
+      const modelId = uid
       const modelpath = req.query.path
       const modelSvc = ServiceManager.getService(
         db + '-ModelSvc')
@@ -513,7 +514,7 @@ module.exports = function() {
           pageQuery
         })
       // 更改模型数据
-      model["_id"] = modelId
+      model["_id"] = mongo.ObjectId(modelId.toString().slice(0, 24))
       model["name"] = modelname
       model["model"]["path"] = modelpath
       model["model"]["name"] = modelname
@@ -524,7 +525,6 @@ module.exports = function() {
       res.json(model)
 
     } catch (error) {
-
       res.status(error.statusCode || 500)
       res.json(error)
     }

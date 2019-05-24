@@ -74,7 +74,7 @@ class ChoosePropertiesExtension extends MultiModelExtensionBase {
       return this.emit('setProperties', data)
     })
     this.viewer.setPropertyPanel(this.panel)
-
+    //获取属性选择按钮
     let chooseButton = this.viewer.toolbar._controls[4]._controls.find((item) => {
       return item._id == 'choosePropertyButton'
     })
@@ -85,7 +85,7 @@ class ChoosePropertiesExtension extends MultiModelExtensionBase {
 
       if (presentPanel instanceof ViewerPropertyPanel && presentPanel.isVisible()) {
         presentPanel.setVisible(!presentPanel.isVisible())
-        chooseButton.removeClass('active')
+        // chooseButton.removeClass('active')
         return
       }
 
@@ -100,7 +100,7 @@ class ChoosePropertiesExtension extends MultiModelExtensionBase {
       this.viewer.loadDynamicExtension ('ChooseProperties').then( () => {
         var propertyPanel = this.viewer.getPropertyPanel(true);
         propertyPanel.setVisible(!propertyPanel.isVisible());
-        chooseButton.addClass('active')
+        // chooseButton.addClass('active')
         //消除平台本身properties按钮的高亮显示
         _this.viewer.toolbar._controls[3].propertiesbutton.removeClass('active')
       });

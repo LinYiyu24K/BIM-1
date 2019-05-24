@@ -1,4 +1,6 @@
 import ServiceManager from 'SvcManager'
+import ModelSvc from '../../../services/ModelSvc'
+import ClientAPI from 'ClientAPI'
 import Modal from 'react-modal'
 import React from 'react'
 import './FileNameDlg.scss'
@@ -13,10 +15,11 @@ export default class FileNameDlg extends React.Component {
 
     super(props)
     this.state = {
-      filePath: 'resources\\models\\dev\\'
+      filePath: 'resources/models/dev/'
     }
     this.handelPathChange =this.handelPathChange.bind(this)
     this.confirm = this.confirm.bind(this)
+    this.getName = this.getName.bind(this)
   }
 
   /////////////////////////////////////////////////////////
@@ -49,10 +52,33 @@ export default class FileNameDlg extends React.Component {
   //
   //
   /////////////////////////////////////////////////////////
+  getName (str) {
+    let arr = str.split('/')
+    return arr[3]
+  }
+
   confirm () {
     console.log(this.state.filePath)
+    let path = this.state.filePath
+    const api = new ClientAPI('api/models/rcdb')
+
+    // api.ajax({
+    //   url: '/amodel',
+    //   method: 'GET',
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   data: `name=${this.getName(path)}&path=${path}`
+    // })
+    const options = {
+      'name': this.getName(path),
+      path
+    }
+    let modelsvc = new ModelSvc({apiUrl:'/api/models'})
+    modelsvc.addmodel('/rcdb', options)
     this.close()
-    this.setState({filePath: 'resources\\models\\dev\\'})
+    this.setState({filePath: 'resources/models/dev/'})
   }
   /////////////////////////////////////////////////////////
   //

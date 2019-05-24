@@ -30,7 +30,7 @@ export default class ModelSvc extends BaseSvc {
   /////////////////////////////////////////////////////////
   addmodel (dbName, opts = {}) {
 
-    const url = dbName + "/addmodel"
+    const url = dbName + "/amodel"
 
     const query =
       `?name=${opts.name || ''}` +
@@ -67,6 +67,7 @@ export default class ModelSvc extends BaseSvc {
       `&search=${opts.search || ''}`
 
     return this.api.ajax (url + query)
+    // return this.api.ajax(url + "/addmodel")
   }
 
   /////////////////////////////////////////////////////////

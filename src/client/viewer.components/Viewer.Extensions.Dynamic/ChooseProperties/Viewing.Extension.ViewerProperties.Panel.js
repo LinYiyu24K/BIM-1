@@ -45,7 +45,7 @@ export default class ViewerPropertiesPanel extends
       properties: [],
       keys: [],
       value: [],
-      materialPanel: false,
+      showMaterialPanel: false,
       buttonCreated: false,
       materials: [],
       map : new Map()
@@ -186,48 +186,6 @@ export default class ViewerPropertiesPanel extends
     })
   }
 
-
-
-//   PropertyPanel.prototype.setProperties = function (properties, options) {
-//     this.removeAllProperties();
-
-//     // Check if any categories need to be displayed.
-//     //
-//     var withCategories = [];
-//     var withoutCategories = [];
-
-//     for (var i = 0; i < properties.length; i++) {
-//         var property = properties[i];
-//         if (!property.hidden) {
-//             var category = properties[i].displayCategory;
-//             if (category && typeof category === 'string' && category !== '') {
-//                 withCategories.push(property);
-//             } else {
-//                 withoutCategories.push(property);
-//             }
-//         }
-//     }
-
-//     if ((withCategories.length + withoutCategories.length) === 0) {
-//         this.showNoProperties();
-//         return;
-//     }
-
-//     for (var i = 0; i < withCategories.length; i++) {
-//         var property = withCategories[i];
-//         var precision = property.precision || Autodesk.Viewing.Private.calculatePrecision(property.displayValue);
-//         var value = Autodesk.Viewing.Private.formatValueWithUnits(property.displayValue, property.units, property.type, precision);
-//         this.addProperty(property.displayName, value, property.displayCategory);
-//     }
-
-//     var hasCategories = (withCategories.length > 0);
-//     for (var i = 0; i < withoutCategories.length; i++) {
-//         var property = withoutCategories[i];
-//         var precision = property.precision || Autodesk.Viewing.Private.calculatePrecision(property.displayValue);
-//         var value = Autodesk.Viewing.Private.formatValueWithUnits(property.displayValue, property.units, property.type, precision);
-//         this.addProperty(property.displayName, value, hasCategories ? 'Other' : '', hasCategories ? {localizeCategory: true} : {});
-//     }
-// };
   /////////////////////////////////////////////////////////
   // addProperty (name, value, category, options)
   //
@@ -447,7 +405,7 @@ export default class ViewerPropertiesPanel extends
   //
   /////////////////////////////////////////////////////////
   ejectMeterialPanel (name) {
-
+    //面板输入项分为已有输入项和新增输入项，前者打开面板时存在，后者通过点击“新增输入项”按钮生成
     let _this = this
     const defaultValue = {
       "_id": Math.random(),
@@ -458,24 +416,29 @@ export default class ViewerPropertiesPanel extends
     }
     console.log(this.state.materials)
     let materials = this.state.materials
+    //material就是面板要展示的材料对象
     let material = materials.find((item) => item.name == name) || defaultValue
+    //材料对象的属性数组
     let keys = Object.keys(material).slice(2)
-    let index = materials.indexOf(material)
+
     //新属性、值
     let newProperties = []
     let newValues = []
-    //新input个数
+    //新增输入项个数
     let count = keys.length - 3
 
+    let index = materials.indexOf(material)
     //材料表不存在该材料
     if (index == -1) {
       console.log('新增材料信息')
       materials.push(material)
       index = materials.length - 1
     }
+
     this.state.map.set("_id", material._id)
     this.state.map.set("name", material.name)
 
+    //把面板已有输入项的属性和值放到map中
     function setMap (map) {
       let values = Object.values(material).slice(2)
       keys.forEach((item, index) => {
@@ -483,6 +446,7 @@ export default class ViewerPropertiesPanel extends
       })
     }
 
+    //把新增输入项的属性和值放到map中
     function addNewProperty (map) {
       if (newProperties.length == 0)  return
       newProperties.forEach((item, index) => {
@@ -490,6 +454,7 @@ export default class ViewerPropertiesPanel extends
       })
     }
 
+    //面板新增的输入项的数值变更
     function newValueChange (event) {
       const target = event.target
       //新值的索引
@@ -499,6 +464,7 @@ export default class ViewerPropertiesPanel extends
       newValues[name] = value
     }
 
+    //面板新增的输入项的属性变更
     function newPropertyChange (event) {
       const target = event.target
       //新值的索引
@@ -508,6 +474,7 @@ export default class ViewerPropertiesPanel extends
       newProperties[name] = value
     }
 
+    //map转换为对象
     function strMapToObj(strMap) {
       let obj = Object.create(null);
       for (let [k,v] of strMap) {
@@ -516,45 +483,80 @@ export default class ViewerPropertiesPanel extends
       return obj;
     }
 
+    //面板关闭
+    function close () {
+      _this.react.popViewerPanel(renderable.id)
+      _this.state.showMaterialPanel = false
+    }
+
+    //面板已有输入项的属性变更
+    function onPropertyChange (keys, item) {
+
+      const target = event.target
+      const value = target.type === 'checkbox' ? target.checked : target.value;
+      let index = keys.indexOf(item)
+
+      keys.splice(index, 1 , value)
+    }
+
+    //面板已有输入项的数值变更
+    function onValueChange (event) {
+
+      const target = event.target
+      const name = target.name
+      const value = target.type === 'checkbox' ? target.checked : target.value;
+
+      material[name] = value
+      materials.splice(index, 1, material)
+    }
+
+    //插入新输入项
+    function insertInput (length) {
+      const element = document.createElement('li')
+
+      const propertyElenment = document.createElement('input')
+      propertyElenment.className = 'property'
+      propertyElenment.type = 'text'
+      propertyElenment.name = length
+      propertyElenment.onchange = newPropertyChange
+
+      const labelElement = document.createElement('label')
+      const textElement = document.createTextNode('：')
+      labelElement.append(textElement)
+
+      const valueElement = document.createElement('input')
+      valueElement.className = 'value'
+      valueElement.type = 'text'
+      valueElement.name = length
+      valueElement.onchange = newValueChange
+
+      $(element).append(propertyElenment)
+                .append(labelElement)
+                .append(valueElement)
+
+      $('#newMaterial').append(element)
+    }
+
     const renderable = {
       id: 9,
       onResize ()  {
         console.log('resize')
       },
-      close () {
-        _this.react.popViewerPanel(renderable.id)
-        _this.state.materialPanel = false
-      },
-      onPropertyChange (keys, item) {
 
-        const target = event.target
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        let index = keys.indexOf(item)
-
-        keys.splice(index, 1 , value)
-      },
-      onValueChange (event) {
-
-        const target = event.target
-        const name = target.name
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-
-        material[name] = value
-        materials.splice(index, 1, material)
-      },
       renderTitle ()  {
         return (<div className="materialTittle">
                   <span>请输入材料信息</span>
-                  <button className="btn close" onClick = {this.close}>×</button>
+                  <button className="btn close" onClick = {close}>×</button>
                 </div>)
       },
+
       render () {
 
         const listItems = keys.map((item, index) =>
           <li key={index}>
-            <input type="text" className="property" name="" defaultValue={item} onChange={function () { renderable.onPropertyChange(keys, item) }}></input>
+            <input type="text" className="property" name="" defaultValue={item} onChange={function () { onPropertyChange(keys, item) }}></input>
             <label>：</label>
-            <input type="text" className="value" name={item} defaultValue={material[item]} onChange={renderable.onValueChange}></input><br></br>
+            <input type="text" className="value" name={item} defaultValue={material[item]} onChange={onValueChange}></input><br></br>
           </li>
         )
 
@@ -566,39 +568,18 @@ export default class ViewerPropertiesPanel extends
             <button className="btn add" onClick={function () {
               let length = newValues.length
               setMap(_this.state.map)
+              insertInput(length)
 
-              const element = document.createElement('li')
-
-              const propertyElenment = document.createElement('input')
-              propertyElenment.className = 'property'
-              propertyElenment.type = 'text'
-              propertyElenment.name = length
-              propertyElenment.onchange = newPropertyChange
-
-              const labelElement = document.createElement('label')
-              const textElement = document.createTextNode('：')
-              labelElement.append(textElement)
-
-              const valueElement = document.createElement('input')
-              valueElement.className = 'value'
-              valueElement.type = 'text'
-              valueElement.name = length
-              valueElement.onchange = newValueChange
-
-              $(element).append(propertyElenment)
-                        .append(labelElement)
-                        .append(valueElement)
-
-              $('#newMaterial').append(element)
+              //自动调整面板高度
               let height = 340 + 40 * count
               count++
               $('#material').parent().parent().css({'height': height + 'px'})
 
             }}>新增输入项
             </button>
-            <button className="btn cancle" onClick={renderable.close}>取消</button>
+            <button className="btn cancle" onClick={close}>取消</button>
             <button className="btn confirm" onClick={function () {
-              renderable.close()
+              close()
               setMap(_this.state.map)
               addNewProperty(_this.state.map)
               _this.confirm({content: '确认！'})
@@ -615,7 +596,7 @@ export default class ViewerPropertiesPanel extends
       }
     }
     this.react.pushViewerPanel(renderable, {'height': 300 + count * 40})
-    this.state.materialPanel = true
+    this.state.showMaterialPanel = true
   }
   /////////////////////////////////////////////////////////
   //
@@ -694,7 +675,7 @@ export default class ViewerPropertiesPanel extends
 
     $(value).click( () => {
       //材料面板已存在
-      if (this.state.materialPanel) {
+      if (this.state.showMaterialPanel) {
         return
       }
       properties.push(metaProperty.displayName)
@@ -724,7 +705,7 @@ export default class ViewerPropertiesPanel extends
 
     $(value).click( () => {
       //材料面板已存在
-      if (this.state.materialPanel) {
+      if (this.state.showMaterialPanel) {
         return
       }
       properties.splice(properties.indexOf(metaProperty.displayName), 1)
