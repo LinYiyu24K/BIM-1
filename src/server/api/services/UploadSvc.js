@@ -52,6 +52,16 @@ export default class UploadSvc extends BaseSvc {
 
     this.dataMulter = multer({storage: dataStorage})
 
+    const modelStorage = multer.diskStorage({
+
+      destination: path.join(__dirname, '/../../../../resources/models/dev'),
+      filename: (req, file, cb) => {
+        cb(null, file.originalname);
+      }
+    })
+
+    this.modelMulter = multer({storage: modelStorage})
+
     // start cleanup task to remove uploaded temp files
     setInterval(() => {
       this.clean(config.tempStorage, 60 * 60)
@@ -88,6 +98,15 @@ export default class UploadSvc extends BaseSvc {
   get dataUploader () {
 
     return this.dataMulter
+  }
+
+  /////////////////////////////////////////////////////////
+  //
+  //修改：新增模型上传的multer
+  /////////////////////////////////////////////////////////
+  get modelUploader () {
+
+    return this.modelMulter
   }
 
   /////////////////////////////////////////////////////////
