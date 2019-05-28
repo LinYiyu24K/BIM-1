@@ -25,6 +25,22 @@ export default class ModelSvc extends BaseSvc {
   }
 
   /////////////////////////////////////////////////////////
+  //新增：2019.4.29
+  //模型上传
+  /////////////////////////////////////////////////////////
+  addmodel (dbName, opts = {}) {
+
+    const url = dbName + "/amodel"
+
+    const query =
+      `?name=${opts.name || ''}` +
+      `&path=${opts.path || ''}`
+
+    return this.api.ajax (url + query)
+    // return this.api.ajax(url + "/addmodel")
+  }
+
+  /////////////////////////////////////////////////////////
   //
   //
   /////////////////////////////////////////////////////////
@@ -51,6 +67,7 @@ export default class ModelSvc extends BaseSvc {
       `&search=${opts.search || ''}`
 
     return this.api.ajax (url + query)
+    // return this.api.ajax(url + "/addmodel")
   }
 
   /////////////////////////////////////////////////////////
@@ -106,6 +123,22 @@ export default class ModelSvc extends BaseSvc {
       data: JSON.stringify(modelIds)
     })
   }
+
+  /////////////////////////////////////////////////////////
+  //新增：2019.4.30
+  //模型上传接口函数
+  /////////////////////////////////////////////////////////
+  modelUpload (dbName, file, opts = {}) {
+
+    const url = dbName + '/uploadmodel'
+
+    const options = Object.assign({}, {
+      tag: 'model'
+    }, opts)
+
+    return this.api.upload (url, file, options)
+  }
+
 
   /////////////////////////////////////////////////////////
   //

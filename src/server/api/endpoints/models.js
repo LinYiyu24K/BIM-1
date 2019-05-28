@@ -6,6 +6,7 @@ import express from 'express'
 import {Buffer} from 'buffer'
 import config from'c0nfig'
 import path from 'path'
+import mongo from 'mongodb'
 
 module.exports = function() {
 
@@ -476,6 +477,60 @@ module.exports = function() {
   })
 
   /////////////////////////////////////////////////////////
+  //新增：2019.4.29
+  //模型上传
+  /////////////////////////////////////////////////////////
+  router.get('/:db/amodel', async (req, res) => {
+    // 生成随机id
+    var uuid = require("node-uuid")
+    var uid = uuid.v1();
+    uid = uid.replace(/\-/g,'');
+
+    try {
+
+      const db = req.params.db
+      // const modelname = req.query.name
+      // const modelId = req.query.id
+      // const modelpath = req.query.path
+      const modelname = req.query.name
+      const modelId = uid
+      const modelpath = req.query.path
+      const modelSvc = ServiceManager.getService(
+        db + '-ModelSvc')
+
+      // 设置需要获取的数据
+      const pageQuery = {
+        dynamicExtensions: 1,
+        layout:1,
+        name: 1,
+        model:1,
+        env:1
+      }
+
+      // 通过该ID找到模型并将该模型作为参照
+      const inimodelId = "583ec7efebfb320e3cef26a5"
+      const model = await modelSvc.getById(
+        inimodelId, {
+          pageQuery
+        })
+      // 更改模型数据
+      model["_id"] = mongo.ObjectId(modelId.toString().slice(0, 24))
+      model["name"] = modelname
+      model["model"]["path"] = modelpath
+      model["model"]["name"] = modelname
+      model["dynamicExtensions"][0]["options"]["materialCategories"] = []
+
+      const response = await modelSvc.register(model)
+      console.log(response)
+      res.json(model)
+
+    } catch (error) {
+      res.status(error.statusCode || 500)
+      res.json(error)
+    }
+  })
+
+  /////////////////////////////////////////////////////////
   //
   //
   /////////////////////////////////////////////////////////
@@ -692,6 +747,28 @@ module.exports = function() {
 
       res.status(ex.statusCode || 404)
       res.json(ex)
+    }
+  })
+
+  /////////////////////////////////////////////////////////
+  // 新增：2019.4.30
+  // 模型文件上传
+  /////////////////////////////////////////////////////////
+  router.post('/:db/uploadmodel',
+    uploadSvc.modelUploader.single('model'),
+    async(req, res) => {
+
+    try {
+      const file = req.file ? req.file : null;
+      const filename = file.name;
+      const path = file.path;
+      console.log("文件名：" + filename)
+      console.log("文件路径："+ path)
+      res.json({res_code: '0'});
+    } catch (error) {
+
+      res.status(error.statusCode || 500)
+      res.json(error)
     }
   })
 
