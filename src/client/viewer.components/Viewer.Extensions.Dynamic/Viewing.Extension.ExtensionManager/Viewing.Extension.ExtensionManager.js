@@ -216,24 +216,9 @@ class ExtensionManager extends MultiModelExtensionBase {
   createUI() {
      var viewer = this.viewer;
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-
     // DataManagement 资料管理
     var dataManagement = new Autodesk.Viewing.UI.Button('dataManagement');
     dataManagement.onClick = function(e) {
-      //viewer.setViewCube('front');//设为后面的视图
-
-      //添加了这个loadDE函数，然后把原有的代码（下边注释的）放入函数体内
-      // let extension = this.getExtensionbyId("Viewing.Extension.DataManagement");
-      // let curExtension = this.getCurrentOpenExtension();
-
-      // if(curExtension){//存在已经打开的extension，把它关掉
-      //   this.onExtensionItemClicked(curExtension);
-      // }
-
-      // if(extension){
-      //   this.onExtensionItemClicked(extension);
-      // }
       var that = this
       viewer.loadDynamicExtension('Viewing.Extension.NewDataManagementExtension').then(function(){
         let extension = that.getExtensionbyId("Viewing.Extension.NewDataManagementExtension");
@@ -250,7 +235,6 @@ class ExtensionManager extends MultiModelExtensionBase {
 
     }.bind(this);
     dataManagement.addClass('dataManagementButton');
-    // dataManagement.addClass('adsk-icon-fullscreen');
     dataManagement.setToolTip('数据管理');
 
     //属性选择按钮

@@ -3,7 +3,7 @@
 修改日志：
 
 疑问 || TODO:
-1、为什么 AppNavbar 中登录弹窗中输入一个字符就 render 一次
+1、为什么 AppNavbar 中登录弹窗中输入一个字符就 render 一次，似乎是因为resize了
 2、src\client\viewer.components\Viewer.Configurator\Viewer.Configurator.js 中的 loadDynamicExtension 方法不起效果！！！
 \src\client\viewer.components\Viewer.Extensions.Dynamic\Viewing.Extension.ExtensionManager\Viewing.Extension.ExtensionManager.js 
 的339行 loadDynamicExtension 函数是每个拓展的回调
